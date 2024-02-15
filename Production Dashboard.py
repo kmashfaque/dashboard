@@ -192,9 +192,6 @@ if not factory and not millno and not quality:
             st.markdown("")
             st.markdown("")
 
-
-        
-
     with col2:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Efficiency</p>'
         st.markdown(original_title,unsafe_allow_html=True)
@@ -304,9 +301,7 @@ else:
         st.markdown("")
         st.markdown("")
         st.markdown("")
-        
-
-    
+   
     with col4:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Frame</p>'
         st.markdown(original_title,unsafe_allow_html=True)

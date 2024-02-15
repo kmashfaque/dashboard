@@ -95,9 +95,12 @@ if search_criteria_cont_no != "Select":
     filtered_df = filtered_df[filtered_df["Cont. No"] == search_criteria_cont_no]
 
 #         # Dropdown for quality based on the filtered data
-#         options_for_quality = filtered_df["Quality"].tolist()
-#         search_criteria_quality = st.selectbox("Select your quality:", options_for_quality)
+    # options_for_quality = filtered_df["Quality"].tolist()
+    # search_criteria_quality = st.selectbox("Select your quality:", options_for_quality)
     
+
+
+
 
 # data
 
@@ -111,11 +114,13 @@ formatted_production_pallet="{:.2f}".format(production_pallet)
 formatted_production_truss="{:.2f}".format(production_truss)
 formatted_production_carton="{:.2f}".format(production_carton)
 formatted_production_mton="{:.2f}".format(production_mton)
+total_sales=filtered_df["Sales Quantity Single"].sum() + filtered_df["Sales Quantity ply"].sum()
+formatted_total_sales="{:.2f}".format(total_sales)
 
 
 
 
-col1,col2,col3,col4=st.columns((4))
+col1,col2,col3,col4,col5=st.columns((5))
 
 if not factory and not millno:
 
@@ -126,7 +131,7 @@ if not factory and not millno:
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
-        st.markdown("")
+        
 
     with col2:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Truss</p>'
@@ -135,7 +140,7 @@ if not factory and not millno:
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
-        st.markdown("")
+        
 
     with col3:
     # Set a custom color scheme
@@ -147,7 +152,7 @@ if not factory and not millno:
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
-        st.markdown("")
+        
         
 
     with col4:
@@ -157,7 +162,16 @@ if not factory and not millno:
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
+        
+
+    with col5:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Total Sales</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_total_sales}</p>'
+        st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
+        st.markdown("")
+        
         
 
 else:
@@ -168,7 +182,7 @@ else:
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
-        st.markdown("")
+        
 
     with col2:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Truss</p>'
@@ -177,7 +191,7 @@ else:
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
-        st.markdown("")
+        
 
     with col3:
     # Set a custom color scheme
@@ -189,7 +203,7 @@ else:
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
-        st.markdown("")
+        
         
 
     with col4:
@@ -199,33 +213,23 @@ else:
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
-        st.markdown("")
         
+    
 
+    with col5:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Total Sales</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_total_sales}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+        st.markdown("")
+        st.markdown("")
+       
 
 # end sections for text columns
     
 
 
 col1,col2,col3=st.columns((3))
-
-
-
-
-# col1, col2 = st.columns((1, 3))
-# with col1:
-#     options_for_contactId = ["Select"] + filtered_df["Cont. No"].unique().tolist()
-#     search_criteria_cont_no = st.selectbox("Select your contact number: ", options_for_contactId)
-
-# # Define filtered_by_contact_df outside of the if condition
-# filtered_by_contact_df = filtered_df[filtered_df["Cont. No"] == search_criteria_cont_no]
-
-# with col2:
-#     if search_criteria_cont_no != "Select":
-#         # Dropdown for quality based on the filtered data
-#         options_for_quality = filtered_by_contact_df["Quality"].unique().tolist()
-#         search_criteria_quality = st.selectbox("Select your quality:", options_for_quality)
-
 
 
 
@@ -239,10 +243,10 @@ grouped_df = filtered_df.groupby("Date").agg({
 
 # # Define the data for each bar chart
 data = [
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock Pallet"], name="Opening Stock Pallet", text=grouped_df["Opening Stock Pallet"], textposition="auto"),
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock Truss"], name="Opening Stock Truss",text=grouped_df["Opening Stock Truss"], textposition="auto"),
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock Carton"], name="Opening Stock Carton",text=grouped_df["Opening Stock Carton"], textposition="auto"),
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock M/Ton"], name="Opening Stock M/Ton",text=grouped_df["Opening Stock M/Ton"], textposition="auto")
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock Pallet"], name="Opening Stock Pallet", text=["{:.2f}".format(value) for value in grouped_df["Opening Stock Pallet"]], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock Truss"], name="Opening Stock Truss",text=["{:.2f}".format(value) for value in grouped_df["Opening Stock Truss"]], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock Carton"], name="Opening Stock Carton",text=["{:.2f}".format(value) for value in grouped_df["Opening Stock Carton"]], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock M/Ton"], name="Opening Stock M/Ton",text=["{:.2f}".format(value) for value in grouped_df["Opening Stock M/Ton"]], textposition="auto")
 ]
 
 # # Define the layout
@@ -270,10 +274,10 @@ grouped_df = filtered_df.groupby("Date").agg({
 
 # # Define the data for each bar chart
 data = [
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch Pallet"], name="Despatch Pallet", text=grouped_df["Despatch Pallet"], textposition="auto"),
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch Truss"], name="Despatch Truss", text=grouped_df["Despatch Truss"], textposition="auto"),
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch Carton"], name="Despatch Carton", text=grouped_df["Despatch Carton"], textposition="auto"),
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch M/Ton"], name="Despatch M/Ton", text=grouped_df["Despatch M/Ton"], textposition="auto")
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch Pallet"], name="Despatch Pallet", text=["{:.2f}".format(value) for value in grouped_df["Despatch Pallet"]], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch Truss"], name="Despatch Truss", text=["{:.2f}".format(value) for value in grouped_df["Despatch Truss"]], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch Carton"], name="Despatch Carton", text=["{:.2f}".format(value) for value in grouped_df["Despatch Carton"]], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch M/Ton"], name="Despatch M/Ton", text=["{:.2f}".format(value) for value in grouped_df["Despatch M/Ton"]], textposition="auto")
 ]
 
 # # Define the layout
@@ -301,10 +305,10 @@ grouped_df = filtered_df.groupby("Date").agg({
 
 # # Define the data for each bar chart
 data = [
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock Pallet"], name="Closing Stock Pallet", text=grouped_df["Closing Stock Pallet"], textposition="auto"),
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock Truss"], name="Closing Stock Truss", text=grouped_df["Closing Stock Truss"], textposition="auto"),
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock Carton"], name="Closing Stock Carton", text=grouped_df["Closing Stock Carton"], textposition="auto"),
-    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock M/Ton"], name="Closing Stock M/Ton", text=grouped_df["Closing Stock M/Ton"], textposition="auto")
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock Pallet"], name="Closing Stock Pallet", text=["{:.2f}".format(value) for value in grouped_df["Closing Stock Pallet"]], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock Truss"], name="Closing Stock Truss", text=["{:.2f}".format(value) for value in grouped_df["Closing Stock Truss"]], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock Carton"], name="Closing Stock Carton", text=["{:.2f}".format(value) for value in grouped_df["Closing Stock Carton"]], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock M/Ton"], name="Closing Stock M/Ton", text=["{:.2f}".format(value) for value in grouped_df["Closing Stock M/Ton"]], textposition="auto")
 ]
 
 # # Define the layout
