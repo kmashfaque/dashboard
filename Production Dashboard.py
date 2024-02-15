@@ -123,10 +123,6 @@ else:
    
 
 
-
-
-
-
 # section for hands per ton
 if not factory and not millno and not quality:
     filtered_df_1 = hands_df
@@ -140,6 +136,8 @@ elif quality:
     filtered_df_1 = hands_df
 else:
     filtered_df_1 = hands_df["Mill No."].isin(millno) & hands_df["Factory"].isin(factory) 
+
+
 
 # factory_df=filtered_df_1.groupby(filtered_df_1["Factory"], as_index=False)["Hands"].sum()
 # millwise_hands=filtered_df_1.groupby(filtered_df_1["Mill No."], as_index=False)["Hands"].sum()
