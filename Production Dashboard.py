@@ -160,13 +160,40 @@ formatted_converted_production="{:.2f}".format(converted_production)
 if not factory and not millno and not quality:
 
     with col1:
-        original_title = '<p style="font-family:Sans-Serif; color:Black; font-size: 18px; font-weight:bold;">Total Production</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
-        st.markdown(value,unsafe_allow_html=True)
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
+        # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
+        # st.markdown(value,unsafe_allow_html=True)
+        # st.markdown("")
+        # st.markdown("")
+        # st.markdown("")
+
+
+        col1_target, col1_actual =st.columns((2))
+        with col1_target:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Target</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+            
+        with col1_actual:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Actual</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+
+
+        
 
     with col2:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Efficiency</p>'
@@ -188,40 +215,91 @@ if not factory and not millno and not quality:
         
 
     with col4:
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Total Frame</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Frame</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{total_frame}</p>'
-        st.markdown(value,unsafe_allow_html=True)
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
+        # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
+        # st.markdown(value,unsafe_allow_html=True)
+        # st.markdown("")
+        # st.markdown("")
+        # st.markdown("")
+
+        existing, running =st.columns((2))
+        with existing:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Existing</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+        with running:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Running</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
 
 else:
     with col1:
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Total Production</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
-        st.markdown(value,unsafe_allow_html=True)
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
-        
+        # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
+        # st.markdown(value,unsafe_allow_html=True)
+        # st.markdown("")
+        # st.markdown("")
+        # st.markdown("")
+
+
+        col1_target, col1_actual =st.columns((2))
+        with col1_target:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Target</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+            
+        with col1_actual:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Actual</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+            
 
     with col2:
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Efficiency</p>'
-        st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_efficiency}</p>'
-        st.markdown(value,unsafe_allow_html=True)
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
-        
 
+
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
+        
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")
+       
+    
 
     with col3:
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Converted Production</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_converted_production}</p>'
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
@@ -230,13 +308,36 @@ else:
 
     
     with col4:
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Total Frame</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Frame</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{total_frame}</p>'
-        st.markdown(value,unsafe_allow_html=True)
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
+        # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
+        # st.markdown(value,unsafe_allow_html=True)
+        # st.markdown("")
+        # st.markdown("")
+        # st.markdown("")
+
+        existing, running =st.columns((2))
+        with existing:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Existing</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+        with running:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Running</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
         
 
 
