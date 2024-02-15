@@ -153,9 +153,8 @@ efficiency=filtered_df["Actual Efficiency"].mean()
 converted_production=filtered_df["Converted Production"].sum()
 total_frame=filtered_df["frame"].sum()
 formatted_actual_production="{:.2f}".format(actual_production)
-formatted_efficiency="{:.2f}".format(efficiency)
+formatted_efficiency="{:.0%}".format(efficiency)
 formatted_converted_production="{:.2f}".format(converted_production)
-
 
 
 if not factory and not millno and not quality:
@@ -179,9 +178,6 @@ if not factory and not millno and not quality:
         st.markdown("")
 
     with col3:
-    # Set a custom color scheme
-    # original_title = '<p style="font-family:Ssns-Serif; color:Black; font-size: 18px; font-weight:bold;">Factory wise Actual Production</p>'
-    # st.markdown(original_title,unsafe_allow_html=True)
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Converted Production</p>'
         st.markdown(original_title,unsafe_allow_html=True)
         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_converted_production}</p>'
@@ -211,9 +207,6 @@ else:
         st.markdown("")
         
 
-        # st.subheader("Total Production")
-        # st.text(factory_df)
-
     with col2:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Efficiency</p>'
         st.markdown(original_title,unsafe_allow_html=True)
@@ -226,9 +219,6 @@ else:
 
 
     with col3:
-    # Set a custom color scheme
-    # original_title = '<p style="font-family:Ssns-Serif; color:Black; font-size: 18px; font-weight:bold;">Factory wise Actual Production</p>'
-    # st.markdown(original_title,unsafe_allow_html=True)
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Converted Production</p>'
         st.markdown(original_title,unsafe_allow_html=True)
         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_converted_production}</p>'

@@ -207,6 +207,10 @@ else:
     
 
 
+col1,col2,col3=st.columns((3))
+
+
+
 
 # col1, col2 = st.columns((1, 3))
 # with col1:
@@ -225,30 +229,92 @@ else:
 
 
 
-# # Group by Factory and sum the production for each category
-# grouped_df = filtered_df.groupby("Factory").agg({
-#     "Production Pallet": "sum",
-#     "Production Truss": "sum",
-#     "Production Carton": "sum",
-#     "Production M/Ton": "sum"
-# }).reset_index()
+# Group by Opening stock and sum the production for each category
+grouped_df = filtered_df.groupby("Date").agg({
+    "Opening Stock Pallet": "sum",
+    "Opening Stock Truss": "sum",
+    "Opening Stock Carton": "sum",
+    "Opening Stock M/Ton": "sum"
+}).reset_index()
 
 # # Define the data for each bar chart
-# data = [
-#     go.Bar(x=grouped_df["Factory"], y=grouped_df["Production Pallet"], name="Production Pallet"),
-#     go.Bar(x=grouped_df["Factory"], y=grouped_df["Production Truss"], name="Production Truss"),
-#     go.Bar(x=grouped_df["Factory"], y=grouped_df["Production Carton"], name="Production Carton"),
-#     go.Bar(x=grouped_df["Factory"], y=grouped_df["Production M/Ton"], name="Production M/Ton")
-# ]
+data = [
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock Pallet"], name="Opening Stock Pallet", text=grouped_df["Opening Stock Pallet"], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock Truss"], name="Opening Stock Truss",text=grouped_df["Opening Stock Truss"], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock Carton"], name="Opening Stock Carton",text=grouped_df["Opening Stock Carton"], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Opening Stock M/Ton"], name="Opening Stock M/Ton",text=grouped_df["Opening Stock M/Ton"], textposition="auto")
+]
 
 # # Define the layout
-# layout = go.Layout(title="Production by Category",
-#                    xaxis=dict(title="Factory"),
-#                    yaxis=dict(title="Production"),
-#                    barmode="group")
+layout = go.Layout(title="Opening Stock",
+                   xaxis=dict(title="Date"),
+                   yaxis=dict(title="Opening Stock"),
+                   barmode="group")
 
 # # Create the figure
-# fig = go.Figure(data=data, layout=layout)
+fig = go.Figure(data=data, layout=layout)
 
 # # Display the chart in Streamlit
-# st.plotly_chart(fig)
+st.plotly_chart(fig,use_container_width=True)
+
+
+
+
+# Group by despatch and sum the production for each category
+grouped_df = filtered_df.groupby("Date").agg({
+    "Despatch Pallet": "sum",
+    "Despatch Truss": "sum",
+    "Despatch Carton": "sum",
+    "Despatch M/Ton": "sum"
+}).reset_index()
+
+# # Define the data for each bar chart
+data = [
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch Pallet"], name="Despatch Pallet", text=grouped_df["Despatch Pallet"], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch Truss"], name="Despatch Truss", text=grouped_df["Despatch Truss"], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch Carton"], name="Despatch Carton", text=grouped_df["Despatch Carton"], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Despatch M/Ton"], name="Despatch M/Ton", text=grouped_df["Despatch M/Ton"], textposition="auto")
+]
+
+# # Define the layout
+layout = go.Layout(title="Despatch",
+                   xaxis=dict(title="Date"),
+                   yaxis=dict(title="Despatch"),
+                   barmode="group")
+
+# # Create the figure
+fig = go.Figure(data=data, layout=layout)
+
+# # Display the chart in Streamlit
+st.plotly_chart(fig,use_container_width=True)
+
+
+
+
+# Group by despatch and sum the production for each category
+grouped_df = filtered_df.groupby("Date").agg({
+    "Closing Stock Pallet": "sum",
+    "Closing Stock Truss": "sum",
+    "Closing Stock Carton": "sum",
+    "Closing Stock M/Ton": "sum"
+}).reset_index()
+
+# # Define the data for each bar chart
+data = [
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock Pallet"], name="Closing Stock Pallet", text=grouped_df["Closing Stock Pallet"], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock Truss"], name="Closing Stock Truss", text=grouped_df["Closing Stock Truss"], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock Carton"], name="Closing Stock Carton", text=grouped_df["Closing Stock Carton"], textposition="auto"),
+    go.Bar(x=grouped_df["Date"], y=grouped_df["Closing Stock M/Ton"], name="Closing Stock M/Ton", text=grouped_df["Closing Stock M/Ton"], textposition="auto")
+]
+
+# # Define the layout
+layout = go.Layout(title="Closing Stock",
+                   xaxis=dict(title="Date"),
+                   yaxis=dict(title="Closing Stock"),
+                   barmode="group")
+
+# # Create the figure
+fig = go.Figure(data=data, layout=layout)
+
+# # Display the chart in Streamlit
+st.plotly_chart(fig,use_container_width=True)
