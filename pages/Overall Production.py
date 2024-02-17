@@ -1,3 +1,7 @@
+
+
+
+
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -10,7 +14,7 @@ warnings.filterwarnings("ignore")
 st.set_page_config(page_title="Production Dashboard!!", page_icon=":bar_chart:", layout="wide")
 
 
-st.title(" :bar_chart: Production Dashboard ")
+st.title(" :bar_chart: Production Dashboard")
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 
 
@@ -30,115 +34,392 @@ os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
     
 df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
 
+unique_date=df["Date"]
 
-# date filtering starts here
+
+
+# # date filtering starts here
 col1, col2=st.columns((2))
-df["date"]=pd.to_datetime(df["date"])
+df["Date"]=pd.to_datetime(df["Date"])
 
 # getting the min and max date
-startdate=pd.to_datetime(df["date"]).min()
-enddate=pd.to_datetime(df["date"]).max()
+startdate=pd.to_datetime(df["Date"]).min()
+enddate=pd.to_datetime(df["Date"]).max()
 
 
-with col1:
-    date1=pd.to_datetime(st.date_input("Start Date",startdate))
+# with col1:
+#     date1=pd.to_datetime(st.date_input("Start Date",startdate))
 
-with col2:
-    date2=pd.to_datetime(st.date_input("End Date", enddate))
+# with col2:
+#     date2=pd.to_datetime(st.date_input("End Date", enddate))
 
-df=df[(df["date"]>=date1) & (df["date"]<=date2)].copy()
+# df=df[(df["Date"]>=date1) & (df["Date"]<=date2)].copy()
 
 # date filtering section ends here
 
 
 
-st.sidebar.header("Choose your filter: ")
+
+# Sidebar for filtering data
+st.sidebar.header("Choose your filter:")
 # Create for Factory Name
-factory=st.sidebar.multiselect("Pick Location",
-                               df["Factory"].unique(),
-                               default=df["Factory"].unique()
-                               )
+selected_factory = st.sidebar.selectbox("Pick Location",
+                                        ["All"] + list(df["Factory"].unique()),
+                                        index=0)
 
-if not factory:
-    df2=df.copy()
+
+# filter data based on factory
+
+col1,col2,col3,col4,col5,col6=st.columns((6))
+
+
+
+if selected_factory=="All":
+
+
+    factory_df=df
+   
+    actual_production=factory_df["actual production"].sum()
+    efficiency=factory_df["Actual Efficiency"].mean()
+    converted_production=factory_df["Converted Production"].sum()
+    total_frame=factory_df["frame"].sum()
+    
+    formatted_actual_production="{:.2f}".format(actual_production)
+    formatted_efficiency="{:.0%}".format(efficiency)
+    formatted_converted_production="{:.2f}".format(converted_production)
+   
+    with col1:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
+        # st.markdown(value,unsafe_allow_html=True)
+        # st.markdown("")
+        # st.markdown("")
+        # st.markdown("")
+
+
+        col1_target, col1_actual =st.columns((2))
+        with col1_target:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Target</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+            
+        with col1_actual:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Actual</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+
+    with col2:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")
+
+    with col3:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")
+        
+
+    with col4:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Frame</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
+        # st.markdown(value,unsafe_allow_html=True)
+        # st.markdown("")
+        # st.markdown("")
+        # st.markdown("")
+
+        existing, running =st.columns((2))
+        with existing:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Existing</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+        with running:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Running</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+        
+        
+        
+
 else:
-    df2=df[df["Factory"].isin(factory)]
 
 
-# Create for mill no
-millno=st.sidebar.multiselect("Choose Mill No.",
-                              df["Mill No."].unique(),
-                              default=df["Mill No."].unique()
-                              )
+    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
+    factory_df_selected = df[df['Factory'].isin(selected_factory)]
+    
+    actual_production=factory_df_selected["actual production"].sum()
+    efficiency=factory_df_selected["Actual Efficiency"].mean()
+    converted_production=factory_df_selected["Converted Production"].sum()
+    total_frame=factory_df_selected["frame"].sum()
+ 
 
-if not millno:
-    df3=df2.copy()
+
+    formatted_actual_production="{:.2f}".format(actual_production)
+    formatted_efficiency="{:.0%}".format(efficiency)
+    formatted_converted_production="{:.2f}".format(converted_production)
+    
+    with col1:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
+        # st.markdown(value,unsafe_allow_html=True)
+        # st.markdown("")
+        # st.markdown("")
+        # st.markdown("")
+
+
+        col1_target, col1_actual =st.columns((2))
+        with col1_target:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Target</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+            
+        with col1_actual:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Actual</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+            
+
+    with col2:
+
+
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
+        
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")
+       
+    
+
+    with col3:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")
+   
+    with col4:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Frame</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
+        # st.markdown(value,unsafe_allow_html=True)
+        # st.markdown("")
+        # st.markdown("")
+        # st.markdown("")
+
+        existing, running =st.columns((2))
+        with existing:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Existing</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+        with running:
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Running</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+   
+    
+
+    
+            
+# end sections for text columns
+
+
+
+# Start sections for charts
+col1, col2, col3 = st.columns((3))
+
+# Display factory-wise charts
+if selected_factory=="All":
+    factory_df = df.groupby(df["Factory"], as_index=False)["actual production"].sum()
+    efficiency_df = df.groupby(df["Factory"], as_index=False)["Actual Efficiency"].mean()
+   
+    with col1:
+        try:
+            # Create a bar chart for production by factory
+            fig = px.bar(factory_df, x="Factory", y="actual production", text=['{:,.2f}'.format(x) for x in factory_df["actual production"]],
+                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(factory_df))
+            fig.update_layout(title="Production by Factory")
+            st.plotly_chart(fig, use_container_width=True)
+
+        except IndexError:
+            st.warning("No data found for the specified filter.")
+
+    with col2:
+        try:
+            # Create a bar chart for efficiency by factory
+            fig = px.bar(efficiency_df, x="Factory", y="Actual Efficiency", text=['{:,.2f}'.format(x) for x in efficiency_df["Actual Efficiency"]],
+                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
+            fig.update_layout(title="Efficiency by Factory")
+            st.plotly_chart(fig, use_container_width=True)
+
+        except IndexError:
+            st.warning("No data found for the specified filter.")
+
+   
+
+# Display mill-wise data if a factory is selected
 else:
-    df3=df2[df2["Mill No."].isin(millno)]
 
+    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
-# Create for product type
-quality=st.sidebar.multiselect("Select quality"
-                               ,df["Product Type"].unique()
-                               ,default=df["Product Type"].unique()
-                               )
+    # Filter the DataFrame based on the selected factories
+    factory_df_selected = df[df['Factory'].isin(selected_factory)]
+    
 
-if not quality:
-    df4=df3.copy()
-else:
-    df4=df3[df3["Product Type"].isin(quality)]
-
-# sidebar for filtering data ends here
-
-
-
-
-# # Filter the data based on quality, product type and mill no
-if not factory and not millno and not quality:
-    filtered_df = df
-elif not factory and not millno:
-    filtered_df = df[df["Product Type"].isin(quality)]
-elif not quality and not factory:
-    filtered_df = df[df["Mill No."].isin(millno)]
-elif millno and quality:
-    filtered_df = df3[df["Mill No."].isin(millno) & df3["Product Type"].isin(quality)]
-elif quality and factory:
-    filtered_df = df3[df["Product Type"].isin(quality) & df3["Factory"].isin(factory)]
-elif factory and millno:
-    filtered_df = df3[df["Factory"].isin(factory) & df3["Mill No."].isin(millno)]
-elif quality:
-    filtered_df = df3[df3["Product Type"].isin(quality)]
-elif millno:
-    filtered_df = df3[df3["Mill No."].isin(millno)]
-
-
-elif factory:
-    filtered_df = df3[df3["Factory"].isin(factory)]
+    # Extract unique mill numbers from both DataFrames
+    selected_mills_production = factory_df_selected["Mill No."].unique()
+   
+    
+    mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
+    
+    mill_production_df = mill_df.groupby(["Mill No."], as_index=False)["actual production"].sum()
+    mill_efficiency_df = mill_df.groupby(["Mill No."], as_index=False)["Actual Efficiency"].mean()
   
+
+  
+
+    with col1:
+        try:
+            # Create a bar chart for production by mill number
+            fig = px.bar(mill_production_df, x="Mill No.", y="actual production",
+                         text=['{:,.2f}'.format(x) for x in mill_production_df["actual production"]],
+                         template="seaborn", width=350, height=350,
+                         color_discrete_sequence=[" #488A99"] * len(mill_production_df))
+            fig.update_layout(title="Production by Mill Number")
+            st.plotly_chart(fig, use_container_width=True)
+
+        except IndexError:
+            st.warning("No data found for the specified filter.")
+
+    with col2:
+        try:
+            # Create a bar chart for efficiency by mill number
+            fig = px.bar(mill_efficiency_df, x="Mill No.", y="Actual Efficiency",
+                         text=['{:,.2f}'.format(x) for x in mill_efficiency_df["Actual Efficiency"]],
+                         template="seaborn", width=350, height=350,
+                         color_discrete_sequence=[" #1C4E80"] * len(mill_efficiency_df))
+            fig.update_layout(title="Efficiency by Mill Number")
+            st.plotly_chart(fig, use_container_width=True)
+
+        except IndexError:
+            st.warning("No data found for the specified filter.")
+
+   
+
+
+
+# counwise production chart
+
+if selected_factory=="All":
+    count_df = df.groupby(df["count"], as_index=False)["actual production"].sum()
+    
+    try:
+        # Create a bar chart for production by factory
+        fig = px.bar(count_df, x="count", y="actual production", text=['{:,.2f}'.format(x) for x in count_df["actual production"]],
+        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+        fig.update_layout(title="Countwise Production")
+        st.plotly_chart(fig, use_container_width=True)
+
+    except IndexError:
+            st.warning("No data found for the specified filter.")
+
+    
+
+# Display mill-wise data if a factory is selected
 else:
-    filtered_df = df3[df3["Product Type"].isin(quality) & df3["Mill No."].isin(millno) & df3["Factory"].isin(factory)]
 
-# data filtering ends here
+    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
+
+    # Filter the DataFrame based on the selected factories
+    factory_df_selected = df[df['Factory'].isin(selected_factory)]
+   
+
+    # Extract unique mill numbers from both DataFrames
+    selected_mills_production = factory_df_selected["count"]
+   
 
 
-# time series analysis data
+    mill_df = factory_df_selected[factory_df_selected["count"].isin(selected_mills_production)]
+    mill_production_df = mill_df.groupby(["count"], as_index=False)["actual production"].sum()
+    
+  
+    try:
+        # Create a bar chart for production by mill number
+        fig = px.bar(mill_production_df, x="count", y="actual production",
+        text=['{:,.2f}'.format(x) for x in mill_production_df["actual production"]],
+        template="seaborn", width=1000, height=500,
+        color_discrete_sequence=[" #488A99"] * len(mill_production_df))
+        fig.update_layout(title="Countwise Production")
+        st.plotly_chart(fig, use_container_width=True)
+
+    except IndexError:
+        st.warning("No data found for the specified filter.")
+
+   
 
 
-
-# Extract day from the date column
-filtered_df["day"] = filtered_df["date"].dt.day
-
-# Group by day and sum the actual production for each day
-linechart = filtered_df.groupby("day")["actual production"].sum().reset_index()
-
-# Plot the line chart
-fig2 = px.line(linechart, x="day", y="actual production", labels={"Production": "Ton"}, height=500, width=1000, template="gridon",title="Time Series Analysis")
-
-# Display the line chart using Streamlit
-st.plotly_chart(fig2, use_container_width=True)
-
-# Optional: Provide a button to download the data
-with st.expander("View Data of TimeSeries:"):
-    st.write(linechart.T.style.background_gradient(cmap="Blues"))
-    csv = linechart.to_csv(index=False).encode("utf-8")
-    st.download_button('Download Data', data=csv, file_name="TimeSeries.csv", mime='text/csv')
