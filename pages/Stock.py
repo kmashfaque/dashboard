@@ -69,7 +69,7 @@ stock_df=stock_df[(stock_df["Date"]>=date1) & (stock_df["Date"]<=date2)].copy()
 
 # # Filter the data based on quality, product type and mill no
 if not factory and not millno:
-    filtered_df = stock_df
+    filtered_df= stock_df
 elif factory and millno:
     filtered_df = df3[stock_df["Factory"].isin(factory) & df3["Mill No."].isin(millno)]
 elif millno:
