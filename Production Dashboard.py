@@ -180,7 +180,7 @@ selected_factory = st.sidebar.selectbox("Pick Location",
 # section for text columns
 # actual_production=factory_df["actual production"].sum()
 
-# efficiency=factory_df["Actual Efficiency"].mean()
+# efficiency=factory_df["Efficiency"].mean()
 
 # converted_production=factory_df["Converted Production"].sum()
 
@@ -428,7 +428,7 @@ if selected_factory=="All":
     hands_df_all=hands_df
     stock_all=stock_df
     actual_production=factory_df["actual production"].sum()
-    efficiency=factory_df["Actual Efficiency"].mean()
+    efficiency=factory_df["Efficiency"].mean()
     converted_production=factory_df["Converted Production"].sum()
     total_frame=factory_df["frame"].sum()
     total_hands=hands_df["Hands"].sum()
@@ -554,7 +554,7 @@ else:
     hands_df_selected = hands_df[hands_df["Factory"].isin(selected_factory)]
     stock_df_selected = stock_df[stock_df["Factory"].isin(selected_factory)]
     actual_production=factory_df_selected["actual production"].sum()
-    efficiency=factory_df_selected["Actual Efficiency"].mean()
+    efficiency=factory_df_selected["Efficiency"].mean()
     converted_production=factory_df_selected["Converted Production"].sum()
     total_frame=factory_df_selected["frame"].sum()
     total_hands=hands_df_selected["Hands"].sum()
@@ -692,7 +692,7 @@ else:
 # countwise_df=filtered_df.groupby(filtered_df["count"], as_index=False)["actual production"].sum()
 # buyer_df=filtered_df.groupby(filtered_df["Buyer's Name"], as_index=False)["actual production"].sum()
 
-# factory_df_efficiency=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Actual Efficiency"].mean()
+# factory_df_efficiency=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Efficiency"].mean()
 
 # # starts sections for charts
 # col1,col2,col3=st.columns((3))
@@ -730,39 +730,39 @@ else:
 #         selected_df_1 = filtered_df[filtered_df["Factory"].isin(JJMLN)]
 
 #         # Group by "Section" (department) and sum the values of "Hands" for each department
-#         JJMLN = selected_df_1["Actual Efficiency"].mean()
+#         JJMLN = selected_df_1["Efficiency"].mean()
 
 
 #         # Filter the DataFrame to include only the selected departments
 #         selected_df_2 = filtered_df[filtered_df["Factory"].isin(JJMLF)]
 
 #         # Group by "Section" (department) and sum the values of "Hands" for each department
-#         JJMLF = selected_df_2["Actual Efficiency"].mean()
+#         JJMLF = selected_df_2["Efficiency"].mean()
 
 
 #         # Filter the DataFrame to include only the selected departments
 #         selected_df_3 = filtered_df[filtered_df["Factory"].isin(SJIL)]
 
 #         # Group by "Section" (department) and sum the values of "Hands" for each department
-#         SJIL = selected_df_3["Actual Efficiency"].mean()
+#         SJIL = selected_df_3["Efficiency"].mean()
 
 
 #         # # Filter the DataFrame to include only the selected departments
 #         # selected_df_4 = filtered_df[filtered_df["Factory"].isin(selected_mils_2B)]
 
 #         # # Group by "Section" (department) and sum the values of "Hands" for each department
-#         # mill2B = selected_df_4["Actual Efficiency"].mean()
+#         # mill2B = selected_df_4["Efficiency"].mean()
 
 
 #         # Create a DataFrame to concatenate the sums
 #         combined_df = pd.DataFrame({
 #         "Factory": ["JJMLN"] + ["JJMLF"] + ["SJIL"] ,
-#         "Actual Efficiency": [JJMLN] + [JJMLF] + [SJIL] 
+#         "Efficiency": [JJMLN] + [JJMLF] + [SJIL] 
 # })
 
 #         # Create a pie chart for the combined data
-#         # fig_combined = px.pie(combined_df, values="Actual Efficiency", names="Mill No.", hole=0.5)
-#         fig=px.bar(combined_df,x="Factory",y="Actual Efficiency",text=['{:,.2f}'.format(x) for x in combined_df["Actual Efficiency"]],
+#         # fig_combined = px.pie(combined_df, values="Efficiency", names="Mill No.", hole=0.5)
+#         fig=px.bar(combined_df,x="Factory",y="Efficiency",text=['{:,.2f}'.format(x) for x in combined_df["Efficiency"]],
 #                 template = "seaborn",width=350,height=350, color_discrete_sequence=[" #AC3E31"]*len(combined_df))
 
 #         # Update layout
@@ -848,11 +848,11 @@ else:
 # Groupby section for data visualization
 # if selected_factory =="All":
 #     factory_df = df.groupby(df["Factory"], as_index=False)["actual production"].sum()
-#     efficiency_df = df.groupby(df["Factory"], as_index=False)["Actual Efficiency"].mean()
+#     efficiency_df = df.groupby(df["Factory"], as_index=False)["Efficiency"].mean()
 #     hands_per_ton_df = hands_df.groupby(hands_df["Factory"], as_index=False)["Hands Per Ton"].sum()
 # else:
 #     factory_df = df.groupby(df["Mill No."], as_index=False)["actual production"].sum()
-#     efficiency_df = df.groupby(df["Mill No."], as_index=False)["Actual Efficiency"].mean()
+#     efficiency_df = df.groupby(df["Mill No."], as_index=False)["Efficiency"].mean()
 #     hands_per_ton_df = hands_df.groupby(hands_df["Mill No."], as_index=False)["Hands Per Ton"].sum()
 
 
@@ -862,7 +862,7 @@ col1, col2, col3 = st.columns((3))
 # Display factory-wise charts
 if selected_factory=="All":
     factory_df = df.groupby(df["Factory"], as_index=False)["actual production"].sum()
-    efficiency_df = df.groupby(df["Factory"], as_index=False)["Actual Efficiency"].mean()
+    efficiency_df = df.groupby(df["Factory"], as_index=False)["Efficiency"].mean()
     hands_per_ton_df = hands_df.groupby(hands_df["Factory"], as_index=False)["Hands Per Ton"].sum()
     with col1:
         try:
@@ -878,7 +878,7 @@ if selected_factory=="All":
     with col2:
         try:
             # Create a bar chart for efficiency by factory
-            fig = px.bar(efficiency_df, x="Factory", y="Actual Efficiency", text=['{:,.2f}'.format(x) for x in efficiency_df["Actual Efficiency"]],
+            fig = px.bar(efficiency_df, x="Factory", y="Efficiency", text=['{:,.2f}'.format(x) for x in efficiency_df["Efficiency"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
             fig.update_layout(title="Efficiency by Factory")
             st.plotly_chart(fig, use_container_width=True)
@@ -916,7 +916,7 @@ else:
     mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
     hands_mill_no = hands_df_selected[hands_df_selected["Mill No."].isin(selected_mills_hands)]
     mill_production_df = mill_df.groupby(["Mill No."], as_index=False)["actual production"].sum()
-    mill_efficiency_df = mill_df.groupby(["Mill No."], as_index=False)["Actual Efficiency"].mean()
+    mill_efficiency_df = mill_df.groupby(["Mill No."], as_index=False)["Efficiency"].mean()
     mill_hands_per_ton_df = hands_mill_no.groupby(["Mill No."], as_index=False)["Hands Per Ton"].sum()
 
   
@@ -937,8 +937,8 @@ else:
     with col2:
         try:
             # Create a bar chart for efficiency by mill number
-            fig = px.bar(mill_efficiency_df, x="Mill No.", y="Actual Efficiency",
-                         text=['{:,.2f}'.format(x) for x in mill_efficiency_df["Actual Efficiency"]],
+            fig = px.bar(mill_efficiency_df, x="Mill No.", y="Efficiency",
+                         text=['{:,.2f}'.format(x) for x in mill_efficiency_df["Efficiency"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #1C4E80"] * len(mill_efficiency_df))
             fig.update_layout(title="Efficiency by Mill Number")
