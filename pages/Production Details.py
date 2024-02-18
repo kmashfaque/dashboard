@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 st.set_page_config(page_title="Over All Production!!", page_icon=":bar_chart:", layout="wide")
 
 
-st.title(" :bar_chart: Over All Production Dashboard")
+st.title(" :bar_chart: Production Details Dashboard")
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 
 
@@ -353,9 +353,6 @@ if selected_factory=="All":
 # Display mill-wise data if a factory is selected
 else:
 
-  
-    # new
-
 
     selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
@@ -380,9 +377,6 @@ else:
         selected_mills = mill_df_selected["count"].unique()
         mill_df_count = mill_df_selected[mill_df_selected["count"].isin(selected_mills)]
         mill_count_df = mill_df_count.groupby(["count"], as_index=False)["Efficiency"].mean()
-
-   
-    
 
   
     try:
@@ -421,9 +415,6 @@ if selected_factory=="All":
 # Display mill-wise data if a factory is selected
 else:
 
-  
-    # new
-
 
     selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
@@ -449,10 +440,6 @@ else:
         mill_df_count = mill_df_selected[mill_df_selected["Product Type"].isin(selected_mills)]
         mill_count_df = mill_df_count.groupby(["Product Type"], as_index=False)["actual production"].sum()
 
-   
-    
-
-  
     try:
         # Create a bar chart for production by mill number
         fig = px.bar(mill_count_df, x="Product Type", y="actual production",

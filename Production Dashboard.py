@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore")
 st.set_page_config(page_title="Production Dashboard!!", page_icon=":bar_chart:", layout="wide")
 
 
-st.title(" :bar_chart: Production Dashboard")
+st.title(" :bar_chart: Daily Production Dashboard")
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 
 
@@ -676,13 +676,6 @@ else:
             st.markdown("")
             st.markdown("")
     
-
-    
-                
-
-
-
-
 # end sections for text columns
 
 
@@ -876,11 +869,16 @@ if selected_factory=="All":
             st.warning("No data found for the specified filter.")
 
     with col2:
+        
+        # Convert efficiency values to percentages
+        efficiency_df["Efficiency (%)"] = efficiency_df["Efficiency"] * 100
         try:
-            # Create a bar chart for efficiency by factory
-            fig = px.bar(efficiency_df, x="Factory", y="Efficiency", text=['{:,.2f}'.format(x) for x in efficiency_df["Efficiency"]],
-                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
-            fig.update_layout(title="Efficiency by Factory")
+            # Create a bar chart for efficiency by mill number
+            fig = px.bar(efficiency_df, x="Factory", y="Efficiency (%)",
+                         text=['{:,.0f}%'.format(x) for x in efficiency_df["Efficiency (%)"]],
+                         template="seaborn", width=350, height=350,
+                         color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
+            fig.update_layout(title="Efficiency by Mill Number")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -922,6 +920,7 @@ else:
   
 
     with col1:
+        
         try:
             # Create a bar chart for production by mill number
             fig = px.bar(mill_production_df, x="Mill No.", y="actual production",
@@ -935,10 +934,12 @@ else:
             st.warning("No data found for the specified filter.")
 
     with col2:
+        # Convert efficiency values to percentages
+        mill_efficiency_df["Efficiency (%)"] = mill_efficiency_df["Efficiency"] * 100
         try:
             # Create a bar chart for efficiency by mill number
-            fig = px.bar(mill_efficiency_df, x="Mill No.", y="Efficiency",
-                         text=['{:,.2f}'.format(x) for x in mill_efficiency_df["Efficiency"]],
+            fig = px.bar(mill_efficiency_df, x="Mill No.", y="Efficiency (%)",
+                         text=['{:,.0f}%'.format(x) for x in mill_efficiency_df["Efficiency (%)"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #1C4E80"] * len(mill_efficiency_df))
             fig.update_layout(title="Efficiency by Mill Number")
