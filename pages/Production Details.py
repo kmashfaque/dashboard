@@ -91,7 +91,7 @@ if selected_factory=="All":
             # Create a bar chart for production by factory
             fig = px.bar(factory_df, x="Factory", y="actual production", text=['{:,.2f}'.format(x) for x in factory_df["actual production"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(factory_df))
-            fig.update_layout(title="Production by Factory")
+            fig.update_layout(title="Production ")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -102,7 +102,7 @@ if selected_factory=="All":
             # Create a bar chart for efficiency by factory
             fig = px.bar(efficiency_df, x="Factory", y="Efficiency", text=['{:,.2f}'.format(x) for x in efficiency_df["Efficiency"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
-            fig.update_layout(title="Efficiency by Factory")
+            fig.update_layout(title="Efficiency ")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -114,7 +114,7 @@ if selected_factory=="All":
             # Create a bar chart for production by factory
             fig = px.bar(ply_df, x="Ply", y="actual production", text=['{:,.2f}'.format(x) for x in ply_df["actual production"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(ply_df))
-            fig.update_layout(title="Production by Factory")
+            fig.update_layout(title="Ply")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -163,7 +163,7 @@ else:
                          text=['{:,.2f}'.format(x) for x in mill_production_df["actual production"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #488A99"] * len(mill_production_df))
-            fig.update_layout(title="Production by Mill Number")
+            fig.update_layout(title="Production")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -176,7 +176,7 @@ else:
                          text=['{:,.2f}'.format(x) for x in mill_efficiency_df["Efficiency"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #1C4E80"] * len(mill_efficiency_df))
-            fig.update_layout(title="Efficiency by Mill Number")
+            fig.update_layout(title="Efficiency ")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -188,7 +188,7 @@ else:
                          text=['{:,.2f}'.format(x) for x in mill_ply_df["actual production"]],
                          template="seaborn", width=700, height=350,
                          color_discrete_sequence=[" #488A99"] * len(mill_ply_df))
-            fig.update_layout(title="Production by Mill Number and Ply")
+            fig.update_layout(title="Ply")
             st.plotly_chart(fig, use_container_width=True)
 
 

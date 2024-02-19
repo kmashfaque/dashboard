@@ -451,17 +451,19 @@ if selected_factory=="All":
 
 
         col1_target, col1_actual =st.columns((2))
+ 
         with col1_target:
-            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Target</p>'
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center;">Target</p>'
             st.markdown(original_title,unsafe_allow_html=True)
 
-            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center;">{formatted_actual_production}</p>'
             st.markdown(value,unsafe_allow_html=True)
 
             st.markdown("")
             st.markdown("")
             st.markdown("")
-            
+          
+
         with col1_actual:
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Actual</p>'
             st.markdown(original_title,unsafe_allow_html=True)
