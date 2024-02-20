@@ -24,17 +24,17 @@ min_date = df["Date"].min()
 max_date = df["Date"].max()
 
 # Set default values for date input widgets
-default_start_date = min_date
-default_end_date = max_date
+default_start_date = min_date.date()
+default_end_date = max_date.date()
 
 # Display the date input widgets in two columns
 col1, col2 = st.columns(2)
 
 with col1:
-    date1 = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date.date())
+    date1 = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_start_date)
 
 with col2:
-    date2 = st.date_input("End Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date.date())
+    date2 = st.date_input("End Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
 
 # Convert start_date and end_date to Timestamp objects
 date1 = pd.Timestamp(date1)
@@ -43,14 +43,15 @@ date2 = pd.Timestamp(date2)
 # Filter the DataFrame based on the selected dates
 filtered_df = df[(df["Date"] >= date1) & (df["Date"] <= date2)].copy()
 
+
 # date filtering section ends here
 
 
 # Define initial options for the selectboxes
-all_factories = ["All"] + list(df["Factory"].unique())
-all_mill_nos = ["All"] + list(df["Mill No."].unique())
-all_buyers = ["All"] + list(df["Buyer's Name"].unique())
-all_cont_nos = ["All"] + list(df["Cont. No"].unique())
+all_factories = ["All"] + list(filtered_df["Factory"].unique())
+all_mill_nos = ["All"] + list(filtered_df["Mill No."].unique())
+all_buyers = ["All"] + list(filtered_df["Buyer's Name"].unique())
+all_cont_nos = ["All"] + list(filtered_df["Cont. No"].unique())
 
 # Create a column for filtering data
 col1, col2, col3, col4 = st.columns(4)
@@ -59,23 +60,50 @@ col1, col2, col3, col4 = st.columns(4)
 with col1:
     selected_factory = st.selectbox("Factory", all_factories)
 
+# Dynamically update options for Mill No. based on selected factory
+if selected_factory != "All":
+    factories_df = filtered_df[filtered_df["Factory"] == selected_factory]
+    all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
+else:
+    all_mill_nos = ["All"] + list(filtered_df["Mill No."].unique())
+
 with col2:
     selected_mill_no = st.selectbox("Mill No.", all_mill_nos)
+
+# Dynamically update options for Buyer's Name based on selected factory and mill
+if selected_mill_no != "All" and selected_factory != "All":
+    mill_df = filtered_df[(filtered_df["Mill No."] == selected_mill_no) & (filtered_df["Factory"] == selected_factory)]
+    all_buyers = ["All"] + list(mill_df["Buyer's Name"].unique())
+elif selected_factory != "All":
+    factories_df = filtered_df[filtered_df["Factory"] == selected_factory]
+    all_buyers = ["All"] + list(factories_df["Buyer's Name"].unique())
+else:
+    all_buyers = ["All"] + list(filtered_df["Buyer's Name"].unique())
 
 with col3:
     selected_buyer = st.selectbox("Buyer's Name", all_buyers)
 
+# Dynamically update options for Cont. No based on selected filters
+if selected_mill_no != "All" and selected_factory != "All" and selected_buyer != "All":
+    contact_df = filtered_df[(filtered_df["Mill No."] == selected_mill_no) & (filtered_df["Factory"] == selected_factory) & (filtered_df["Buyer's Name"] == selected_buyer)]
+    all_cont_nos = ["All"] + list(contact_df["Cont. No"].unique())
+elif selected_mill_no != "All" and selected_factory != "All":
+    contact_df = filtered_df[(filtered_df["Mill No."] == selected_mill_no) & (filtered_df["Factory"] == selected_factory)]
+    all_cont_nos = ["All"] + list(contact_df["Cont. No"].unique())
+elif selected_factory != "All":
+    contact_df = filtered_df[filtered_df["Factory"] == selected_factory]
+    all_cont_nos = ["All"] + list(contact_df["Cont. No"].unique())
+else:
+    all_cont_nos = ["All"] + list(filtered_df["Cont. No"].unique())
+
 with col4:
-    selected_cont_no = st.selectbox("Cont. No.", all_cont_nos)
-
+    selected_cont_no = st.selectbox("Cont. No", all_cont_nos)
 
 st.markdown("")
 st.markdown("")
-
-
 
 # Filter the data based on selected filters
-filtered_df = df.copy()
+filtered_df = filtered_df.copy()
 if selected_factory != "All":
     filtered_df = filtered_df[filtered_df["Factory"] == selected_factory]
 if selected_mill_no != "All":
@@ -84,7 +112,6 @@ if selected_buyer != "All":
     filtered_df = filtered_df[filtered_df["Buyer's Name"] == selected_buyer]
 if selected_cont_no != "All":
     filtered_df = filtered_df[filtered_df["Cont. No"] == selected_cont_no]
-
 
 
 
@@ -97,16 +124,20 @@ formatted_production_value="{:.2f}".format(production_value)
 despatch_value=filtered_df["Despatch M/Ton"].sum()
 formatted_despatch_value="{:.2f}".format(despatch_value)
 
-filtered_date_df=df[df["Date"]==date2]
-closing_stock=filtered_date_df["Closing Stock M/Ton"].sum()
+filtered_date_closing_df=filtered_df[filtered_df["Date"]==date2]
+closing_stock=filtered_date_closing_df["Closing Stock M/Ton"].sum()
 formatted_closing_stock="{:.2f}".format(closing_stock)
 
 
-loose_stock=filtered_date_df["Loose Stock"].sum()
+loose_stock=filtered_date_closing_df["Loose Stock"].sum()
 formatted_loose_stock="{:.2f}".format(loose_stock)
 
 
-col1,col2,col3,col4=st.columns(4)
+filtered_date_1_date_df=filtered_df[filtered_df["Date"]==date1]
+opening_value=filtered_date_1_date_df["Opening Stock M/Ton"].sum()
+formatted_opening_value="{:.2f}".format(opening_value)
+
+col1,col2,col3,col4,col5=st.columns(5)
 
 with col1:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
@@ -142,6 +173,16 @@ with col4:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;text-align:center">Loose Stock</p>'
         st.markdown(original_title,unsafe_allow_html=True)
         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center;text-align:center">{formatted_loose_stock}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")
+
+
+with col5:
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;text-align:center">Opening Stock</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center;text-align:center">{formatted_opening_value}</p>'
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
@@ -247,26 +288,54 @@ with col3:
         st.warning("No data found for the specified filter.")
 
 
+col1,col2=st.columns(2)
 
-try:
+with col1:
+    try:
     # Filter the DataFrame based on the end date
-    filtered_df = df[df["Date"] == date2]
+        filtered_df = df[df["Date"] == date2]
 
-    # Group by "Count" and sum the "Closing Stock M/Ton" values
-    countwise_closing_stock = filtered_df.groupby("Count", as_index=False)["Closing Stock M/Ton"].sum()
+        # Group by "Count" and sum the "Closing Stock M/Ton" values
+        countwise_closing_stock = filtered_df.groupby("Count", as_index=False)["Closing Stock M/Ton"].sum()
 
-    
-        # Plot the DataFrame as a stacked bar chart
-    fig = px.bar(countwise_closing_stock, x="Count", y="Closing Stock M/Ton",
-                     text=['{:,.2f}'.format(x) for x in countwise_closing_stock["Closing Stock M/Ton"]],
-                     template="seaborn", width=800, height=500, title="Countwise Closing Stock",
-                     color_discrete_sequence=[" #488A99"] * len(countwise_closing_stock))
+        
+            # Plot the DataFrame as a stacked bar chart
+        fig = px.bar(countwise_closing_stock, x="Count", y="Closing Stock M/Ton",
+                        text=['{:,.2f}'.format(x) for x in countwise_closing_stock["Closing Stock M/Ton"]],
+                        template="seaborn", width=800, height=500, title="Countwise Closing Stock",
+                        color_discrete_sequence=[" #488A99"] * len(countwise_closing_stock))
 
-        # Update the layout
-    fig.update_layout(xaxis_title="Product", yaxis_title="Closing Stock")
+            # Update the layout
+        fig.update_layout(xaxis_title="Product", yaxis_title="Closing Stock")
 
-        # Display the chart
-    st.plotly_chart(fig, use_container_width=True)
-except:
-    st.warning("No data found for the specified end date.")
+            # Display the chart
+        st.plotly_chart(fig, use_container_width=True)
+    except:
+        st.warning("No data found for the specified end date.")
+
+
+with col2:
+    try:
+    # Filter the DataFrame based on the end date
+        filtered_df = df[df["Date"] == date1]
+
+        # Group by "Count" and sum the "Closing Stock M/Ton" values
+        countwise_opeining_stock = filtered_df.groupby("Count", as_index=False)["Opening Stock M/Ton"].sum()
+
+        
+            # Plot the DataFrame as a stacked bar chart
+        fig = px.bar(countwise_opeining_stock, x="Count", y="Opening Stock M/Ton",
+                        text=['{:,.2f}'.format(x) for x in countwise_opeining_stock["Opening Stock M/Ton"]],
+                        template="seaborn", width=800, height=500, title="Countwise Opening Stock",
+                        color_discrete_sequence=[" #488A99"] * len(countwise_opeining_stock))
+
+            # Update the layout
+        fig.update_layout(xaxis_title="Product", yaxis_title="Opening Stock")
+
+            # Display the chart
+        st.plotly_chart(fig, use_container_width=True)
+    except:
+        st.warning("No data found for the specified end date.")
+
+
 

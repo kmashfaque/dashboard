@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -56,33 +54,6 @@ with col2:
 df=df[(df["Date"]>=date1) & (df["Date"]<=date2)].copy()
 
 # date filtering section ends here
-
-
-
-
-# Sidebar for filtering data
-st.sidebar.header("Choose your filter:")
-# Create for Factory Name
-selected_factory = st.sidebar.selectbox("Pick Location",
-                                        ["All"] + list(df["Factory"].unique()),
-                                        index=0)
-
-# Filter mill numbers based on the selected factory
-if selected_factory == "All":
-    filtered_mill_numbers = df["Mill No."].unique()
-  
-    
-else:
-    filtered_mill_numbers = df[df["Factory"] == selected_factory]["Mill No."].unique()
-
-
-
- # Create a selectbox for Mill Name
-selected_mill_number = st.sidebar.selectbox("Pick Mill No.",
-                                                ["All"] + list(filtered_mill_numbers),
-                                                index=0)
-
-
 
 
 
@@ -158,19 +129,19 @@ if selected_cont_no != "All":
 col1,col2,col3,col4,col5=st.columns(5)
 
 
-if selected_factory=="All":
-    factory_df=df
 
-    production=factory_df["actual production"].sum()
-    efficiency=factory_df["Efficiency"].mean()
-    converted_production=factory_df["Converted Production"].sum()
-    total_frame=factory_df["Frame"].sum()
+factory_df=filtered_df
 
-    formatted_actual_production="{:.2f}".format(production)
-    formatted_efficiency="{:.0%}".format(efficiency)
-    formatted_converted_production="{:.2f}".format(converted_production)
+production=factory_df["actual production"].sum()
+efficiency=factory_df["Efficiency"].mean()
+converted_production=factory_df["Converted Production"].sum()
+total_frame=factory_df["Frame"].sum()
 
-    with col1:
+formatted_actual_production="{:.2f}".format(production)
+formatted_efficiency="{:.0%}".format(efficiency)
+formatted_converted_production="{:.2f}".format(converted_production)
+
+with col1:
 
 
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
@@ -184,7 +155,7 @@ if selected_factory=="All":
         st.markdown("")
     
 
-    with col2:
+with col2:
 
 
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
@@ -199,7 +170,7 @@ if selected_factory=="All":
     
 
 
-    with col3:
+with col3:
 
 
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
@@ -212,7 +183,7 @@ if selected_factory=="All":
         st.markdown("")
         st.markdown("")
     
-    with col4:
+with col4:
 
 
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Frame</p>'
@@ -226,100 +197,100 @@ if selected_factory=="All":
         st.markdown("")
 
 
-else:
-    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
+# else:
+#     selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
-    # Filter the DataFrame based on the selected factories
-    factory_df_selected = df[df['Factory'].isin(selected_factory)]
+#     # Filter the DataFrame based on the selected factories
+#     factory_df_selected = df[df['Factory'].isin(selected_factory)]
 
-    # Extract unique mill numbers from the selected factory DataFrame
-    selected_mills_production = factory_df_selected["Mill No."].unique()
+#     # Extract unique mill numbers from the selected factory DataFrame
+#     selected_mills_production = factory_df_selected["Mill No."].unique()
 
-    # Filter the DataFrame to include only the selected mills
-    mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
+#     # Filter the DataFrame to include only the selected mills
+#     mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
     
 
-    if selected_mill_number=="All":
-        production=factory_df_selected["actual production"].sum()
-        efficiency=factory_df_selected["Efficiency"].mean()
-        converted_production=factory_df_selected["Converted Production"].sum()
-        total_frame=factory_df_selected["Frame"].sum()
+#     if selected_mill_number=="All":
+#         production=factory_df_selected["actual production"].sum()
+#         efficiency=factory_df_selected["Efficiency"].mean()
+#         converted_production=factory_df_selected["Converted Production"].sum()
+#         total_frame=factory_df_selected["Frame"].sum()
 
-        formatted_actual_production="{:.2f}".format(production)
-        formatted_efficiency="{:.0%}".format(efficiency)
-        formatted_converted_production="{:.2f}".format(converted_production)
+#         formatted_actual_production="{:.2f}".format(production)
+#         formatted_efficiency="{:.0%}".format(efficiency)
+#         formatted_converted_production="{:.2f}".format(converted_production)
 
-    else:
+#     else:
 
-        # Group by both mill number to get production data for ply
-        selected_mill_number = [selected_mill_number] if isinstance(selected_mill_number, str) else selected_mill_number
-        mill_df_selected = factory_df_selected[factory_df_selected['Mill No.'].isin(selected_mill_number)]
+#         # Group by both mill number to get production data for ply
+#         selected_mill_number = [selected_mill_number] if isinstance(selected_mill_number, str) else selected_mill_number
+#         mill_df_selected = factory_df_selected[factory_df_selected['Mill No.'].isin(selected_mill_number)]
         
-        production = mill_df_selected["actual production"].sum()
-        efficiency = mill_df_selected["Efficiency"].mean()
-        converted_production = mill_df_selected["Converted Production"].sum()
-        total_frame = mill_df_selected["Frame"].sum()
+#         production = mill_df_selected["actual production"].sum()
+#         efficiency = mill_df_selected["Efficiency"].mean()
+#         converted_production = mill_df_selected["Converted Production"].sum()
+#         total_frame = mill_df_selected["Frame"].sum()
 
-        formatted_actual_production="{:.2f}".format(production)
-        formatted_efficiency="{:.0%}".format(efficiency)
-        formatted_converted_production="{:.2f}".format(converted_production)
-
-
-
-    with col1:
+#         formatted_actual_production="{:.2f}".format(production)
+#         formatted_efficiency="{:.0%}".format(efficiency)
+#         formatted_converted_production="{:.2f}".format(converted_production)
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
+
+#     with col1:
+
+
+#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
         
-        st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_actual_production}</p>'
-        st.markdown(value,unsafe_allow_html=True)
+#         st.markdown(original_title,unsafe_allow_html=True)
+#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_actual_production}</p>'
+#         st.markdown(value,unsafe_allow_html=True)
 
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
+#         st.markdown("")
+#         st.markdown("")
+#         st.markdown("")
     
 
-    with col2:
+#     with col2:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
+#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
         
-        st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
-        st.markdown(value,unsafe_allow_html=True)
+#         st.markdown(original_title,unsafe_allow_html=True)
+#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
+#         st.markdown(value,unsafe_allow_html=True)
 
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
+#         st.markdown("")
+#         st.markdown("")
+#         st.markdown("")
     
 
 
-    with col3:
+#     with col3:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
+#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
         
-        st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
-        st.markdown(value,unsafe_allow_html=True)
+#         st.markdown(original_title,unsafe_allow_html=True)
+#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
+#         st.markdown(value,unsafe_allow_html=True)
 
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
+#         st.markdown("")
+#         st.markdown("")
+#         st.markdown("")
     
-    with col4:
+#     with col4:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Frame</p>'
+#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Frame</p>'
         
-        st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
-        st.markdown(value,unsafe_allow_html=True)
+#         st.markdown(original_title,unsafe_allow_html=True)
+#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
+#         st.markdown(value,unsafe_allow_html=True)
 
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
+#         st.markdown("")
+#         st.markdown("")
+#         st.markdown("")
    
     
 
@@ -329,9 +300,9 @@ col1, col2, col3 = st.columns((3))
 
 # Display factory-wise charts
 if selected_factory=="All":
-    factory_df = df.groupby(df["Factory"], as_index=False)["actual production"].sum()
-    efficiency_df = df.groupby(df["Factory"], as_index=False)["Efficiency"].mean()
-    ply_df=df.groupby(df["Ply"],as_index=False)["actual production"].sum()
+    factory_df = filtered_df.groupby(filtered_df["Factory"], as_index=False)["actual production"].sum()
+    efficiency_df = filtered_df.groupby(filtered_df["Factory"], as_index=False)["Efficiency"].mean()
+    
    
     with col1:
         try:
@@ -358,16 +329,18 @@ if selected_factory=="All":
 
     with col3:
 
-        
+        quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["actual production"].sum()
+    
         try:
-            # Create a bar chart for production by factory
-            fig = px.bar(ply_df, x="Ply", y="actual production", text=['{:,.2f}'.format(x) for x in ply_df["actual production"]],
-                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(ply_df))
-            fig.update_layout(title="Ply")
-            st.plotly_chart(fig, use_container_width=True)
+                # Create a bar chart for production by factory
+                fig = px.bar(quality_df, x="Product Type", y="actual production", text=['{:,.2f}'.format(x) for x in quality_df["actual production"]],
+                template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
+                fig.update_layout(title="Quality vs Production")
+                st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
-            st.warning("No data found for the specified filter.")
+                    st.warning("No data found for the specified filter.")
+            
 
 
 # Display mill-wise data if a factory is selected
@@ -384,18 +357,19 @@ else:
     # Filter the DataFrame to include only the selected mills
     mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
     
+    
 
-    if selected_mill_number=="All":
-        mill_ply_df = factory_df_selected.groupby(["Ply"], as_index=False)["actual production"].sum()
+    # if selected_mill_number=="All":
+    #     mill_ply_df = factory_df_selected.groupby(["Ply"], as_index=False)["actual production"].sum()
 
-    else:
+    # else:
 
-        # Group by both mill number to get production data for ply
-        selected_mill_number = [selected_mill_number] if isinstance(selected_mill_number, str) else selected_mill_number
-        mill_df_selected = factory_df_selected[factory_df_selected['Mill No.'].isin(selected_mill_number)]
-        selected_mills = mill_df_selected["Ply"].unique()
-        mill_df_ply = mill_df_selected[mill_df_selected["Ply"].isin(selected_mills)]
-        mill_ply_df = mill_df_ply.groupby(["Ply"], as_index=False)["actual production"].sum()
+    #     # Group by both mill number to get production data for ply
+    #     selected_mill_number = [selected_mill_number] if isinstance(selected_mill_number, str) else selected_mill_number
+    #     mill_df_selected = factory_df_selected[factory_df_selected['Mill No.'].isin(selected_mill_number)]
+    #     selected_mills = mill_df_selected["Ply"].unique()
+    #     mill_df_ply = mill_df_selected[mill_df_selected["Ply"].isin(selected_mills)]
+    #     mill_ply_df = mill_df_ply.groupby(["Ply"], as_index=False)["actual production"].sum()
 
    
     
@@ -432,272 +406,98 @@ else:
             st.warning("No data found for the specified filter.")
 
     with col3:
+        quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["actual production"].sum()
+    
         try:
-            fig = px.bar(mill_ply_df, x="Ply", y="actual production", 
-                         text=['{:,.2f}'.format(x) for x in mill_ply_df["actual production"]],
-                         template="seaborn", width=700, height=350,
-                         color_discrete_sequence=[" #488A99"] * len(mill_ply_df))
-            fig.update_layout(title="Ply")
-            st.plotly_chart(fig, use_container_width=True)
-
+                # Create a bar chart for production by factory
+                fig = px.bar(quality_df, x="Product Type", y="actual production", text=['{:,.2f}'.format(x) for x in quality_df["actual production"]],
+                template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
+                fig.update_layout(title="Quality vs Production")
+                st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
-            st.warning("No data found for the specified filter.")
-
+                    st.warning("No data found for the specified filter.")
 
 # quality wise chart
 
-if selected_factory=="All":
-    quality_df = df.groupby(df["Product Type"], as_index=False)["actual production"].sum()
-    
-    try:
-        # Create a bar chart for production by factory
-        fig = px.bar(quality_df, x="Product Type", y="actual production", text=['{:,.2f}'.format(x) for x in quality_df["actual production"]],
-        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
-        fig.update_layout(title="Quality vs Production")
-        st.plotly_chart(fig, use_container_width=True)
 
-    except IndexError:
-            st.warning("No data found for the specified filter.")
+
 
     
 
-# Display mill-wise data if a factory is selected
-else:
-
-
-    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
-
-    # Filter the DataFrame based on the selected factories
-    factory_df_selected = df[df['Factory'].isin(selected_factory)]
-
-    # Extract unique mill numbers from the selected factory DataFrame
-    selected_mills_production = factory_df_selected["Mill No."].unique()
-
-    # Filter the DataFrame to include only the selected mills
-    mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
-    
-
-    if selected_mill_number=="All":
-        mill_count_df = mill_df.groupby(["Product Type"], as_index=False)["actual production"].sum()
-
-    else:
-
-        # Group by both mill number to get production data for ply
-        selected_mill_number = [selected_mill_number] if isinstance(selected_mill_number, str) else selected_mill_number
-        mill_df_selected = factory_df_selected[factory_df_selected['Mill No.'].isin(selected_mill_number)]
-        selected_mills = mill_df_selected["Product Type"].unique()
-        mill_df_count = mill_df_selected[mill_df_selected["Product Type"].isin(selected_mills)]
-        mill_count_df = mill_df_count.groupby(["Product Type"], as_index=False)["actual production"].sum()
-
-    try:
-        # Create a bar chart for production by mill number
-        fig = px.bar(mill_count_df, x="Product Type", y="actual production",
-        text=['{:,.2f}'.format(x) for x in mill_count_df["actual production"]],
-        template="seaborn", width=1000, height=500,
-        color_discrete_sequence=[" #488A99"] * len(mill_count_df))
-        fig.update_layout(title="Quality vs Production")
-        st.plotly_chart(fig, use_container_width=True)
-
-    except IndexError:
-        st.warning("No data found for the specified filter.")
 
 # end quality chart
         
 
-    
+col1,col2=st.columns([3,2])    
 
 # counwise production chart
 
-if selected_factory=="All":
-    count_df = df.groupby(df["count"], as_index=False)["actual production"].sum()
-    
+
+count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["actual production"].sum()
+ply_df=filtered_df.groupby(filtered_df["Ply"],as_index=False)["actual production"].sum()
+
+
+with col1:
+      
     try:
-        # Create a bar chart for production by factory
-        fig = px.bar(count_df, x="count", y="actual production", text=['{:,.2f}'.format(x) for x in count_df["actual production"]],
-        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
-        fig.update_layout(title="Countwise Production")
-        st.plotly_chart(fig, use_container_width=True)
+            # Create a bar chart for production by factory
+            fig = px.bar(count_df, x="count", y="actual production", text=['{:,.2f}'.format(x) for x in count_df["actual production"]],
+            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+            fig.update_layout(title="Countwise Production")
+            st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:
-            st.warning("No data found for the specified filter.")
-
-    
-
-# Display mill-wise data if a factory is selected
-else:
-
-  
-    # new
+                st.warning("No data found for the specified filter.")
 
 
-    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
-
-    # Filter the DataFrame based on the selected factories
-    factory_df_selected = df[df['Factory'].isin(selected_factory)]
-
-    # Extract unique mill numbers from the selected factory DataFrame
-    selected_mills_production = factory_df_selected["Mill No."].unique()
-
-    # Filter the DataFrame to include only the selected mills
-    mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
-    
-
-    if selected_mill_number=="All":
-        mill_count_df = mill_df.groupby(["count"], as_index=False)["actual production"].sum()
-
-    else:
-
-        # Group by both mill number to get production data for ply
-        selected_mill_number = [selected_mill_number] if isinstance(selected_mill_number, str) else selected_mill_number
-        mill_df_selected = factory_df_selected[factory_df_selected['Mill No.'].isin(selected_mill_number)]
-        selected_mills = mill_df_selected["count"].unique()
-        mill_df_count = mill_df_selected[mill_df_selected["count"].isin(selected_mills)]
-        mill_count_df = mill_df_count.groupby(["count"], as_index=False)["actual production"].sum()
-
-   
-    
-
-  
+with col2:
     try:
-        # Create a bar chart for production by mill number
-        fig = px.bar(mill_count_df, x="count", y="actual production",
-        text=['{:,.2f}'.format(x) for x in mill_count_df["actual production"]],
-        template="seaborn", width=1000, height=500,
-        color_discrete_sequence=[" #488A99"] * len(mill_count_df))
-        fig.update_layout(title="Countwise Production")
-        st.plotly_chart(fig, use_container_width=True)
+                # Create a bar chart for production by factory
+                fig = px.bar(ply_df, x="Ply", y="actual production", text=['{:,.2f}'.format(x) for x in ply_df["actual production"]],
+                            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(ply_df))
+                fig.update_layout(title="Ply")
+                st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:
-        st.warning("No data found for the specified filter.")
-
-   
-
-
+                st.warning("No data found for the specified filter.")
 
 
 # frame vs count chart
 
-if selected_factory=="All":
-    count_df = df.groupby(df["count"], as_index=False)["Frame"].sum()
-    
+
+count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["Frame"].sum()
+col1,col2=st.columns(2)
+
+with col1:
+      
     try:
-        # Create a bar chart for production by factory
-        fig = px.bar(count_df, x="count", y="Frame", text=['{:,.2f}'.format(x) for x in count_df["Frame"]],
-        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
-        fig.update_layout(title="Frame vs Count")
-        st.plotly_chart(fig, use_container_width=True)
+            # Create a bar chart for production by factory
+            fig = px.bar(count_df, x="count", y="Frame", text=['{:,.2f}'.format(x) for x in count_df["Frame"]],
+            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+            fig.update_layout(title="Frame vs Count")
+            st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:
-            st.warning("No data found for the specified filter.")
+                st.warning("No data found for the specified filter.")
 
-    
+# count vs efficiency
 
-# Display mill-wise data if a factory is selected
-else:
+count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["Efficiency"].mean()
 
-  
-    # new
-
-
-    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
-
-    # Filter the DataFrame based on the selected factories
-    factory_df_selected = df[df['Factory'].isin(selected_factory)]
-
-    # Extract unique mill numbers from the selected factory DataFrame
-    selected_mills_production = factory_df_selected["Mill No."].unique()
-
-    # Filter the DataFrame to include only the selected mills
-    mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
-    
-
-    if selected_mill_number=="All":
-        mill_count_df = mill_df.groupby(["count"], as_index=False)["Frame"].sum()
-
-    else:
-
-        # Group by both mill number to get production data for ply
-        selected_mill_number = [selected_mill_number] if isinstance(selected_mill_number, str) else selected_mill_number
-        mill_df_selected = factory_df_selected[factory_df_selected['Mill No.'].isin(selected_mill_number)]
-        selected_mills = mill_df_selected["count"].unique()
-        mill_df_count = mill_df_selected[mill_df_selected["count"].isin(selected_mills)]
-        mill_count_df = mill_df_count.groupby(["count"], as_index=False)["Frame"].sum()
-
-   
-    
-
-  
+with col2:
+         
     try:
-        # Create a bar chart for production by mill number
-        fig = px.bar(mill_count_df, x="count", y="Frame",
-        text=['{:,.2f}'.format(x) for x in mill_count_df["Frame"]],
-        template="seaborn", width=1000, height=500,
-        color_discrete_sequence=[" #488A99"] * len(mill_count_df))
-        fig.update_layout(title="Frame vs Count")
-        st.plotly_chart(fig, use_container_width=True)
+            # Create a bar chart for production by factory
+            fig = px.bar(count_df, x="count", y="Efficiency", text=['{:,.2f}'.format(x) for x in count_df["Efficiency"]],
+            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+            fig.update_layout(title="Efficiency vs Count")
+            st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:
-        st.warning("No data found for the specified filter.")
+                st.warning("No data found for the specified filter.")
 
-
-# efficiency vs count chart
-
-if selected_factory=="All":
-    count_df = df.groupby(df["count"], as_index=False)["Efficiency"].mean()
-    
-    try:
-        # Create a bar chart for production by factory
-        fig = px.bar(count_df, x="count", y="Efficiency", text=['{:,.2f}'.format(x) for x in count_df["Efficiency"]],
-        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
-        fig.update_layout(title="Efficiency vs Count")
-        st.plotly_chart(fig, use_container_width=True)
-
-    except IndexError:
-            st.warning("No data found for the specified filter.")
-
-    
-
-# Display mill-wise data if a factory is selected
-else:
-
-
-    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
-
-    # Filter the DataFrame based on the selected factories
-    factory_df_selected = df[df['Factory'].isin(selected_factory)]
-
-    # Extract unique mill numbers from the selected factory DataFrame
-    selected_mills_production = factory_df_selected["Mill No."].unique()
-
-    # Filter the DataFrame to include only the selected mills
-    mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
-    
-
-    if selected_mill_number=="All":
-        mill_count_df = mill_df.groupby(["count"], as_index=False)["Efficiency"].mean()
-
-    else:
-
-        # Group by both mill number to get production data for ply
-        selected_mill_number = [selected_mill_number] if isinstance(selected_mill_number, str) else selected_mill_number
-        mill_df_selected = factory_df_selected[factory_df_selected['Mill No.'].isin(selected_mill_number)]
-        selected_mills = mill_df_selected["count"].unique()
-        mill_df_count = mill_df_selected[mill_df_selected["count"].isin(selected_mills)]
-        mill_count_df = mill_df_count.groupby(["count"], as_index=False)["Efficiency"].mean()
-
-  
-    try:
-        # Create a bar chart for production by mill number
-        fig = px.bar(mill_count_df, x="count", y="Efficiency",
-        text=['{:,.2f}'.format(x) for x in mill_count_df["Efficiency"]],
-        template="seaborn", width=1000, height=500,
-        color_discrete_sequence=[" #488A99"] * len(mill_count_df))
-        fig.update_layout(title="Efficiency vs Count")
-        st.plotly_chart(fig, use_container_width=True)
-
-    except IndexError:
-        st.warning("No data found for the specified filter.")
+        
 
 
 
