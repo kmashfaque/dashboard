@@ -53,71 +53,131 @@ hands_df=hands_df[(hands_df["Date"]>=date1) & (hands_df["Date"]<=date2)].copy()
 
 # sidebar for filtering data starts here
 
-st.sidebar.header("Choose your filter: ")
-# Create for Factory Name
-factory=st.sidebar.multiselect("Pick Location",
-                               hands_df["Factory"].unique(),
-                               default=hands_df["Factory"].unique()
-                               )
+# st.sidebar.header("Choose your filter: ")
+# # Create for Factory Name
+# factory=st.sidebar.multiselect("Pick Location",
+#                                hands_df["Factory"].unique(),
+#                                default=hands_df["Factory"].unique()
+#                                )
 
-if not factory:
-    hands_df2=hands_df.copy()
+# if not factory:
+#     hands_df2=hands_df.copy()
+# else:
+#     hands_df2=hands_df[hands_df["Factory"].isin(factory)]
+
+
+# # Create for mill no
+# millno=st.sidebar.multiselect("Choose Mill",
+#                               hands_df["Mill No."].unique(),
+#                               default=hands_df["Mill No."].unique()
+#                               )
+
+# if not millno:
+#     hands_df3=hands_df2.copy()
+# else:
+#     hands_df3=hands_df2[hands_df2["Mill No."].isin(millno)]
+
+
+
+# # Create for product type
+# shift=st.sidebar.multiselect("Select Shift",
+#                              hands_df["Shift"].unique(),
+#                              default=hands_df["Shift"].unique()
+#                              )
+
+# if not shift:
+#     hands_df4=hands_df3.copy()
+# else:
+#     hands_df4=hands_df3[hands_df3["Shift"].isin(shift)]
+
+# # sidebar for filtering data ends here
+
+
+
+# # # Filter the data based on shift, product type and mill no
+# if not factory and not millno and not shift:
+#     filtered_df = hands_df
+# elif not factory and not millno:
+#     filtered_df = hands_df[hands_df["Shift"].isin(shift)]
+# elif not shift and not factory:
+#     filtered_df = hands_df[hands_df["Mill No."].isin(millno)]
+# elif millno and shift:
+#     filtered_df = hands_df3[hands_df["Mill No."].isin(millno) & hands_df3["Shift"].isin(shift)]
+# elif shift and factory:
+#     filtered_df = hands_df3[hands_df["Shift"].isin(shift) & hands_df3["Factory"].isin(factory)]
+# elif factory and millno:
+#     filtered_df = hands_df3[hands_df["Factory"].isin(factory) & hands_df3["Mill No."].isin(millno)]
+# elif shift:
+#     filtered_df = hands_df3[hands_df3["Shift"].isin(shift)]
+# elif millno:
+#     filtered_df = hands_df3[hands_df3["Mill No."].isin(millno)]
+# elif factory:
+#     filtered_df = hands_df3[hands_df3["Factory"].isin(factory)]
+# else:
+#     filtered_df = hands_df3[hands_df3["Shift"].isin(shift) & hands_df3["Mill No."].isin(millno) & hands_df3["Factory"].isin(factory)]
+
+# # data filtering ends here
+
+
+
+
+# Define initial options for the selectboxes
+all_factories = ["All"] + list(hands_df["Factory"].unique())
+all_mill_nos = ["All"] + list(hands_df["Mill No."].unique())
+all_buyers = ["All"] + list(hands_df["Shift"].unique())
+
+
+# Create a column for filtering data
+col1, col2, col3 = st.columns(3)
+
+# Create selectboxes for filtering
+with col1:
+    selected_factory = st.selectbox("Factory", all_factories)
+
+# Dynamically update options for Mill No. based on selected factory
+if selected_factory != "All":
+    factories_df = hands_df[hands_df["Factory"] == selected_factory]
+    all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
 else:
-    hands_df2=hands_df[hands_df["Factory"].isin(factory)]
+    all_mill_nos = ["All"] + list(hands_df["Mill No."].unique())
 
+with col2:
+    selected_mill_no = st.selectbox("Mill No.", all_mill_nos)
 
-# Create for mill no
-millno=st.sidebar.multiselect("Choose Mill",
-                              hands_df["Mill No."].unique(),
-                              default=hands_df["Mill No."].unique()
-                              )
-
-if not millno:
-    hands_df3=hands_df2.copy()
+# Dynamically update options for Shift based on selected factory and mill
+if selected_mill_no != "All" and selected_factory != "All":
+    mill_df = hands_df[(hands_df["Mill No."] == selected_mill_no) & (hands_df["Factory"] == selected_factory)]
+    shift = ["All"] + list(mill_df["Shift"].unique())
+elif selected_factory != "All":
+    factories_df = hands_df[hands_df["Factory"] == selected_factory]
+    shift = ["All"] + list(factories_df["Shift"].unique())
 else:
-    hands_df3=hands_df2[hands_df2["Mill No."].isin(millno)]
+    shift = ["All"] + list(hands_df["Shift"].unique())
+
+with col3:
+    selected_Shift = st.selectbox("Shift", shift)
 
 
 
-# Create for product type
-shift=st.sidebar.multiselect("Select Shift",
-                             hands_df["Shift"].unique(),
-                             default=hands_df["Shift"].unique()
-                             )
+st.markdown("")
+st.markdown("")
 
-if not shift:
-    hands_df4=hands_df3.copy()
-else:
-    hands_df4=hands_df3[hands_df3["Shift"].isin(shift)]
-
-# sidebar for filtering data ends here
-
+# Filter the data based on selected filters
+filtered_df = hands_df.copy()
+if selected_factory != "All":
+    filtered_df = filtered_df[filtered_df["Factory"] == selected_factory]
+if selected_mill_no != "All":
+    filtered_df = filtered_df[filtered_df["Mill No."] == selected_mill_no]
+if selected_Shift != "All":
+    filtered_df = filtered_df[filtered_df["Shift"] == selected_Shift]
 
 
-# # Filter the data based on shift, product type and mill no
-if not factory and not millno and not shift:
-    filtered_df = hands_df
-elif not factory and not millno:
-    filtered_df = hands_df[hands_df["Shift"].isin(shift)]
-elif not shift and not factory:
-    filtered_df = hands_df[hands_df["Mill No."].isin(millno)]
-elif millno and shift:
-    filtered_df = hands_df3[hands_df["Mill No."].isin(millno) & hands_df3["Shift"].isin(shift)]
-elif shift and factory:
-    filtered_df = hands_df3[hands_df["Shift"].isin(shift) & hands_df3["Factory"].isin(factory)]
-elif factory and millno:
-    filtered_df = hands_df3[hands_df["Factory"].isin(factory) & hands_df3["Mill No."].isin(millno)]
-elif shift:
-    filtered_df = hands_df3[hands_df3["Shift"].isin(shift)]
-elif millno:
-    filtered_df = hands_df3[hands_df3["Mill No."].isin(millno)]
-elif factory:
-    filtered_df = hands_df3[hands_df3["Factory"].isin(factory)]
-else:
-    filtered_df = hands_df3[hands_df3["Shift"].isin(shift) & hands_df3["Mill No."].isin(millno) & hands_df3["Factory"].isin(factory)]
 
-# data filtering ends here
-    
+
+
+
+
+
 
 # groupby shift for data visualization
 factory_df=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands"].sum()
@@ -133,18 +193,16 @@ col1,col2=st.columns((2))
 total_hands=filtered_df["Hands"].sum()
 hands_per_ton=filtered_df["Hands Per Ton"].sum()
 
-if not factory and not millno and not shift:
-    # total_hands=filtered_df["Hands"].sum()
-    # hands_per_ton=filtered_df["Hands Per Ton"].sum()
 
-    with col1:
+
+with col1:
         formatted_total_hands="{:.2f}".format(total_hands)
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 20px; font-weight:bold;">Total Hands</p>'
         st.markdown(original_title,unsafe_allow_html=True)
         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 20px; font-weight:bold;">{formatted_total_hands}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
-    with col2:
+with col2:
 
         formatted_total_hands="{:.2f}".format(hands_per_ton)
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 20px; font-weight:bold;">Hands Per Ton</p>'
@@ -154,21 +212,21 @@ if not factory and not millno and not shift:
        
     
     
-else:
-    with col1:
-        formatted_total_hands="{:.2f}".format(total_hands)
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 20px; font-weight:bold;">Total Hands</p>'
-        st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 20px; font-weight:bold;">{formatted_total_hands}</p>'
-        st.markdown(value,unsafe_allow_html=True)
+# else:
+#     with col1:
+#         formatted_total_hands="{:.2f}".format(total_hands)
+#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 20px; font-weight:bold;">Total Hands</p>'
+#         st.markdown(original_title,unsafe_allow_html=True)
+#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 20px; font-weight:bold;">{formatted_total_hands}</p>'
+#         st.markdown(value,unsafe_allow_html=True)
        
 
-    with col2:
-        formatted_total_hands="{:.2f}".format(hands_per_ton)
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 20px; font-weight:bold;">Hands Per Ton</p>'
-        st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 20px; font-weight:bold;">{formatted_total_hands}</p>'
-        st.markdown(value,unsafe_allow_html=True)
+#     with col2:
+#         formatted_total_hands="{:.2f}".format(hands_per_ton)
+#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 20px; font-weight:bold;">Hands Per Ton</p>'
+#         st.markdown(original_title,unsafe_allow_html=True)
+#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 20px; font-weight:bold;">{formatted_total_hands}</p>'
+#         st.markdown(value,unsafe_allow_html=True)
        
 
 # end section for text columns

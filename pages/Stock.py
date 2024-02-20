@@ -31,7 +31,7 @@ default_end_date = max_date.date()
 col1, col2 = st.columns(2)
 
 with col1:
-    date1 = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_start_date)
+    date1 = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
 
 with col2:
     date2 = st.date_input("End Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
@@ -286,6 +286,74 @@ with col3:
 
     except:
         st.warning("No data found for the specified filter.")
+
+
+
+
+col1,col2=st.columns(2)
+
+with col1:
+    try:
+
+
+        # Group by "Count" and sum the "Production M/Ton" values
+        countwise_production = filtered_df.groupby("Count", as_index=False)["Production M/Ton"].sum()
+
+        
+            # Plot the DataFrame as a stacked bar chart
+        fig = px.bar(countwise_production, x="Count", y="Production M/Ton",
+                        text=['{:,.2f}'.format(x) for x in countwise_production["Production M/Ton"]],
+                        template="seaborn", width=800, height=500, title="Countwise Closing Stock",
+                        color_discrete_sequence=[" #488A99"] * len(countwise_production))
+
+            # Update the layout
+        fig.update_layout(xaxis_title="Product", yaxis_title="Production")
+
+            # Display the chart
+        st.plotly_chart(fig, use_container_width=True)
+    except:
+        st.warning("No data found for the specified end date.")
+
+
+with col2:
+    try:
+    # Filter the DataFrame based on the end date
+        filtered_df = df[df["Date"] == date1]
+
+        # Group by "Count" and sum the "Loose Stock M/Ton" values
+        countwise_loose_stock = filtered_df.groupby("Count", as_index=False)["Loose Stock"].sum()
+
+        
+            # Plot the DataFrame as a stacked bar chart
+        fig = px.bar(countwise_loose_stock, x="Count", y="Loose Stock",
+                        text=['{:,.2f}'.format(x) for x in countwise_loose_stock["Loose Stock"]],
+                        template="seaborn", width=800, height=500, title="Countwise Opening Stock",
+                        color_discrete_sequence=[" #488A99"] * len(countwise_loose_stock))
+
+            # Update the layout
+        fig.update_layout(xaxis_title="Product", yaxis_title="Loose Stock")
+
+            # Display the chart
+        st.plotly_chart(fig, use_container_width=True)
+    except:
+        st.warning("No data found for the specified end date.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 col1,col2=st.columns(2)
