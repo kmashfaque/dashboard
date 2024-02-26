@@ -113,6 +113,9 @@ elif selected_mill_no != "All" and selected_factory != "All":
 elif selected_factory != "All":
     contact_df = df[df["Factory"] == selected_factory]
     all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
+elif selected_buyer != "All":
+    contact_df = df[df["Buyer's Name"] == selected_buyer]
+    all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
 else:
     all_cont_nos = ["All"] + list(df["Contact No."].unique())
 
@@ -142,7 +145,7 @@ col1,col2,col3,col4,col5=st.columns(5)
 
 factory_df=filtered_df
 
-production=factory_df["actual production"].sum()
+production=factory_df["achieved production"].sum()
 efficiency=factory_df["Efficiency"].mean()
 converted_production=factory_df["Converted Production"].sum()
 total_frame=factory_df["Frame"].sum()
@@ -215,14 +218,14 @@ col1, col2, col3 = st.columns((3))
 
 # Display factory-wise charts
 if selected_factory=="All":
-    factory_df = filtered_df.groupby(filtered_df["Factory"], as_index=False)["actual production"].sum()
+    factory_df = filtered_df.groupby(filtered_df["Factory"], as_index=False)["achieved production"].sum()
     efficiency_df = filtered_df.groupby(filtered_df["Factory"], as_index=False)["Efficiency"].mean()
     
    
     with col1:
         try:
             # Create a bar chart for production by factory
-            fig = px.bar(factory_df, x="Factory", y="actual production", text=['{:,.2f}'.format(x) for x in factory_df["actual production"]],
+            fig = px.bar(factory_df, x="Factory", y="achieved production", text=['{:,.2f}'.format(x) for x in factory_df["achieved production"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(factory_df))
             fig.update_layout(title="Production ")
             st.plotly_chart(fig, use_container_width=True)
@@ -244,11 +247,11 @@ if selected_factory=="All":
 
     with col3:
 
-        quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["actual production"].sum()
+        quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["achieved production"].sum()
     
         try:
                 # Create a bar chart for production by factory
-                fig = px.bar(quality_df, x="Product Type", y="actual production", text=['{:,.2f}'.format(x) for x in quality_df["actual production"]],
+                fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
                 template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
                 fig.update_layout(title="Quality vs Production")
                 st.plotly_chart(fig, use_container_width=True)
@@ -274,7 +277,7 @@ else:
     
    
     
-    mill_production_df = mill_df.groupby(["Mill No."], as_index=False)["actual production"].sum()
+    mill_production_df = mill_df.groupby(["Mill No."], as_index=False)["achieved production"].sum()
     mill_efficiency_df = mill_df.groupby(["Mill No."], as_index=False)["Efficiency"].mean()
 
   
@@ -283,8 +286,8 @@ else:
     with col1:
         try:
             # Create a bar chart for production by mill number
-            fig = px.bar(mill_production_df, x="Mill No.", y="actual production",
-                         text=['{:,.2f}'.format(x) for x in mill_production_df["actual production"]],
+            fig = px.bar(mill_production_df, x="Mill No.", y="achieved production",
+                         text=['{:,.2f}'.format(x) for x in mill_production_df["achieved production"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #488A99"] * len(mill_production_df))
             fig.update_layout(title="Production")
@@ -307,11 +310,11 @@ else:
             st.warning("No data found for the specified filter.")
 
     with col3:
-        quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["actual production"].sum()
+        quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["achieved production"].sum()
     
         try:
                 # Create a bar chart for production by factory
-                fig = px.bar(quality_df, x="Product Type", y="actual production", text=['{:,.2f}'.format(x) for x in quality_df["actual production"]],
+                fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
                 template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
                 fig.update_layout(title="Quality vs Production")
                 st.plotly_chart(fig, use_container_width=True)
@@ -326,15 +329,15 @@ col1,col2=st.columns([3,2])
 
 
 
-count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["actual production"].sum()
-ply_df=filtered_df.groupby(filtered_df["Ply"],as_index=False)["actual production"].sum()
+count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["achieved production"].sum()
+ply_df=filtered_df.groupby(filtered_df["Ply"],as_index=False)["achieved production"].sum()
 
 
 with col1:
       
     try:
             # Create a bar chart for production by factory
-            fig = px.bar(count_df, x="count", y="actual production", text=['{:,.2f}'.format(x) for x in count_df["actual production"]],
+            fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
             template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
             fig.update_layout(title="Countwise Production")
             st.plotly_chart(fig, use_container_width=True)
@@ -346,7 +349,7 @@ with col1:
 with col2:
     try:
                 # Create a bar chart for production by factory
-                fig = px.bar(ply_df, x="Ply", y="actual production", text=['{:,.2f}'.format(x) for x in ply_df["actual production"]],
+                fig = px.bar(ply_df, x="Ply", y="achieved production", text=['{:,.2f}'.format(x) for x in ply_df["achieved production"]],
                             template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(ply_df))
                 fig.update_layout(title="Ply")
                 st.plotly_chart(fig, use_container_width=True)
@@ -396,12 +399,12 @@ with col2:
 # frame with count vs production 
         
 # if selected_factory == "All":
-#     count_df = df.groupby(df["count"], as_index=False)["actual production"].sum()
+#     count_df = df.groupby(df["count"], as_index=False)["achieved production"].sum()
     
 #     try:
 #         # Create a bar chart for production by factory
-#         fig = px.bar(count_df, x="count", y="actual production", 
-#                      text=['{:,.2f}'.format(x) for x in count_df["actual production"]],
+#         fig = px.bar(count_df, x="count", y="achieved production", 
+#                      text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
 #                      template="seaborn", width=1000, height=500, 
 #                      color_discrete_sequence=[" #488A99"] * len(count_df))
 #         fig.update_layout(title="Countwise Production")

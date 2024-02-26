@@ -178,7 +178,7 @@ selected_factory = st.sidebar.selectbox("Pick Location",
 
 
 # section for text columns
-# actual_production=factory_df["actual production"].sum()
+# actual_production=factory_df["achieved production"].sum()
 
 # efficiency=factory_df["Efficiency"].mean()
 
@@ -427,11 +427,11 @@ if selected_factory=="All":
     factory_df=df
     hands_df_all=hands_df
     stock_all=stock_df
-    actual_production=factory_df["actual production"].sum()
+    actual_production=factory_df["achieved production"].sum()
     efficiency=factory_df["Efficiency"].mean()
     converted_production=factory_df["Converted Production"].sum()
     total_frame=factory_df["frame"].sum()
-    total_hands=hands_df["Hands"].sum()
+    total_hands=hands_df["Hands Per Ton"].sum()
     stock_despatch=stock_df["Despatch M/Ton"].sum()
 
     formatted_actual_production="{:.2f}".format(actual_production)
@@ -465,8 +465,10 @@ if selected_factory=="All":
           
 
         with col1_actual:
-            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Actual</p>'
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Achieved</p>'
             st.markdown(original_title,unsafe_allow_html=True)
+
+            
 
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
             st.markdown(value,unsafe_allow_html=True)
@@ -478,14 +480,22 @@ if selected_factory=="All":
     with col2:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
-        st.markdown(value,unsafe_allow_html=True)
-        st.markdown("")
-        st.markdown("")
-        st.markdown("")
 
+       
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Achieved</p>'
+        st.markdown(original_title, unsafe_allow_html=True)
+
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
+        st.markdown(value, unsafe_allow_html=True)
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")
     with col3:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+
+        
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Achieved</p>'
         st.markdown(original_title,unsafe_allow_html=True)
         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
         st.markdown(value,unsafe_allow_html=True)
@@ -529,7 +539,7 @@ if selected_factory=="All":
         
         with col5:
            
-            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Total Hands</p>'
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Hands Per Ton</p>'
             st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_total_hands}</p>'
             st.markdown(value,unsafe_allow_html=True)
@@ -555,11 +565,11 @@ else:
     factory_df_selected = df[df['Factory'].isin(selected_factory)]
     hands_df_selected = hands_df[hands_df["Factory"].isin(selected_factory)]
     stock_df_selected = stock_df[stock_df["Factory"].isin(selected_factory)]
-    actual_production=factory_df_selected["actual production"].sum()
+    actual_production=factory_df_selected["achieved production"].sum()
     efficiency=factory_df_selected["Efficiency"].mean()
     converted_production=factory_df_selected["Converted Production"].sum()
     total_frame=factory_df_selected["frame"].sum()
-    total_hands=hands_df_selected["Hands"].sum()
+    total_hands=hands_df_selected["Hands Per Ton"].sum()
     stock_despatch=stock_df_selected["Despatch M/Ton"].sum()
 
 
@@ -606,11 +616,14 @@ else:
 
 
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
-        
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
-        st.markdown(value,unsafe_allow_html=True)
 
+       
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Achieved</p>'
+        st.markdown(original_title, unsafe_allow_html=True)
+
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
+        st.markdown(value, unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
         st.markdown("")
@@ -620,11 +633,16 @@ else:
     with col3:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
         st.markdown(original_title,unsafe_allow_html=True)
+
+        
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Achieved</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
         st.markdown(value,unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
         st.markdown("")
+        
    
     with col4:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Frame</p>'
@@ -659,7 +677,7 @@ else:
             st.markdown("")
     with col5:
             
-            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Total Hands</p>'
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Hands Per Ton</p>'
             st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_total_hands}</p>'
             st.markdown(value,unsafe_allow_html=True)
@@ -698,7 +716,7 @@ else:
 
 #     try:
 #     # Create the bar chart with custom color
-#         fig=px.bar(factory_df,x="Factory",y="actual production",text=['{:,.2f}'.format(x) for x in factory_df["actual production"]],
+#         fig=px.bar(factory_df,x="Factory",y="actual production",text=['{:,.2f}'.format(x) for x in factory_df["achieved production"]],
 #         template = "seaborn",width=350,height=350, color_discrete_sequence=[" #488A99"]*len(factory_df))
 
 #         # Update layout
@@ -856,15 +874,15 @@ col1, col2, col3 = st.columns((3))
 
 # Display factory-wise charts
 if selected_factory=="All":
-    factory_df = df.groupby(df["Factory"], as_index=False)["actual production"].sum()
+    factory_df = df.groupby(df["Factory"], as_index=False)["achieved production"].sum()
     efficiency_df = df.groupby(df["Factory"], as_index=False)["Efficiency"].mean()
     hands_per_ton_df = hands_df.groupby(hands_df["Factory"], as_index=False)["Hands Per Ton"].sum()
     with col1:
         try:
             # Create a bar chart for production by factory
-            fig = px.bar(factory_df, x="Factory", y="actual production", text=['{:,.2f}'.format(x) for x in factory_df["actual production"]],
+            fig = px.bar(factory_df, x="Factory", y="achieved production", text=['{:,.2f}'.format(x) for x in factory_df["achieved production"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(factory_df))
-            fig.update_layout(title="Production by Factory")
+            fig.update_layout(title="Production: Premise Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -880,7 +898,7 @@ if selected_factory=="All":
                          text=['{:,.0f}%'.format(x) for x in efficiency_df["Efficiency (%)"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
-            fig.update_layout(title="Efficiency by Mill Number")
+            fig.update_layout(title="Efficiency: Premise Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -891,7 +909,7 @@ if selected_factory=="All":
             # Create a bar chart for hands per ton by factory
             fig = px.bar(hands_per_ton_df, x="Factory", y="Hands Per Ton", text=['{:,.2f}'.format(x) for x in hands_per_ton_df["Hands Per Ton"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=["#AC3E31"] * len(hands_per_ton_df))
-            fig.update_layout(title="Hands Per Ton by Factory")
+            fig.update_layout(title="Hands Per Ton: Premise Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -915,7 +933,7 @@ else:
 
     mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
     hands_mill_no = hands_df_selected[hands_df_selected["Mill No."].isin(selected_mills_hands)]
-    mill_production_df = mill_df.groupby(["Mill No."], as_index=False)["actual production"].sum()
+    mill_production_df = mill_df.groupby(["Mill No."], as_index=False)["achieved production"].sum()
     mill_efficiency_df = mill_df.groupby(["Mill No."], as_index=False)["Efficiency"].mean()
     mill_hands_per_ton_df = hands_mill_no.groupby(["Mill No."], as_index=False)["Hands Per Ton"].sum()
 
@@ -925,11 +943,11 @@ else:
         
         try:
             # Create a bar chart for production by mill number
-            fig = px.bar(mill_production_df, x="Mill No.", y="actual production",
-                         text=['{:,.2f}'.format(x) for x in mill_production_df["actual production"]],
+            fig = px.bar(mill_production_df, x="Mill No.", y="achieved production",
+                         text=['{:,.2f}'.format(x) for x in mill_production_df["achieved production"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #488A99"] * len(mill_production_df))
-            fig.update_layout(title="Production by Mill Number")
+            fig.update_layout(title="Production: Mill Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -944,7 +962,7 @@ else:
                          text=['{:,.0f}%'.format(x) for x in mill_efficiency_df["Efficiency (%)"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #1C4E80"] * len(mill_efficiency_df))
-            fig.update_layout(title="Efficiency by Mill Number")
+            fig.update_layout(title="Efficiency: Mill Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -957,7 +975,7 @@ else:
                          text=['{:,.2f}'.format(x) for x in mill_hands_per_ton_df["Hands Per Ton"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=["#AC3E31"] * len(mill_hands_per_ton_df))
-            fig.update_layout(title="Hands Per Ton by Mill Number")
+            fig.update_layout(title="Hands Per Ton: Mill Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -969,11 +987,11 @@ else:
 # counwise production chart
 
 if selected_factory=="All":
-    count_df = df.groupby(df["count"], as_index=False)["actual production"].sum()
+    count_df = df.groupby(df["count"], as_index=False)["achieved production"].sum()
     
     try:
         # Create a bar chart for production by factory
-        fig = px.bar(count_df, x="count", y="actual production", text=['{:,.2f}'.format(x) for x in count_df["actual production"]],
+        fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
         fig.update_layout(title="Countwise Production")
         st.plotly_chart(fig, use_container_width=True)
@@ -998,13 +1016,13 @@ else:
 
 
     mill_df = factory_df_selected[factory_df_selected["count"].isin(selected_mills_production)]
-    mill_production_df = mill_df.groupby(["count"], as_index=False)["actual production"].sum()
+    mill_production_df = mill_df.groupby(["count"], as_index=False)["achieved production"].sum()
     
   
     try:
         # Create a bar chart for production by mill number
-        fig = px.bar(mill_production_df, x="count", y="actual production",
-        text=['{:,.2f}'.format(x) for x in mill_production_df["actual production"]],
+        fig = px.bar(mill_production_df, x="count", y="achieved production",
+        text=['{:,.2f}'.format(x) for x in mill_production_df["achieved production"]],
         template="seaborn", width=1000, height=500,
         color_discrete_sequence=[" #488A99"] * len(mill_production_df))
         fig.update_layout(title="Countwise Production")

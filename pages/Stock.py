@@ -93,6 +93,10 @@ elif selected_mill_no != "All" and selected_factory != "All":
 elif selected_factory != "All":
     contact_df = filtered_df[filtered_df["Factory"] == selected_factory]
     all_cont_nos = ["All"] + list(contact_df["Cont. No"].unique())
+
+elif selected_buyer != "All":
+    contact_df = filtered_df[filtered_df["Buyer's Name"] == selected_buyer]
+    all_cont_nos = ["All"] + list(contact_df["Cont. No"].unique())
 else:
     all_cont_nos = ["All"] + list(filtered_df["Cont. No"].unique())
 
