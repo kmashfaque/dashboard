@@ -7,13 +7,26 @@ import matplotlib as mult
 
 warnings.filterwarnings("ignore")
 
+
+
+os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
+df=pd.read_excel("production.xlsx")
+hands_df=pd.read_excel("HandsPerTon.xlsx")
+stock_df=pd.read_excel("Stocks.xlsx")
+
+unique_date=df["Date"].unique()
+hands_df=hands_df[hands_df["Date"].isin(unique_date)]
+stock_df=stock_df[stock_df["Date"].isin(unique_date)]
+
+# Extract the end date from the DataFrame
+end_date_from_df = df["Date"].max().strftime('%Y-%m-%d')
 st.set_page_config(page_title="Production Dashboard!!", page_icon=":bar_chart:", layout="wide")
 
-
-st.title(" :bar_chart: Daily Production Dashboard")
+title_with_end_date = f":bar_chart: Daily Production Dashboard - Date: {end_date_from_df}"
+st.title(title_with_end_date)
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
-
-
+st.markdown("")
+st.markdown("")
 # file uploading section
 # fl=st.file_uploader(":file_folder: Upload a file", type=(["csv","xlsx","txt","xls"]))
 # if fl is not None:
@@ -26,35 +39,17 @@ st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow
 #     df=pd.read_excel("production.xlsx")
 #     hands_df=pd.read_excel("HandsPerTon.xlsx")
 
-os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
     
-df=pd.read_excel("production.xlsx")
-hands_df=pd.read_excel("HandsPerTon.xlsx")
-stock_df=pd.read_excel("Stocks.xlsx")
+# df=pd.read_excel("production.xlsx")
+# hands_df=pd.read_excel("HandsPerTon.xlsx")
+# stock_df=pd.read_excel("Stocks.xlsx")
 
-unique_date=df["Date"].unique()
-hands_df=hands_df[hands_df["Date"].isin(unique_date)]
-stock_df=stock_df[stock_df["Date"].isin(unique_date)]
-
-
-# # date filtering starts here
-# col1, col2=st.columns((2))
-# df["Date"]=pd.to_datetime(df["Date"])
-
-# # getting the min and max date
-# startdate=pd.to_datetime(df["Date"]).min()
-# enddate=pd.to_datetime(df["Date"]).max()
+# unique_date=df["Date"].unique()
+# hands_df=hands_df[hands_df["Date"].isin(unique_date)]
+# stock_df=stock_df[stock_df["Date"].isin(unique_date)]
 
 
-# with col1:
-#     date1=pd.to_datetime(st.date_input("Start Date",startdate))
 
-# with col2:
-#     date2=pd.to_datetime(st.date_input("End Date", enddate))
-
-# df=df[(df["Date"]>=date1) & (df["Date"]<=date2)].copy()
-
-# date filtering section ends here
 
 
 
@@ -541,6 +536,8 @@ if selected_factory=="All":
            
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Hands Per Ton</p>'
             st.markdown(original_title,unsafe_allow_html=True)
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_total_hands}</p>'
             st.markdown(value,unsafe_allow_html=True)
             st.markdown("")
@@ -551,6 +548,8 @@ if selected_factory=="All":
         with col6:
            
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Despatch</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
             st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_stock_despatch}</p>'
             st.markdown(value,unsafe_allow_html=True)
@@ -679,6 +678,9 @@ else:
             
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Hands Per Ton</p>'
             st.markdown(original_title,unsafe_allow_html=True)
+           
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_total_hands}</p>'
             st.markdown(value,unsafe_allow_html=True)
             st.markdown("")
@@ -690,14 +692,46 @@ else:
            
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Despatch</p>'
             st.markdown(original_title,unsafe_allow_html=True)
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+            st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_stock_despatch}</p>'
             st.markdown(value,unsafe_allow_html=True)
             st.markdown("")
             st.markdown("")
             st.markdown("")
+
+
     
 # end sections for text columns
 
+# Function to create a styled card
+# def create_card(title, value):
+#     card = f"""
+#     <div style="background-color: #f0f0f0; border-radius: 5px; padding: 20px; margin-bottom: 20px;">
+#         <p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold; text-align:center;">{title}</p>
+#         <p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{value}</p>
+#     </div>
+#     """
+#     return card
+
+# # Display the cards for each column
+# with col1:
+#     st.markdown(create_card("Production", formatted_actual_production), unsafe_allow_html=True)
+
+# with col2:
+#     st.markdown(create_card("Efficiency", formatted_efficiency), unsafe_allow_html=True)
+
+# with col3:
+#     st.markdown(create_card("Converted Production", formatted_converted_production), unsafe_allow_html=True)
+
+# with col4:
+#     st.markdown(create_card("Total Frame", total_frame), unsafe_allow_html=True)
+
+# with col5:
+#     st.markdown(create_card("Hands Per Ton", formatted_total_hands), unsafe_allow_html=True)
+
+# with col6:
+#     st.markdown(create_card("Despatch", formatted_stock_despatch), unsafe_allow_html=True)
 
 
 # # groupby section for data visualization
