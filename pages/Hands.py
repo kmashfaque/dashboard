@@ -248,7 +248,9 @@ with col1:
         formatted_total_hands="{:.2f}".format(total_hands)
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Hands</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_total_hands}</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{formatted_total_hands}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
 with col2:
@@ -256,7 +258,9 @@ with col2:
         formatted_total_hands="{:.2f}".format(hands_per_ton)
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Hands Per Ton</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_total_hands}</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{formatted_total_hands}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
 with col3:
