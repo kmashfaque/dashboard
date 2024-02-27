@@ -4,6 +4,9 @@ import pandas as pd
 import os
 import warnings
 import matplotlib as mult
+import base64
+from io import BytesIO
+
 
 warnings.filterwarnings("ignore")
 
@@ -27,6 +30,7 @@ st.title(title_with_end_date)
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 st.markdown("")
 st.markdown("")
+
 # file uploading section
 # fl=st.file_uploader(":file_folder: Upload a file", type=(["csv","xlsx","txt","xls"]))
 # if fl is not None:
@@ -62,352 +66,38 @@ selected_factory = st.sidebar.selectbox("Pick Location",
                                         index=0)
 
 
-# sidebar for filtering data starts here
-
-# st.sidebar.header("Choose your filter: ")
-# # Create for Factory Name
-# factory=st.sidebar.multiselect("Pick Location",
-#                                df["Factory"].unique(),
-#                                default=df["Factory"].unique()
-#                                )
-
-# if selected_factory == "All":
-#     filtered_df = df.copy()
-#     hands_df_all=han
-# else:
-#     filtered_df = df[df["Factory"] == selected_factory]
-
-# if selected_factory == "All":
-#     hands_df = hands_df.copy()
-# else:
-#     hands_df = hands_df[hands_df["Factory"] == selected_factory]
+# Define the function to generate a download link for Excel
+def get_table_download_link(df, filename):
+    excel_file_buffer = BytesIO()
+    df.to_excel(excel_file_buffer, index=False)
+    excel_file_buffer.seek(0)
+    b64 = base64.b64encode(excel_file_buffer.read()).decode()
+    href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}.xlsx">Download file</a>'
+    return href
 
 
+if selected_factory=="All":
+    factory_df_selected=df
+    with st.expander("View DataFrame"):
+        # Display the DataFrame within the expander
+        st.write(factory_df_selected)
+        # Generate a download button for the DataFrame
+else:
+    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
-# Create for mill no
-# millno=st.sidebar.multiselect("Choose Mill",
-#                               df["Mill No."].unique(),
-#                               default=df["Mill No."].unique()
-#                               )
-
-# if not millno:
-#     df3=df2.copy()
-# else:
-#     df3=df2[df2["Mill No."].isin(millno)]
-
-
-# Create for product type
-# quality=st.sidebar.multiselect("Select Quality"
-#                                ,df["Product Type"].unique()
-#                                ,default=df["Product Type"].unique()
-#                                )
-
-# if not quality:
-#     df4=df3.copy()
-# else:
-#     df4=df3[df3["Product Type"].isin(quality)]
-
-# sidebar for filtering data ends here
-
-
-
-
-# # Filter the data based on quality, product type and mill no
-# if not factory and not millno and not quality:
-#     filtered_df = df
-# elif not factory and not millno:
-#     filtered_df = df[df["Product Type"].isin(quality)]
-# elif not quality and not factory:
-#     filtered_df = df[df["Mill No."].isin(millno)]
-# elif millno and quality:
-#     filtered_df = df3[df["Mill No."].isin(millno) & df3["Product Type"].isin(quality)]
-# elif quality and factory:
-#     filtered_df = df3[df["Product Type"].isin(quality) & df3["Factory"].isin(factory)]
-# elif factory and millno:
-#     filtered_df = df3[df["Factory"].isin(factory) & df3["Mill No."].isin(millno)]
-# elif quality:
-#     filtered_df = df3[df3["Product Type"].isin(quality)]
-# elif millno:
-#     filtered_df = df3[df3["Mill No."].isin(millno)]
-# elif factory:
-#     filtered_df = df3[df3["Factory"].isin(factory)]
-# else:
-#     filtered_df = df3[df3["Product Type"].isin(quality) & df3["Mill No."].isin(millno) & df3["Factory"].isin(factory)]
-
-# data filtering ends here
-
-
-# section for hands per ton
-# if not factory and not millno and not quality:
-#     filtered_df_1 = hands_df
-# elif factory and millno:
-#     filtered_df_1 = hands_df[hands_df["Factory"].isin(factory) & hands_df["Mill No."].isin(millno)]
-# elif millno:
-#     filtered_df_1 = hands_df[hands_df["Mill No."].isin(millno)]
-# elif factory:
-#     filtered_df_1 = hands_df[hands_df["Factory"].isin(factory)]
-# elif quality:
-#     filtered_df_1 = hands_df
-# else:
-#     filtered_df_1 = hands_df["Mill No."].isin(millno) & hands_df["Factory"].isin(factory) 
-
-# hands per ton section ends here
-
-
-# # Stock Filter the data based on product type and mill no
-# if not factory and not millno and not quality:
-#     filtered_df_stock= stock_df
-# elif factory and millno:
-#     filtered_df_stock = stock_df[stock_df["Factory"].isin(factory) & stock_df["Mill No."].isin(millno)]
-# elif millno:
-#     filtered_df_stock = stock_df[stock_df["Mill No."].isin(millno)]
-# elif factory:
-#     filtered_df_stock = stock_df[stock_df["Factory"].isin(factory)]
-# elif quality:
-#     filtered_df_stock = stock_df  
-# else:
-#     filtered_df_stock = stock_df["Mill No."].isin(millno) & stock_df["Factory"].isin(factory) 
-
-# Stock data filtering ends here
-
-
-
-# section for text columns
-# actual_production=factory_df["achieved production"].sum()
-
-# efficiency=factory_df["Efficiency"].mean()
-
-# converted_production=factory_df["Converted Production"].sum()
-
-# total_frame=factory_df["frame"].sum()
-
-# total_hands=hands_df["Hands"].sum()
-
-
-# stock_despatch=stock_df["Despatch M/Ton"].sum()
-
-
-# if not factory and not millno and not quality:
-
-#     with col1:
-#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
-#         st.markdown(original_title,unsafe_allow_html=True)
-#         # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
-#         # st.markdown(value,unsafe_allow_html=True)
-#         # st.markdown("")
-#         # st.markdown("")
-#         # st.markdown("")
-
-
-#         col1_target, col1_actual =st.columns((2))
-#         with col1_target:
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Target</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-            
-#         with col1_actual:
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Actual</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-
-#     with col2:
-#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Efficiency</p>'
-#         st.markdown(original_title,unsafe_allow_html=True)
-#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_efficiency}</p>'
-#         st.markdown(value,unsafe_allow_html=True)
-#         st.markdown("")
-#         st.markdown("")
-#         st.markdown("")
-
-#     with col3:
-#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;">Converted Production</p>'
-#         st.markdown(original_title,unsafe_allow_html=True)
-#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_converted_production}</p>'
-#         st.markdown(value,unsafe_allow_html=True)
-#         st.markdown("")
-#         st.markdown("")
-#         st.markdown("")
-        
-
-#     with col4:
-#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Frame</p>'
-#         st.markdown(original_title,unsafe_allow_html=True)
-#         # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
-#         # st.markdown(value,unsafe_allow_html=True)
-#         # st.markdown("")
-#         # st.markdown("")
-#         # st.markdown("")
-
-#         existing, running =st.columns((2))
-#         with existing:
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Existing</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-
-            
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-#         with running:
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Running</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-        
-        
-#         with col5:
-           
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Total Hands</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_total_hands}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-
-
-#         with col6:
-           
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Despatch</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_stock_despatch}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-
-# else:
-#     with col1:
-#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
-#         st.markdown(original_title,unsafe_allow_html=True)
-#         # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
-#         # st.markdown(value,unsafe_allow_html=True)
-#         # st.markdown("")
-#         # st.markdown("")
-#         # st.markdown("")
-
-
-#         col1_target, col1_actual =st.columns((2))
-#         with col1_target:
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Target</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-            
-#         with col1_actual:
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Actual</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-            
-
-#     with col2:
-
-
-#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
-        
-#         st.markdown(original_title,unsafe_allow_html=True)
-#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
-#         st.markdown(value,unsafe_allow_html=True)
-
-#         st.markdown("")
-#         st.markdown("")
-#         st.markdown("")
-       
+    # Filter the DataFrame based on the selected factories
+    factory_df_selected = df[df['Factory'].isin(selected_factory)]
     
 
-#     with col3:
-#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
-#         st.markdown(original_title,unsafe_allow_html=True)
-#         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
-#         st.markdown(value,unsafe_allow_html=True)
-#         st.markdown("")
-#         st.markdown("")
-#         st.markdown("")
-   
-#     with col4:
-#         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Frame</p>'
-#         st.markdown(original_title,unsafe_allow_html=True)
-#         # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
-#         # st.markdown(value,unsafe_allow_html=True)
-#         # st.markdown("")
-#         # st.markdown("")
-#         # st.markdown("")
+    with st.expander("View DataFrame"):
+        # Display the DataFrame within the expander
+        st.write(factory_df_selected)
+        # Generate a download button for the DataFrame
+        
 
-#         existing, running =st.columns((2))
-#         with existing:
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Existing</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
+st.markdown(get_table_download_link(factory_df_selected, "production"), unsafe_allow_html=True)
 
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-
-            
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-#         with running:
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Running</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-#     with col5:
-            
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Total Hands</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_total_hands}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-
-    
-#     with col6:
-           
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Despatch</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-#             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_stock_despatch}</p>'
-#             st.markdown(value,unsafe_allow_html=True)
-#             st.markdown("")
-#             st.markdown("")
-#             st.markdown("")
-    
-
-
+st.markdown("")
 
 
 # filter data based on factory

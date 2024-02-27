@@ -5,7 +5,8 @@ import os
 import warnings
 import matplotlib as mult
 import plotly.graph_objs as go
-
+import base64
+from io import BytesIO
 
 warnings.filterwarnings("ignore")
 
@@ -135,6 +136,42 @@ if selected_buyer != "All":
     filtered_df = filtered_df[filtered_df["Buyer's Name"] == selected_buyer]
 if selected_cont_no != "All":
     filtered_df = filtered_df[filtered_df["Contact No."] == selected_cont_no]
+
+
+
+# Define the function to generate a download link for Excel
+def get_table_download_link(df, filename):
+    excel_file_buffer = BytesIO()
+    df.to_excel(excel_file_buffer, index=False)
+    excel_file_buffer.seek(0)
+    b64 = base64.b64encode(excel_file_buffer.read()).decode()
+    href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}.xlsx">Download file</a>'
+    return href
+
+
+if selected_factory=="All":
+    factory_df_selected=filtered_df
+    with st.expander("View DataFrame"):
+        # Display the DataFrame within the expander
+        st.write(factory_df_selected)
+
+        # Generate a download button for the DataFrame
+else:
+    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
+
+    # Filter the DataFrame based on the selected factories
+    factory_df_selected = filtered_df[filtered_df['Factory'].isin(selected_factory)]
+    
+
+    with st.expander("View DataFrame"):
+        # Display the DataFrame within the expander
+        st.write(factory_df_selected)
+        # Generate a download button for the DataFrame
+        
+
+st.markdown(get_table_download_link(factory_df_selected, "Production Details"), unsafe_allow_html=True)
+
+st.markdown("")
 
 
 
