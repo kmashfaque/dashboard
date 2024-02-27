@@ -1,0 +1,23 @@
+.st-emotion-cache-j5r0tf {
+    background-color: rgb(255, 255, 255);
+    
+    margin:0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Optional: horizontally center the content */
+    padding: 0; 
+    position: relative;
+} 
+
+.st-emotion-cache-j5r0tf:after{
+    content: '';
+    height: 70%; 
+    width: 2px;
+    position: absolute;
+    right: 0;
+    top: 0; 
+    
+    background-color: #000000;
+}
+

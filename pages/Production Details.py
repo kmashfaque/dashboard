@@ -264,18 +264,20 @@ if selected_factory=="All":
             # Create a bar chart for production by factory
             fig = px.bar(factory_df, x="Factory", y="achieved production", text=['{:,.2f}'.format(x) for x in factory_df["achieved production"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(factory_df))
-            fig.update_layout(title="Production ")
+            fig.update_layout(title="Production: Premise Wise ")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
             st.warning("No data found for the specified filter.")
 
     with col2:
+        # Convert efficiency values to percentages
+        efficiency_df["Efficiency (%)"] = efficiency_df["Efficiency"] * 100
         try:
             # Create a bar chart for efficiency by factory
-            fig = px.bar(efficiency_df, x="Factory", y="Efficiency", text=['{:,.2f}'.format(x) for x in efficiency_df["Efficiency"]],
+            fig = px.bar(efficiency_df, x="Factory", y="Efficiency (%)", text=['{:,.0f}%'.format(x) for x in efficiency_df["Efficiency (%)"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
-            fig.update_layout(title="Efficiency ")
+            fig.update_layout(title="Efficiency: Premise Wise ")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -290,7 +292,7 @@ if selected_factory=="All":
                 # Create a bar chart for production by factory
                 fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
                 template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
-                fig.update_layout(title="Quality vs Production")
+                fig.update_layout(title="Production: Quality Wise")
                 st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -327,20 +329,22 @@ else:
                          text=['{:,.2f}'.format(x) for x in mill_production_df["achieved production"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #488A99"] * len(mill_production_df))
-            fig.update_layout(title="Production")
+            fig.update_layout(title="Production: Mill Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
             st.warning("No data found for the specified filter.")
 
     with col2:
+        # Convert efficiency values to percentages
+        mill_efficiency_df["Efficiency (%)"] = mill_efficiency_df["Efficiency"] * 100
         try:
             # Create a bar chart for efficiency by mill number
-            fig = px.bar(mill_efficiency_df, x="Mill No.", y="Efficiency",
-                         text=['{:,.2f}'.format(x) for x in mill_efficiency_df["Efficiency"]],
+            fig = px.bar(mill_efficiency_df, x="Mill No.", y="Efficiency (%)",
+                         text=['{:,.0f}%'.format(x) for x in mill_efficiency_df["Efficiency (%)"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #1C4E80"] * len(mill_efficiency_df))
-            fig.update_layout(title="Efficiency ")
+            fig.update_layout(title="Efficiency: Mill Wise ")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -353,7 +357,7 @@ else:
                 # Create a bar chart for production by factory
                 fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
                 template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
-                fig.update_layout(title="Quality vs Production")
+                fig.update_layout(title="Production: Quality Wise")
                 st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -376,7 +380,7 @@ with col1:
             # Create a bar chart for production by factory
             fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
             template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
-            fig.update_layout(title="Countwise Production")
+            fig.update_layout(title="Production: Countwise")
             st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:
@@ -388,7 +392,7 @@ with col2:
                 # Create a bar chart for production by factory
                 fig = px.bar(ply_df, x="Ply", y="achieved production", text=['{:,.2f}'.format(x) for x in ply_df["achieved production"]],
                             template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(ply_df))
-                fig.update_layout(title="Ply")
+                fig.update_layout(title="Production: Ply Wise")
                 st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:
@@ -418,10 +422,13 @@ with col1:
 count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["Efficiency"].mean()
 
 with col2:
+    # Convert efficiency values to percentages
+    count_df["Efficiency (%)"] = count_df["Efficiency"] * 100
+
          
     try:
             # Create a bar chart for production by factory
-            fig = px.bar(count_df, x="count", y="Efficiency", text=['{:,.2f}'.format(x) for x in count_df["Efficiency"]],
+            fig = px.bar(count_df, x="count", y="Efficiency (%)", text=['{:,.0f}%'.format(x) for x in count_df["Efficiency (%)"]],
             template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
             fig.update_layout(title="Efficiency vs Count")
             st.plotly_chart(fig, use_container_width=True)

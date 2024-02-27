@@ -24,7 +24,8 @@ st.set_page_config(page_title="Over All Production!!", page_icon=":bar_chart:", 
 st.title(" :bar_chart: Production Details Dashboard")
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 
-
+with open("pages\style.css")as f:
+    st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
 
 # file uploading section
 # fl=st.file_uploader(":file_folder: Upload a file", type=(["csv","xlsx","txt","xls"]))
@@ -148,10 +149,10 @@ if selected_factory=="All":
     with col1:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 14px; font-weight:bold;text-align:center;margin:0;">Production</p>'
         
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_actual_production}</p>'
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 14px; font-weight:bold;text-align:center;margin:0">{formatted_actual_production}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
         st.markdown("")
@@ -162,10 +163,10 @@ if selected_factory=="All":
     with col2:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 14px; font-weight:bold;text-align:center">Efficiency</p>'
         
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 14px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
         st.markdown("")
@@ -177,10 +178,10 @@ if selected_factory=="All":
     with col3:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 14px; font-weight:bold;text-align:center">Converted Production</p>'
         
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 14px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
         st.markdown("")
@@ -190,10 +191,10 @@ if selected_factory=="All":
     with col4:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Frame</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 14px; font-weight:bold;text-align:center">Frame</p>'
         
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 14px; font-weight:bold;text-align:center">{total_frame}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
         st.markdown("")
@@ -244,10 +245,10 @@ else:
     with col1:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 14px; font-weight:bold;text-align:center">Production</p>'
         
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_actual_production}</p>'
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 14px; font-weight:bold;text-align:center">{formatted_actual_production}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
         st.markdown("")
@@ -258,10 +259,10 @@ else:
     with col2:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 14px; font-weight:bold;text-align:center">Efficiency</p>'
         
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 14px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
         st.markdown("")
@@ -273,10 +274,10 @@ else:
     with col3:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 14px; font-weight:bold;text-align:center">Converted Production</p>'
         
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 14px; font-weight:bold;text-align:center">{formatted_converted_production}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
         st.markdown("")
@@ -286,10 +287,10 @@ else:
     with col4:
 
 
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Frame</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 14px; font-weight:bold;text-align:center">Frame</p>'
         
         st.markdown(original_title,unsafe_allow_html=True)
-        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{total_frame}</p>'
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 14px; font-weight:bold;text-align:center">{total_frame}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
         st.markdown("")
@@ -303,17 +304,28 @@ else:
 col1, col2, col3 = st.columns((3))
 
 # Display factory-wise charts
-if selected_factory=="All":
+import plotly.express as px
+
+if selected_factory == "All":
     factory_df = df.groupby(df["Factory"], as_index=False)["achieved production"].sum()
     efficiency_df = df.groupby(df["Factory"], as_index=False)["Efficiency"].mean()
-    ply_df=df.groupby(df["Ply"],as_index=False)["achieved production"].sum()
-   
+    ply_df = df.groupby(df["Ply"], as_index=False)["achieved production"].sum()
+
     with col1:
         try:
             # Create a bar chart for production by factory
-            fig = px.bar(factory_df, x="Factory", y="achieved production", text=['{:,.2f}'.format(x) for x in factory_df["achieved production"]],
-                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(factory_df))
+            fig = px.bar(
+                factory_df,
+                x="Factory",
+                y="achieved production",
+                text=["{:,.2f}".format(x) for x in factory_df["achieved production"]],
+                template="seaborn",
+                width=350,
+                height=350,
+                color=factory_df["Factory"],  # Assigning different colors based on the "Factory" column
+            )
             fig.update_layout(title="Production ")
+            fig.update_traces(textfont_color='white')  # Setting text color to white
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -322,23 +334,39 @@ if selected_factory=="All":
     with col2:
         try:
             # Create a bar chart for efficiency by factory
-            fig = px.bar(efficiency_df, x="Factory", y="Efficiency", text=['{:,.2f}'.format(x) for x in efficiency_df["Efficiency"]],
-                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
+            fig = px.bar(
+                efficiency_df,
+                x="Factory",
+                y="Efficiency",
+                text=["{:,.2f}".format(x) for x in efficiency_df["Efficiency"]],
+                template="seaborn",
+                width=350,
+                height=350,
+                color=efficiency_df["Factory"],  # Assigning different colors based on the "Factory" column
+            )
             fig.update_layout(title="Efficiency ")
+            fig.update_traces(textfont_color='white')  # Setting text color to white
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
             st.warning("No data found for the specified filter.")
-    
 
     with col3:
 
-        
         try:
             # Create a bar chart for production by factory
-            fig = px.bar(ply_df, x="Ply", y="achieved production", text=['{:,.2f}'.format(x) for x in ply_df["achieved production"]],
-                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(ply_df))
+            fig = px.bar(
+                ply_df,
+                x="Ply",
+                y="achieved production",
+                text=["{:,.2f}".format(x) for x in ply_df["achieved production"]],
+                template="seaborn",
+                width=350,
+                height=350,
+                color=ply_df["Ply"],  # Assigning different colors based on the "Ply" column
+            )
             fig.update_layout(title="Ply")
+            fig.update_traces(textfont_color='white')  # Setting text color to white
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -1075,3 +1103,135 @@ else:
 
 # # # # Display the chart in Streamlit
 # # st.plotly_chart(fig,use_container_width=True)
+        
+#         import streamlit as st
+# import plotly.express as px
+# import pandas as pd
+# import os
+# import warnings
+# import matplotlib as mult
+# import plotly.graph_objs as go
+# import streamlit as st
+# import pandas as pd
+# import base64
+# from io import BytesIO
+
+# warnings.filterwarnings("ignore")
+
+# st.set_page_config(page_title="Over All Production!!", page_icon=":bar_chart:", layout="wide")
+
+# st.title(" :bar_chart: Production Details Dashboard")
+# st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
+
+# os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
+
+# Load the DataFrame
+df = pd.read_excel("production.xlsx", sheet_name="Overall Production")
+unique_date=df["Date"]
+
+# Sidebar for filtering data
+st.sidebar.header("Choose your filter:")
+selected_factory = st.sidebar.selectbox("Pick Location", ["All"] + list(df["Factory"].unique()), index=0)
+
+# Filter mill numbers based on the selected factory
+if selected_factory == "All":
+    filtered_mill_numbers = df["Mill No."].unique()
+else:
+    filtered_mill_numbers = df[df["Factory"] == selected_factory]["Mill No."].unique()
+
+selected_mill_number = st.sidebar.selectbox("Pick Mill No.", ["All"] + list(filtered_mill_numbers), index=0)
+
+# Define the function to generate a download link for Excel
+def get_table_download_link(df, filename):
+    excel_file_buffer = BytesIO()
+    df.to_excel(excel_file_buffer, index=False)
+    excel_file_buffer.seek(0)
+    b64 = base64.b64encode(excel_file_buffer.read()).decode()
+    href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}.xlsx">Download file</a>'
+    return href
+
+# Filter the DataFrame based on the selected factories
+if selected_factory=="All":
+    factory_df=df
+else:
+    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
+    factory_df_selected = df[df['Factory'].isin(selected_factory)]
+    factory_df = factory_df_selected
+
+# Display the DataFrame and generate a download button
+with st.expander("View DataFrame", expanded=True):
+    # Card-style container for the DataFrame
+    with st.container():
+        st.dataframe(factory_df.iloc[:, :8])  # Display only the first 8 columns
+        st.markdown(get_table_download_link(factory_df, "production"), unsafe_allow_html=True)
+
+# Define card-style container function
+def card_container(title, value):
+    return f'''
+        <div style="border-radius: 10px; border: 2px solid #AC3E31; padding: 20px; background-color: #F5F5F5; margin-bottom: 20px;">
+            <p style="font-family: Arial-Black; color: Black; font-size: 18px; font-weight: bold; text-align: center;">{title}</p>
+            <p style="font-family: Arial-Black; color: #AC3E31; font-size: 18px; font-weight: bold; text-align: center;">{value}</p>
+        </div>
+    '''
+
+# Calculate metrics
+production = factory_df["achieved production"].sum()
+efficiency = factory_df["Efficiency"].mean()
+converted_production = factory_df["Converted Production"].sum()
+total_frame = factory_df["Frame"].sum()
+
+# Format metrics
+formatted_production = "{:.2f}".format(production)
+formatted_efficiency = "{:.0%}".format(efficiency)
+formatted_converted_production = "{:.2f}".format(converted_production)
+
+# Display metrics in card-style containers
+col1, col2, col3, col4 = st.columns(4)
+col1.markdown(card_container("Production", formatted_production), unsafe_allow_html=True)
+col2.markdown(card_container("Efficiency", formatted_efficiency), unsafe_allow_html=True)
+col3.markdown(card_container("Converted Production", formatted_converted_production), unsafe_allow_html=True)
+col4.markdown(card_container("Frame", total_frame), unsafe_allow_html=True)
+
+# Display charts
+# Your chart code here...
+
+# Quality-wise chart
+if selected_factory=="All":
+    quality_df = df.groupby(df["Product Type"], as_index=False)["achieved production"].sum()
+    
+    try:
+        fig = px.bar(quality_df, x="Product Type", y="achieved production",
+                     text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
+                     template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
+        fig.update_layout(title="Quality vs Production")
+        st.plotly_chart(fig, use_container_width=True)
+
+    except IndexError:
+        st.warning("No data found for the specified filter.")
+
+# Display mill-wise data if a factory is selected
+else:
+    selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
+    factory_df_selected = df[df['Factory'].isin(selected_factory)]
+    selected_mills_production = factory_df_selected["Mill No."].unique()
+    mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
+    
+    if selected_mill_number=="All":
+        mill_count_df = mill_df.groupby(["Product Type"], as_index=False)["achieved production"].sum()
+    else:
+        selected_mill_number = [selected_mill_number] if isinstance(selected_mill_number, str) else selected_mill_number
+        mill_df_selected = factory_df_selected[factory_df_selected['Mill No.'].isin(selected_mill_number)]
+        selected_mills = mill_df_selected["Product Type"].unique()
+        mill_df_count = mill_df_selected[mill_df_selected["Product Type"].isin(selected_mills)]
+        mill_count_df = mill_df_count.groupby(["Product Type"], as_index=False)["achieved production"].sum()
+    
+    try:
+        fig = px.bar(mill_count_df, x="Product Type", y="achieved production",
+                     text=['{:,.2f}'.format(x) for x in mill_count_df["achieved production"]],
+                     template="seaborn", width=1000, height=500,
+                     color_discrete_sequence=[" #488A99"] * len(mill_count_df))
+        fig.update_layout(title="Quality vs Production")
+        st.plotly_chart(fig, use_container_width=True)
+
+    except IndexError:
+        st.warning("No data found for the specified filter.")

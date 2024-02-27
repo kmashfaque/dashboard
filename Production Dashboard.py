@@ -717,7 +717,7 @@ if selected_factory=="All":
         # Create a bar chart for production by factory
         fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
-        fig.update_layout(title="Countwise Production")
+        fig.update_layout(title="Production: Countwise")
         st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:
