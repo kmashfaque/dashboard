@@ -248,7 +248,7 @@ with col1:
         formatted_total_hands="{:.2f}".format(total_hands)
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Hands</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premises Wise</p>'
         st.markdown(original_title,unsafe_allow_html=True)
         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{formatted_total_hands}</p>'
         st.markdown(value,unsafe_allow_html=True)
@@ -258,7 +258,7 @@ with col2:
         formatted_total_hands="{:.2f}".format(hands_per_ton)
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Hands Per Ton</p>'
         st.markdown(original_title,unsafe_allow_html=True)
-        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premises Wise</p>'
         st.markdown(original_title,unsafe_allow_html=True)
         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{formatted_total_hands}</p>'
         st.markdown(value,unsafe_allow_html=True)
@@ -371,7 +371,7 @@ with col1:
     
         fig=px.bar(factory_df,x="Factory",y="Hands",text=['{:,.2f}'.format(x) for x in factory_df["Hands"]],
                     template = "seaborn",height=350,width=350)
-        fig.update_layout(title="Factory Wise Hands")
+        fig.update_layout(title="Hands: Premises Wise")
     
     except IndexError:
         st.warning("No data found for the specified filter.")
@@ -388,7 +388,7 @@ with col2:
         # st.markdown(original_title,unsafe_allow_html=True)
         fig = px.bar(factory_df_hands_per_ton, x="Factory",y="Hands Per Ton",text=['{:,.2f}'.format(x) for x in factory_df_hands_per_ton["Hands Per Ton"]],
                     template="seaborn",height=350,width=350)
-        fig.update_layout(title="Factory Wise Hands Per Ton")
+        fig.update_layout(title="Hands Per Ton: Premises Wise")
     
     except IndexError:
         st.warning("No data found for the specified filter.")
@@ -453,7 +453,7 @@ with col2:
             # Create a bar chart for production by factory
             fig = px.bar(sectionwise_df, x="Section", y="Hands Per Ton", text=['{:,.2f}'.format(x) for x in sectionwise_df["Hands Per Ton"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(sectionwise_df))
-            fig.update_layout(title="Production by Factory")
+            fig.update_layout(title="Production: Section Wise")
             st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:

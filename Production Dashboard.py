@@ -226,7 +226,7 @@ if selected_factory=="All":
            
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Hands Per Ton</p>'
             st.markdown(original_title,unsafe_allow_html=True)
-            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premises Wise</p>'
             st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_total_hands}</p>'
             st.markdown(value,unsafe_allow_html=True)
@@ -239,7 +239,7 @@ if selected_factory=="All":
            
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Despatch</p>'
             st.markdown(original_title,unsafe_allow_html=True)
-            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premises Wise</p>'
             st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_stock_despatch}</p>'
             st.markdown(value,unsafe_allow_html=True)
@@ -369,7 +369,7 @@ else:
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Hands Per Ton</p>'
             st.markdown(original_title,unsafe_allow_html=True)
            
-            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premises Wise</p>'
             st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_total_hands}</p>'
             st.markdown(value,unsafe_allow_html=True)
@@ -382,7 +382,7 @@ else:
            
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center;">Despatch</p>'
             st.markdown(original_title,unsafe_allow_html=True)
-            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premise Wise</p>'
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Premises Wise</p>'
             st.markdown(original_title,unsafe_allow_html=True)
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold; text-align:center;">{formatted_stock_despatch}</p>'
             st.markdown(value,unsafe_allow_html=True)
@@ -606,7 +606,7 @@ if selected_factory=="All":
             # Create a bar chart for production by factory
             fig = px.bar(factory_df, x="Factory", y="achieved production", text=['{:,.2f}'.format(x) for x in factory_df["achieved production"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(factory_df))
-            fig.update_layout(title="Production: Premise Wise")
+            fig.update_layout(title="Production: Premises Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -622,7 +622,7 @@ if selected_factory=="All":
                          text=['{:,.0f}%'.format(x) for x in efficiency_df["Efficiency (%)"]],
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
-            fig.update_layout(title="Efficiency: Premise Wise")
+            fig.update_layout(title="Efficiency: Premises Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -633,7 +633,7 @@ if selected_factory=="All":
             # Create a bar chart for hands per ton by factory
             fig = px.bar(hands_per_ton_df, x="Factory", y="Hands Per Ton", text=['{:,.2f}'.format(x) for x in hands_per_ton_df["Hands Per Ton"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=["#AC3E31"] * len(hands_per_ton_df))
-            fig.update_layout(title="Hands Per Ton: Premise Wise")
+            fig.update_layout(title="Hands Per Ton: Premises Wise")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:

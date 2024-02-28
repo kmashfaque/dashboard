@@ -264,7 +264,7 @@ if selected_factory=="All":
             # Create a bar chart for production by factory
             fig = px.bar(factory_df, x="Factory", y="achieved production", text=['{:,.2f}'.format(x) for x in factory_df["achieved production"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(factory_df))
-            fig.update_layout(title="Production: Premise Wise ")
+            fig.update_layout(title="Production: Premises Wise ")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -277,7 +277,7 @@ if selected_factory=="All":
             # Create a bar chart for efficiency by factory
             fig = px.bar(efficiency_df, x="Factory", y="Efficiency (%)", text=['{:,.0f}%'.format(x) for x in efficiency_df["Efficiency (%)"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
-            fig.update_layout(title="Efficiency: Premise Wise ")
+            fig.update_layout(title="Efficiency: Premises Wise ")
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
