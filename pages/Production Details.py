@@ -37,9 +37,8 @@ unique_date=df["Date"]
 
 
 
-# # date filtering starts here
-col1, col2=st.columns((2))
-df["Date"]=pd.to_datetime(df["Date"])
+col1, col2 = st.columns(2)
+df["Date"] = pd.to_datetime(df["Date"])
 
 # Get the minimum and maximum dates from the DataFrame
 min_date = df["Date"].min()
@@ -50,20 +49,20 @@ default_start_date = min_date.date()
 default_end_date = max_date.date()
 
 # Display the date input widgets in two columns
-col1, col2 = st.columns(2)
-
 with col1:
-    date1 = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
+    start_date = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_start_date)
 
 with col2:
-    date2 = st.date_input("End Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
+    # Set the minimum value of the end date input dynamically based on the selected start date
+    min_end_date = min(start_date, default_end_date)
+    end_date = st.date_input("End Date", min_value=min_end_date, max_value=max_date.date(), value=default_end_date)
 
 # Convert start_date and end_date to Timestamp objects
-date1 = pd.Timestamp(date1)
-date2 = pd.Timestamp(date2)
+start_date = pd.Timestamp(start_date)
+end_date = pd.Timestamp(end_date)
 
-df=df[(df["Date"]>=date1) & (df["Date"]<=date2)].copy()
-
+# Apply date filtering to the DataFrame
+df = df[(df["Date"] >= start_date) & (df["Date"] <= end_date)].copy()
 # date filtering section ends here
 
 
