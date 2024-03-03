@@ -22,7 +22,7 @@ hands_df=hands_df[hands_df["Date"].isin(unique_date)]
 stock_df=stock_df[stock_df["Date"].isin(unique_date)]
 
 # Extract the end date from the DataFrame
-end_date_from_df = df["Date"].max().strftime('%Y-%m-%d')
+end_date_from_df = df["Date"].min().strftime('%Y-%m-%d')
 st.set_page_config(page_title="Production Dashboard!!", page_icon=":bar_chart:", layout="wide")
 
 title_with_end_date = f":bar_chart: Daily Production Dashboard - Date: {end_date_from_df}"
@@ -30,6 +30,16 @@ st.title(title_with_end_date)
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 st.markdown("")
 st.markdown("")
+
+
+# Filter the DataFrame to include only data for the last date
+df_last_date = df[df["Date"] == end_date_from_df]
+
+# Filter the hands DataFrame to include only data for the last date
+hands_df_last_date = hands_df[hands_df["Date"] == end_date_from_df]
+
+# Filter the stock DataFrame to include only data for the last date
+stock_df_last_date = stock_df[stock_df["Date"] == end_date_from_df]
 
 # file uploading section
 # fl=st.file_uploader(":file_folder: Upload a file", type=(["csv","xlsx","txt","xls"]))
@@ -62,14 +72,14 @@ st.markdown("")
 st.sidebar.header("Choose your filter:")
 # Create for Factory Name
 selected_factory = st.sidebar.selectbox("Pick Location",
-                                        ["All"] + list(df["Factory"].unique()),
+                                        ["All"] + list(df_last_date["Factory"].unique()),
                                         index=0)
 
 
 # Define the function to generate a download link for Excel
-def get_table_download_link(df, filename):
+def get_table_download_link(df_last_date, filename):
     excel_file_buffer = BytesIO()
-    df.to_excel(excel_file_buffer, index=False)
+    df_last_date.to_excel(excel_file_buffer, index=False)
     excel_file_buffer.seek(0)
     b64 = base64.b64encode(excel_file_buffer.read()).decode()
     href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}.xlsx">Download file</a>'
@@ -77,7 +87,7 @@ def get_table_download_link(df, filename):
 
 
 if selected_factory=="All":
-    factory_df_selected=df
+    factory_df_selected=df_last_date
     with st.expander("View DataFrame"):
         # Display the DataFrame within the expander
         st.write(factory_df_selected)
@@ -86,7 +96,7 @@ else:
     selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
     # Filter the DataFrame based on the selected factories
-    factory_df_selected = df[df['Factory'].isin(selected_factory)]
+    factory_df_selected = df_last_date[df_last_date['Factory'].isin(selected_factory)]
     
 
     with st.expander("View DataFrame"):
@@ -109,15 +119,15 @@ col1,col2,col3,col4,col5,col6=st.columns((6))
 if selected_factory=="All":
 
 
-    factory_df=df
-    hands_df_all=hands_df
-    stock_all=stock_df
+    factory_df=df_last_date
+    hands_df_all=hands_df_last_date
+    stock_all=stock_df_last_date
     actual_production=factory_df["achieved production"].sum()
     efficiency=factory_df["Efficiency"].mean()
     converted_production=factory_df["Converted Production"].sum()
-    total_frame=factory_df["frame"].sum()
-    total_hands=hands_df["Hands Per Ton"].sum()
-    stock_despatch=stock_df["Despatch M/Ton"].sum()
+    total_frame=factory_df["Frame"].sum()
+    total_hands=hands_df_all["Hands Per Ton"].sum()
+    stock_despatch=stock_all["Despatch M/Ton"].sum()
 
     formatted_actual_production="{:.2f}".format(actual_production)
     formatted_efficiency="{:.0%}".format(efficiency)
@@ -251,13 +261,13 @@ else:
 
 
     selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
-    factory_df_selected = df[df['Factory'].isin(selected_factory)]
-    hands_df_selected = hands_df[hands_df["Factory"].isin(selected_factory)]
-    stock_df_selected = stock_df[stock_df["Factory"].isin(selected_factory)]
+    factory_df_selected = df_last_date[df_last_date['Factory'].isin(selected_factory)]
+    hands_df_selected = hands_df_last_date[hands_df_last_date["Factory"].isin(selected_factory)]
+    stock_df_selected = stock_df_last_date[stock_df_last_date["Factory"].isin(selected_factory)]
     actual_production=factory_df_selected["achieved production"].sum()
     efficiency=factory_df_selected["Efficiency"].mean()
     converted_production=factory_df_selected["Converted Production"].sum()
-    total_frame=factory_df_selected["frame"].sum()
+    total_frame=factory_df_selected["Frame"].sum()
     total_hands=hands_df_selected["Hands Per Ton"].sum()
     stock_despatch=stock_df_selected["Despatch M/Ton"].sum()
 
@@ -266,6 +276,7 @@ else:
     formatted_efficiency="{:.0%}".format(efficiency)
     formatted_converted_production="{:.2f}".format(converted_production)
     formatted_total_hands="{:.2f}".format(total_hands)
+    total_frame="{:.2f}".format(total_frame)
     formatted_stock_despatch="{:.2f}".format(stock_despatch)
     with col1:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
@@ -598,9 +609,9 @@ col1, col2, col3 = st.columns((3))
 
 # Display factory-wise charts
 if selected_factory=="All":
-    factory_df = df.groupby(df["Factory"], as_index=False)["achieved production"].sum()
-    efficiency_df = df.groupby(df["Factory"], as_index=False)["Efficiency"].mean()
-    hands_per_ton_df = hands_df.groupby(hands_df["Factory"], as_index=False)["Hands Per Ton"].sum()
+    factory_df = df_last_date.groupby(df_last_date["Factory"], as_index=False)["achieved production"].sum()
+    efficiency_df = df_last_date.groupby(df_last_date["Factory"], as_index=False)["Efficiency"].mean()
+    hands_per_ton_df = hands_df_last_date.groupby(hands_df_last_date["Factory"], as_index=False)["Hands Per Ton"].sum()
     with col1:
         try:
             # Create a bar chart for production by factory
@@ -645,8 +656,8 @@ else:
     selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
     # Filter the DataFrame based on the selected factories
-    factory_df_selected = df[df['Factory'].isin(selected_factory)]
-    hands_df_selected = hands_df[hands_df['Factory'].isin(selected_factory)]
+    factory_df_selected = df_last_date[df_last_date['Factory'].isin(selected_factory)]
+    hands_df_selected = hands_df_last_date[hands_df_last_date['Factory'].isin(selected_factory)]
 
     # Extract unique mill numbers from both DataFrames
     selected_mills_production = factory_df_selected["Mill No."].unique()
@@ -711,17 +722,22 @@ else:
 # counwise production chart
 
 if selected_factory=="All":
-    count_df = df.groupby(df["count"], as_index=False)["achieved production"].sum()
-    
+    count_df = df_last_date.groupby(df_last_date["count"], as_index=False)["achieved production"].sum()
+
     try:
         # Create a bar chart for production by factory
         fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
-        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+                    template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
         fig.update_layout(title="Production: Countwise")
+        
+        # Convert the x-axis to categorical to remove blank spaces
+        fig.update_xaxes(type='category')
+        
         st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:
-            st.warning("No data found for the specified filter.")
+        st.warning("No data found for the specified filter.")
+
 
     
 
@@ -731,29 +747,31 @@ else:
     selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
     # Filter the DataFrame based on the selected factories
-    factory_df_selected = df[df['Factory'].isin(selected_factory)]
-    hands_df_selected = hands_df[hands_df['Factory'].isin(selected_factory)]
+    factory_df_selected = df_last_date[df_last_date['Factory'].isin(selected_factory)]
+    hands_df_selected = hands_df_last_date[hands_df_last_date['Factory'].isin(selected_factory)]
 
     # Extract unique mill numbers from both DataFrames
     selected_mills_production = factory_df_selected["count"]
-   
-
 
     mill_df = factory_df_selected[factory_df_selected["count"].isin(selected_mills_production)]
     mill_production_df = mill_df.groupby(["count"], as_index=False)["achieved production"].sum()
-    
-  
+
     try:
         # Create a bar chart for production by mill number
         fig = px.bar(mill_production_df, x="count", y="achieved production",
-        text=['{:,.2f}'.format(x) for x in mill_production_df["achieved production"]],
-        template="seaborn", width=1000, height=500,
-        color_discrete_sequence=[" #488A99"] * len(mill_production_df))
+                    text=['{:,.2f}'.format(x) for x in mill_production_df["achieved production"]],
+                    template="seaborn", width=1000, height=500,
+                    color_discrete_sequence=[" #488A99"] * len(mill_production_df))
         fig.update_layout(title="Countwise Production")
+        
+        # Convert the x-axis to categorical to remove blank spaces
+        fig.update_xaxes(type='category')
+        
         st.plotly_chart(fig, use_container_width=True)
 
     except IndexError:
         st.warning("No data found for the specified filter.")
+
 
    
 

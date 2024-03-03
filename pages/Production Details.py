@@ -31,7 +31,7 @@ st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow
 
 os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
     
-df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
+df=pd.read_excel("production.xlsx")
 
 unique_date=df["Date"]
 
@@ -190,6 +190,8 @@ total_frame=factory_df["Frame"].sum()
 formatted_actual_production="{:.2f}".format(production)
 formatted_efficiency="{:.0%}".format(efficiency)
 formatted_converted_production="{:.2f}".format(converted_production)
+total_frame="{:.2f}".format(total_frame)
+
 
 with col1:
 
@@ -285,19 +287,36 @@ if selected_factory=="All":
     
 
     with col3:
+            ply_df = filtered_df.groupby(filtered_df["Ply"], as_index=False)["achieved production"].sum()
 
-        quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["achieved production"].sum()
-    
-        try:
+
+            try:
                 # Create a bar chart for production by factory
-                fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
-                template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
-                fig.update_layout(title="Production: Quality Wise")
+                fig = px.bar(ply_df, x="Ply", y="achieved production", text=['{:,.2f}'.format(x) for x in ply_df["achieved production"]],
+                            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(ply_df))
+                fig.update_layout(title="Production: Ply Wise")
                 st.plotly_chart(fig, use_container_width=True)
 
-        except IndexError:
-                    st.warning("No data found for the specified filter.")
+            except IndexError:
+                st.warning("No data found for the specified filter.")
+
+        # quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["achieved production"].sum()
+
+        # try:
+        #     # Create a bar chart for production by factory
+        #     fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
+        #                 template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
+        #     fig.update_layout(title="Production: Quality Wise")
             
+        #     # Convert the x-axis to categorical to remove blank spaces
+        #     fig.update_xaxes(type='category')
+            
+        #     st.plotly_chart(fig, use_container_width=True)
+
+        # except IndexError:
+        #     st.warning("No data found for the specified filter.")
+
+                
 
 
 # Display mill-wise data if a factory is selected
@@ -351,92 +370,212 @@ else:
             st.warning("No data found for the specified filter.")
 
     with col3:
-        quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["achieved production"].sum()
-    
-        try:
-                # Create a bar chart for production by factory
-                fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
-                template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
-                fig.update_layout(title="Production: Quality Wise")
-                st.plotly_chart(fig, use_container_width=True)
-
-        except IndexError:
-                    st.warning("No data found for the specified filter.")
-
-        
-
-col1,col2=st.columns([3,2])    
+            
+            ply_df = filtered_df.groupby(filtered_df["Ply"], as_index=False)["achieved production"].sum()
 
 
-
-
-count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["achieved production"].sum()
-ply_df=filtered_df.groupby(filtered_df["Ply"],as_index=False)["achieved production"].sum()
-
-
-with col1:
-      
-    try:
-            # Create a bar chart for production by factory
-            fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
-            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
-            fig.update_layout(title="Production: Countwise")
-            st.plotly_chart(fig, use_container_width=True)
-
-    except IndexError:
-                st.warning("No data found for the specified filter.")
-
-
-with col2:
-    try:
+            try:
                 # Create a bar chart for production by factory
                 fig = px.bar(ply_df, x="Ply", y="achieved production", text=['{:,.2f}'.format(x) for x in ply_df["achieved production"]],
                             template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(ply_df))
                 fig.update_layout(title="Production: Ply Wise")
                 st.plotly_chart(fig, use_container_width=True)
 
-    except IndexError:
+            except IndexError:
                 st.warning("No data found for the specified filter.")
+
+        # quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["achieved production"].sum()
+
+        # try:
+        #     # Create a bar chart for production by factory
+        #     fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
+        #                 template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
+        #     fig.update_layout(title="Production: Quality Wise")
+            
+        #     # Convert the x-axis to categorical to remove blank spaces
+        #     fig.update_xaxes(type='category')
+            
+        #     st.plotly_chart(fig, use_container_width=True)
+
+        # except IndexError:
+        #     st.warning("No data found for the specified filter.")
+
+
+# Calculate the difference between start date and end date
+start_date = filtered_df["Date"].min()
+end_date = filtered_df["Date"].max()
+date_diff = (end_date - start_date).days
+
+
+
+
+
+
+count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["achieved production"].sum()
+quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["achieved production"].sum()
+
+if date_diff<=5:
+    col1,col2=st.columns([3,2])    
+    if len(quality_df)==0:
+       
+            # Create a bar chart for production by factory
+            fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
+                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+            fig.update_layout(title="Production: Countwise")
+            
+            # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
+            
+            st.plotly_chart(fig, use_container_width=True)
+
+    # with col1:
+    #     try:
+    #         # Create a bar chart for production by factory
+    #         fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
+    #                     template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+    #         fig.update_layout(title="Production: Countwise")
+            
+    #         # Convert the x-axis to categorical to remove blank spaces
+    #         fig.update_xaxes(type='category')
+            
+    #         st.plotly_chart(fig, use_container_width=True)
+
+    #     except IndexError:
+    #         st.warning("No data found for the specified filter.")
+
+    
+    else:
+        with col1:
+            try:
+            # Create a bar chart for production by factory
+                fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
+                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+                fig.update_layout(title="Production: Countwise")
+                
+                # Convert the x-axis to categorical to remove blank spaces
+                fig.update_xaxes(type='category')
+                
+                st.plotly_chart(fig, use_container_width=True)
+
+            except IndexError:
+                st.warning("No data found for the specified filter.")
+
+         
+        with col2:
+
+                try:
+                    # Create a bar chart for production by factory
+                    fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
+                                template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
+                    fig.update_layout(title="Production: Quality Wise")
+                    
+                    # Convert the x-axis to categorical to remove blank spaces
+                    fig.update_xaxes(type='category')
+                    
+                    st.plotly_chart(fig, use_container_width=True)
+
+                except IndexError:
+                    st.warning("No data found for the specified filter.")
+
+
+else:
 
 
 # frame vs count chart
 
+    
+    try:
+            # Create a bar chart for production by factory
+            fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
+                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+            fig.update_layout(title="Production: Countwise")
+            
+            # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
+            
+            st.plotly_chart(fig, use_container_width=True)
 
+    except IndexError:
+            st.warning("No data found for the specified filter.")
+
+
+    try:
+                # Create a bar chart for production by factory
+            fig = px.bar(quality_df, x="Product Type", y="achieved production", text=['{:,.2f}'.format(x) for x in quality_df["achieved production"]],
+                            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(quality_df))
+            fig.update_layout(title="Production: Quality Wise")
+                
+                # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
+                
+            st.plotly_chart(fig, use_container_width=True)
+
+    except IndexError:
+            st.warning("No data found for the specified filter.")
+
+
+
+# Grouping and processing data for the first column
 count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["Frame"].sum()
-col1,col2=st.columns(2)
 
-with col1:
-      
-    try:
-            # Create a bar chart for production by factory
+if date_diff <= 5:
+    with col1:
+        try:
+            # Create a bar chart for Frame vs Count
             fig = px.bar(count_df, x="count", y="Frame", text=['{:,.2f}'.format(x) for x in count_df["Frame"]],
-            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
             fig.update_layout(title="Frame vs Count")
+            fig.update_xaxes(type='category')
             st.plotly_chart(fig, use_container_width=True)
 
-    except IndexError:
-                st.warning("No data found for the specified filter.")
+        except IndexError:
+            st.warning("No data found for the specified filter.")
 
-# count vs efficiency
+    # Grouping and processing data for the second column
+    count_eff_df = filtered_df.groupby(filtered_df["count"], as_index=False)["Efficiency"].mean()
+    eff_df = count_eff_df[(count_eff_df["Efficiency"].notnull()) & (count_eff_df["Efficiency"] != 0)]
+    eff_df["Efficiency (%)"] = eff_df["Efficiency"] * 100
 
-count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["Efficiency"].mean()
-
-with col2:
-    # Convert efficiency values to percentages
-    count_df["Efficiency (%)"] = count_df["Efficiency"] * 100
-
-         
-    try:
-            # Create a bar chart for production by factory
-            fig = px.bar(count_df, x="count", y="Efficiency (%)", text=['{:,.0f}%'.format(x) for x in count_df["Efficiency (%)"]],
-            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+    with col2:
+        try:
+            # Create a bar chart for Efficiency vs Count
+            fig = px.bar(eff_df, x="count", y="Efficiency (%)", text=['{:,.0f}%'.format(x) for x in eff_df["Efficiency (%)"]],
+                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(eff_df))
             fig.update_layout(title="Efficiency vs Count")
+            fig.update_xaxes(type='category')
             st.plotly_chart(fig, use_container_width=True)
 
-    except IndexError:
-                st.warning("No data found for the specified filter.")
+        except IndexError:
+            st.warning("No data found for the specified filter.")
+else:
+    try:
+        # Create a bar chart for Frame vs Count
+        fig = px.bar(count_df, x="count", y="Frame", text=['{:,.2f}'.format(x) for x in count_df["Frame"]],
+                    template="seaborn", width=700, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
+        fig.update_layout(title="Frame vs Count")
+        fig.update_xaxes(type='category')
+        st.plotly_chart(fig, use_container_width=True)
 
-        
+    except IndexError:
+        st.warning("No data found for the specified filter.")
+
+    # Grouping and processing data for the second row
+    count_eff_df = filtered_df.groupby(filtered_df["count"], as_index=False)["Efficiency"].mean()
+    eff_df = count_eff_df[(count_eff_df["Efficiency"].notnull()) & (count_eff_df["Efficiency"] != 0)]
+    eff_df["Efficiency (%)"] = eff_df["Efficiency"] * 100
+
+    try:
+        # Create a bar chart for Efficiency vs Count
+        fig = px.bar(eff_df, x="count", y="Efficiency (%)", text=['{:,.0f}%'.format(x) for x in eff_df["Efficiency (%)"]],
+                    template="seaborn", width=700, height=350, color_discrete_sequence=[" #488A99"] * len(eff_df))
+        fig.update_layout(title="Efficiency vs Count")
+        fig.update_xaxes(type='category')
+        st.plotly_chart(fig, use_container_width=True)
+
+    except IndexError:
+        st.warning("No data found for the specified filter.")
+     
+
 
 
 
