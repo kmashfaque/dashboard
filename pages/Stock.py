@@ -250,214 +250,270 @@ with col5:
 col1,col2,col3=st.columns(3)
 
 
-with col1:
+start_date = filtered_df["Date"].min()
+end_date = filtered_df["Date"].max()
+date_diff = (end_date - start_date).days
+
+if date_diff<=5:
+
+
+    with col1:
+        try:
+            # Select only the columns of interest
+            production_df = filtered_df[["Production Pallet", "Production Truss", "Production Carton"]]
+
+            # Sum the production quantities across all counts
+            total_production = production_df.sum()
+
+            # Create a DataFrame for the total production
+            total_production_df = pd.DataFrame(total_production).reset_index()
+
+            # Rename the columns for plotting
+            total_production_df.columns = ["Product", "Total Production"]
+
+            # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(total_production_df, x="Product", y="Total Production",
+                        template="seaborn", width=350,height=350,title=" Production",
+                        color_discrete_sequence=["#488A99", "#1C4E80", "#7C77B9", "#FF5733"],
+                        # Specify custom colors if needed
+                        text="Total Production"
+                        
+                        )
+
+            # Update the layout
+            fig.update_layout(xaxis_title="Product",yaxis_title="Production")
+
+            # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
+        
+        except:
+            st.warning("No data found for the specified filter.")
+
+
+
+    with col2:
+        try:
+            # Select only the columns of interest
+            production_df = filtered_df[["Despatch Pallet", "Despatch Truss", "Despatch Carton"]]
+
+            # Sum the production quantities across all counts
+            total_production = production_df.sum()
+
+            # Create a DataFrame for the total production
+            total_production_df = pd.DataFrame(total_production).reset_index()
+
+            # Rename the columns for plotting
+            total_production_df.columns = ["Product", "Total Production"]
+
+            # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(total_production_df, x="Product", y="Total Production",
+                        template="seaborn", width=350,height=350,title="Despatch",
+                        color_discrete_sequence=["#488A99", "#1C4E80", "#7C77B9", "#FF5733"],
+                        # Specify custom colors if needed
+                        text="Total Production"
+                        
+                        )
+
+            # Update the layout
+            fig.update_layout(xaxis_title="Product", yaxis_title="Production", barmode="stack")
+
+            # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
+        
+        except:
+            st.warning("No data found for the specified filter.")
+
+
+    with col3:
+        try:
+        
+            countwise_despatch=filtered_df.groupby("Count",as_index=False)["Despatch M/Ton"].sum()
+
+            # Filter out rows with zero values in "Despatch M/Ton"
+            countwise_despatch = countwise_despatch[countwise_despatch["Despatch M/Ton"] > 0]
+
+            # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(countwise_despatch, x="Count", y="Despatch M/Ton",
+                        text=['{:,.2f}'.format(x) for x in countwise_despatch["Despatch M/Ton"]],
+                        template="seaborn", width=350,height=350,title="Despatch (M/Ton)",
+                        color_discrete_sequence=[" #488A99"] * len(countwise_despatch),
+                        )
+
+            # Update the layout
+            fig.update_layout(xaxis_title="Product", yaxis_title="Production", barmode="stack")
+
+            # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
+
+        except:
+            st.warning("No data found for the specified filter.")
+
+
+else:
+    start_date = filtered_df["Date"].min()
+    end_date = filtered_df["Date"].max()
+    date_diff = (end_date - start_date).days
+
     try:
-        # Select only the columns of interest
-        production_df = filtered_df[["Production Pallet", "Production Truss", "Production Carton"]]
 
-        # Sum the production quantities across all counts
-        total_production = production_df.sum()
 
-        # Create a DataFrame for the total production
-        total_production_df = pd.DataFrame(total_production).reset_index()
+            # Group by "Count" and sum the "Production M/Ton" values
+            countwise_production = filtered_df.groupby("Count", as_index=False)["Production M/Ton"].sum()
 
-        # Rename the columns for plotting
-        total_production_df.columns = ["Product", "Total Production"]
+            
+                # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(countwise_production, x="Count", y="Production M/Ton",
+                            text=['{:,.2f}'.format(x) for x in countwise_production["Production M/Ton"]],
+                            template="seaborn", width=800, height=500, title="Countwise Closing Stock",
+                            color_discrete_sequence=[" #488A99"] * len(countwise_production))
 
-        # Plot the DataFrame as a stacked bar chart
-        fig = px.bar(total_production_df, x="Product", y="Total Production",
-                    template="seaborn", width=350,height=350,title=" Production",
-                    color_discrete_sequence=["#488A99", "#1C4E80", "#7C77B9", "#FF5733"],
-                    # Specify custom colors if needed
-                    text="Total Production"
-                    
-                    )
+                # Update the layout
+            fig.update_layout(xaxis_title="Product", yaxis_title="Production")
 
-        # Update the layout
-        fig.update_layout(xaxis_title="Product",yaxis_title="Production")
+                # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
+    except:
+            st.warning("No data found for the specified end date.")
 
-        # Display the chart
-        st.plotly_chart(fig, use_container_width=True)
+
     
-    except:
-        st.warning("No data found for the specified filter.")
-
-
-
-with col2:
     try:
-        # Select only the columns of interest
-        production_df = filtered_df[["Despatch Pallet", "Despatch Truss", "Despatch Carton"]]
+        # Filter the DataFrame based on the end date
+            filtered_df = df[df["Date"] == date1]
 
-        # Sum the production quantities across all counts
-        total_production = production_df.sum()
+            # Group by "Count" and sum the "Loose Stock M/Ton" values
+            countwise_loose_stock = filtered_df.groupby("Count", as_index=False)["Loose Stock"].sum()
 
-        # Create a DataFrame for the total production
-        total_production_df = pd.DataFrame(total_production).reset_index()
+            
+                # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(countwise_loose_stock, x="Count", y="Loose Stock",
+                            text=['{:,.2f}'.format(x) for x in countwise_loose_stock["Loose Stock"]],
+                            template="seaborn", width=800, height=500, title="Countwise Opening Stock",
+                            color_discrete_sequence=[" #488A99"] * len(countwise_loose_stock))
 
-        # Rename the columns for plotting
-        total_production_df.columns = ["Product", "Total Production"]
+                # Update the layout
+            fig.update_layout(xaxis_title="Product", yaxis_title="Loose Stock")
 
-        # Plot the DataFrame as a stacked bar chart
-        fig = px.bar(total_production_df, x="Product", y="Total Production",
-                    template="seaborn", width=350,height=350,title="Despatch",
-                    color_discrete_sequence=["#488A99", "#1C4E80", "#7C77B9", "#FF5733"],
-                    # Specify custom colors if needed
-                    text="Total Production"
-                    
-                    )
-
-        # Update the layout
-        fig.update_layout(xaxis_title="Product", yaxis_title="Production", barmode="stack")
-
-        # Display the chart
-        st.plotly_chart(fig, use_container_width=True)
-    
+                # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
     except:
-        st.warning("No data found for the specified filter.")
+            st.warning("No data found for the specified end date.")
 
 
-with col3:
-    try:
-       
-        countwise_despatch=filtered_df.groupby("Count",as_index=False)["Despatch M/Ton"].sum()
 
-         # Filter out rows with zero values in "Despatch M/Ton"
-        countwise_despatch = countwise_despatch[countwise_despatch["Despatch M/Ton"] > 0]
 
-        # Plot the DataFrame as a stacked bar chart
-        fig = px.bar(countwise_despatch, x="Count", y="Despatch M/Ton",
-                    text=['{:,.2f}'.format(x) for x in countwise_despatch["Despatch M/Ton"]],
-                    template="seaborn", width=350,height=350,title="Despatch (M/Ton)",
-                    color_discrete_sequence=[" #488A99"] * len(countwise_despatch),
-                    )
 
-        # Update the layout
-        fig.update_layout(xaxis_title="Product", yaxis_title="Production", barmode="stack")
 
-        # Display the chart
-        st.plotly_chart(fig, use_container_width=True)
 
-    except:
-        st.warning("No data found for the specified filter.")
+
+
+
+
+
+
+
+
 
 
 
 
 col1,col2=st.columns(2)
 
-with col1:
+if date_diff<=5:
+     
+    with col1:
+        try:
+        # Filter the DataFrame based on the end date
+            filtered_df = df[df["Date"] == date2]
+
+            # Group by "Count" and sum the "Closing Stock M/Ton" values
+            countwise_closing_stock = filtered_df.groupby("Count", as_index=False)["Closing Stock M/Ton"].sum()
+
+            
+                # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(countwise_closing_stock, x="Count", y="Closing Stock M/Ton",
+                            text=['{:,.2f}'.format(x) for x in countwise_closing_stock["Closing Stock M/Ton"]],
+                            template="seaborn", width=800, height=500, title="Countwise Closing Stock",
+                            color_discrete_sequence=[" #488A99"] * len(countwise_closing_stock))
+
+                # Update the layout
+            fig.update_layout(xaxis_title="Product", yaxis_title="Closing Stock")
+
+                # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
+        except:
+            st.warning("No data found for the specified end date.")
+
+
+    with col2:
+        try:
+        # Filter the DataFrame based on the end date
+            filtered_df = df[df["Date"] == date1]
+
+            # Group by "Count" and sum the "Closing Stock M/Ton" values
+            countwise_opeining_stock = filtered_df.groupby("Count", as_index=False)["Opening Stock M/Ton"].sum()
+
+            
+                # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(countwise_opeining_stock, x="Count", y="Opening Stock M/Ton",
+                            text=['{:,.2f}'.format(x) for x in countwise_opeining_stock["Opening Stock M/Ton"]],
+                            template="seaborn", width=800, height=500, title="Countwise Opening Stock",
+                            color_discrete_sequence=[" #488A99"] * len(countwise_opeining_stock))
+
+                # Update the layout
+            fig.update_layout(xaxis_title="Product", yaxis_title="Opening Stock")
+
+                # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
+        except:
+            st.warning("No data found for the specified end date.")
+
+
+
+else:
+    
     try:
+        # Filter the DataFrame based on the end date
+            filtered_df = df[df["Date"] == date2]
 
+            # Group by "Count" and sum the "Closing Stock M/Ton" values
+            countwise_closing_stock = filtered_df.groupby("Count", as_index=False)["Closing Stock M/Ton"].sum()
 
-        # Group by "Count" and sum the "Production M/Ton" values
-        countwise_production = filtered_df.groupby("Count", as_index=False)["Production M/Ton"].sum()
+            
+                # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(countwise_closing_stock, x="Count", y="Closing Stock M/Ton",
+                            text=['{:,.2f}'.format(x) for x in countwise_closing_stock["Closing Stock M/Ton"]],
+                            template="seaborn", width=800, height=500, title="Countwise Closing Stock",
+                            color_discrete_sequence=[" #488A99"] * len(countwise_closing_stock))
 
-        
-            # Plot the DataFrame as a stacked bar chart
-        fig = px.bar(countwise_production, x="Count", y="Production M/Ton",
-                        text=['{:,.2f}'.format(x) for x in countwise_production["Production M/Ton"]],
-                        template="seaborn", width=800, height=500, title="Countwise Closing Stock",
-                        color_discrete_sequence=[" #488A99"] * len(countwise_production))
+                # Update the layout
+            fig.update_layout(xaxis_title="Product", yaxis_title="Closing Stock")
 
-            # Update the layout
-        fig.update_layout(xaxis_title="Product", yaxis_title="Production")
-
-            # Display the chart
-        st.plotly_chart(fig, use_container_width=True)
+                # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
     except:
-        st.warning("No data found for the specified end date.")
+            st.warning("No data found for the specified end date.")
 
 
-with col2:
+    
     try:
-    # Filter the DataFrame based on the end date
-        filtered_df = df[df["Date"] == date1]
+        # Filter the DataFrame based on the end date
+            filtered_df = df[df["Date"] == date1]
 
-        # Group by "Count" and sum the "Loose Stock M/Ton" values
-        countwise_loose_stock = filtered_df.groupby("Count", as_index=False)["Loose Stock"].sum()
+            # Group by "Count" and sum the "Closing Stock M/Ton" values
+            countwise_opeining_stock = filtered_df.groupby("Count", as_index=False)["Opening Stock M/Ton"].sum()
 
-        
-            # Plot the DataFrame as a stacked bar chart
-        fig = px.bar(countwise_loose_stock, x="Count", y="Loose Stock",
-                        text=['{:,.2f}'.format(x) for x in countwise_loose_stock["Loose Stock"]],
-                        template="seaborn", width=800, height=500, title="Countwise Opening Stock",
-                        color_discrete_sequence=[" #488A99"] * len(countwise_loose_stock))
+            
+                # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(countwise_opeining_stock, x="Count", y="Opening Stock M/Ton",
+                            text=['{:,.2f}'.format(x) for x in countwise_opeining_stock["Opening Stock M/Ton"]],
+                            template="seaborn", width=800, height=500, title="Countwise Opening Stock",
+                            color_discrete_sequence=[" #488A99"] * len(countwise_opeining_stock))
 
-            # Update the layout
-        fig.update_layout(xaxis_title="Product", yaxis_title="Loose Stock")
+                # Update the layout
+            fig.update_layout(xaxis_title="Product", yaxis_title="Opening Stock")
 
-            # Display the chart
-        st.plotly_chart(fig, use_container_width=True)
+                # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
     except:
-        st.warning("No data found for the specified end date.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-col1,col2=st.columns(2)
-
-with col1:
-    try:
-    # Filter the DataFrame based on the end date
-        filtered_df = df[df["Date"] == date2]
-
-        # Group by "Count" and sum the "Closing Stock M/Ton" values
-        countwise_closing_stock = filtered_df.groupby("Count", as_index=False)["Closing Stock M/Ton"].sum()
-
-        
-            # Plot the DataFrame as a stacked bar chart
-        fig = px.bar(countwise_closing_stock, x="Count", y="Closing Stock M/Ton",
-                        text=['{:,.2f}'.format(x) for x in countwise_closing_stock["Closing Stock M/Ton"]],
-                        template="seaborn", width=800, height=500, title="Countwise Closing Stock",
-                        color_discrete_sequence=[" #488A99"] * len(countwise_closing_stock))
-
-            # Update the layout
-        fig.update_layout(xaxis_title="Product", yaxis_title="Closing Stock")
-
-            # Display the chart
-        st.plotly_chart(fig, use_container_width=True)
-    except:
-        st.warning("No data found for the specified end date.")
-
-
-with col2:
-    try:
-    # Filter the DataFrame based on the end date
-        filtered_df = df[df["Date"] == date1]
-
-        # Group by "Count" and sum the "Closing Stock M/Ton" values
-        countwise_opeining_stock = filtered_df.groupby("Count", as_index=False)["Opening Stock M/Ton"].sum()
-
-        
-            # Plot the DataFrame as a stacked bar chart
-        fig = px.bar(countwise_opeining_stock, x="Count", y="Opening Stock M/Ton",
-                        text=['{:,.2f}'.format(x) for x in countwise_opeining_stock["Opening Stock M/Ton"]],
-                        template="seaborn", width=800, height=500, title="Countwise Opening Stock",
-                        color_discrete_sequence=[" #488A99"] * len(countwise_opeining_stock))
-
-            # Update the layout
-        fig.update_layout(xaxis_title="Product", yaxis_title="Opening Stock")
-
-            # Display the chart
-        st.plotly_chart(fig, use_container_width=True)
-    except:
-        st.warning("No data found for the specified end date.")
-
-
-
+            st.warning("No data found for the specified end date.")
