@@ -179,12 +179,20 @@ despatch_value=filtered_df["Despatch M/Ton"].sum()
 formatted_despatch_value="{:.2f}".format(despatch_value)
 
 filtered_date_closing_df=filtered_df[filtered_df["Date"]==date2]
+
+# Convert "Loose Stock" column to numeric, coercing errors to NaN
+filtered_date_closing_df["Loose Stock"] = pd.to_numeric(filtered_date_closing_df["Loose Stock"], errors='coerce')
+
+# Sum up the "Loose Stock" column
+loose_stock = filtered_date_closing_df["Loose Stock"].sum()
+
+# Format the sum
+formatted_loose_stock = "{:.2f}".format(loose_stock)
+
 closing_stock=filtered_date_closing_df["Closing Stock M/Ton"].sum()
 formatted_closing_stock="{:.2f}".format(closing_stock)
 
 
-loose_stock=filtered_date_closing_df["Loose Stock"].sum()
-formatted_loose_stock="{:.2f}".format(loose_stock)
 
 
 filtered_date_1_date_df=filtered_df[filtered_df["Date"]==date1]
@@ -247,17 +255,18 @@ with col5:
 
 # section for chart
         
-col1,col2,col3=st.columns(3)
+col1,col2,col3=st.columns([1,1,3])
 
 
 start_date = filtered_df["Date"].min()
 end_date = filtered_df["Date"].max()
 date_diff = (end_date - start_date).days
 
-if date_diff<=5:
 
 
-    with col1:
+
+with col1:
+        
         try:
             # Select only the columns of interest
             production_df = filtered_df[["Production Pallet", "Production Truss", "Production Carton"]]
@@ -282,6 +291,9 @@ if date_diff<=5:
 
             # Update the layout
             fig.update_layout(xaxis_title="Product",yaxis_title="Production")
+            
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
 
             # Display the chart
             st.plotly_chart(fig, use_container_width=True)
@@ -291,7 +303,7 @@ if date_diff<=5:
 
 
 
-    with col2:
+with col2:
         try:
             # Select only the columns of interest
             production_df = filtered_df[["Despatch Pallet", "Despatch Truss", "Despatch Carton"]]
@@ -316,7 +328,11 @@ if date_diff<=5:
 
             # Update the layout
             fig.update_layout(xaxis_title="Product", yaxis_title="Production", barmode="stack")
+            
 
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
+            
             # Display the chart
             st.plotly_chart(fig, use_container_width=True)
         
@@ -324,7 +340,7 @@ if date_diff<=5:
             st.warning("No data found for the specified filter.")
 
 
-    with col3:
+with col3:
         try:
         
             countwise_despatch=filtered_df.groupby("Count",as_index=False)["Despatch M/Ton"].sum()
@@ -342,6 +358,9 @@ if date_diff<=5:
             # Update the layout
             fig.update_layout(xaxis_title="Product", yaxis_title="Production", barmode="stack")
 
+
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
             # Display the chart
             st.plotly_chart(fig, use_container_width=True)
 
@@ -349,60 +368,61 @@ if date_diff<=5:
             st.warning("No data found for the specified filter.")
 
 
-else:
-    start_date = filtered_df["Date"].min()
-    end_date = filtered_df["Date"].max()
-    date_diff = (end_date - start_date).days
 
-    try:
+
+# start_date = filtered_df["Date"].min()
+# end_date = filtered_df["Date"].max()
+# date_diff = (end_date - start_date).days
+
+try:
 
 
             # Group by "Count" and sum the "Production M/Ton" values
             countwise_production = filtered_df.groupby("Count", as_index=False)["Production M/Ton"].sum()
 
             
-                # Plot the DataFrame as a stacked bar chart
-            fig = px.bar(countwise_production, x="Count", y="Production M/Ton",
-                            text=['{:,.2f}'.format(x) for x in countwise_production["Production M/Ton"]],
-                            template="seaborn", width=800, height=500, title="Countwise Closing Stock",
-                            color_discrete_sequence=[" #488A99"] * len(countwise_production))
+            countwise_production_filtered = countwise_production[countwise_production["Production M/Ton"] > 0]
 
-                # Update the layout
-            fig.update_layout(xaxis_title="Product", yaxis_title="Production")
+            # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(countwise_production_filtered, x="Count", y="Production M/Ton",
+                        text=['{:,.2f}'.format(x) for x in countwise_production_filtered["Production M/Ton"]],
+                        template="seaborn", width=800, height=500, title="Countwise Production",
+                        color_discrete_sequence=[" #488A99"] * len(countwise_production_filtered))
 
-                # Display the chart
+            # Update the layout
+            fig.update_layout(xaxis_title="Count", yaxis_title="Production")
+            fig.update_xaxes(type='category')
+
+            # Display the chart
             st.plotly_chart(fig, use_container_width=True)
-    except:
+except:
             st.warning("No data found for the specified end date.")
 
 
     
-    try:
+try:
         # Filter the DataFrame based on the end date
-            filtered_df = df[df["Date"] == date1]
+            # filtered_df = filtered_df[filtered_df["Date"] == date2]
 
             # Group by "Count" and sum the "Loose Stock M/Ton" values
-            countwise_loose_stock = filtered_df.groupby("Count", as_index=False)["Loose Stock"].sum()
+            countwise_loose_stock = filtered_date_closing_df.groupby("Count", as_index=False)["Loose Stock"].sum()
 
-            
+            countwise_loose_stock=countwise_loose_stock[countwise_loose_stock["Loose Stock"]>0]
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_loose_stock, x="Count", y="Loose Stock",
                             text=['{:,.2f}'.format(x) for x in countwise_loose_stock["Loose Stock"]],
-                            template="seaborn", width=800, height=500, title="Countwise Opening Stock",
+                            template="seaborn", width=800, height=500, title="Countwise Loose Stock",
                             color_discrete_sequence=[" #488A99"] * len(countwise_loose_stock))
 
                 # Update the layout
-            fig.update_layout(xaxis_title="Product", yaxis_title="Loose Stock")
+            fig.update_layout(xaxis_title="Count", yaxis_title="Loose Stock")
 
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
                 # Display the chart
             st.plotly_chart(fig, use_container_width=True)
-    except:
+except:
             st.warning("No data found for the specified end date.")
-
-
-
-
-
 
 
 
@@ -419,7 +439,7 @@ else:
 
 col1,col2=st.columns(2)
 
-if date_diff<=5:
+if date_diff<=10:
      
     with col1:
         try:
@@ -429,7 +449,7 @@ if date_diff<=5:
             # Group by "Count" and sum the "Closing Stock M/Ton" values
             countwise_closing_stock = filtered_df.groupby("Count", as_index=False)["Closing Stock M/Ton"].sum()
 
-            
+            countwise_closing_stock=countwise_closing_stock[countwise_closing_stock["Closing Stock M/Ton"]>0]
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_closing_stock, x="Count", y="Closing Stock M/Ton",
                             text=['{:,.2f}'.format(x) for x in countwise_closing_stock["Closing Stock M/Ton"]],
@@ -437,8 +457,10 @@ if date_diff<=5:
                             color_discrete_sequence=[" #488A99"] * len(countwise_closing_stock))
 
                 # Update the layout
-            fig.update_layout(xaxis_title="Product", yaxis_title="Closing Stock")
+            fig.update_layout(xaxis_title="Count", yaxis_title="Closing Stock")
 
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
                 # Display the chart
             st.plotly_chart(fig, use_container_width=True)
         except:
@@ -453,15 +475,17 @@ if date_diff<=5:
             # Group by "Count" and sum the "Closing Stock M/Ton" values
             countwise_opeining_stock = filtered_df.groupby("Count", as_index=False)["Opening Stock M/Ton"].sum()
 
-            
+            countwise_opeining_stock=countwise_opeining_stock[countwise_opeining_stock["Opening Stock M/Ton"]>0]
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_opeining_stock, x="Count", y="Opening Stock M/Ton",
                             text=['{:,.2f}'.format(x) for x in countwise_opeining_stock["Opening Stock M/Ton"]],
                             template="seaborn", width=800, height=500, title="Countwise Opening Stock",
                             color_discrete_sequence=[" #488A99"] * len(countwise_opeining_stock))
 
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
                 # Update the layout
-            fig.update_layout(xaxis_title="Product", yaxis_title="Opening Stock")
+            fig.update_layout(xaxis_title="Count", yaxis_title="Opening Stock")
 
                 # Display the chart
             st.plotly_chart(fig, use_container_width=True)
@@ -479,7 +503,7 @@ else:
             # Group by "Count" and sum the "Closing Stock M/Ton" values
             countwise_closing_stock = filtered_df.groupby("Count", as_index=False)["Closing Stock M/Ton"].sum()
 
-            
+            countwise_closing_stock=countwise_closing_stock[countwise_closing_stock["Closing Stock M/Ton"]>0]
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_closing_stock, x="Count", y="Closing Stock M/Ton",
                             text=['{:,.2f}'.format(x) for x in countwise_closing_stock["Closing Stock M/Ton"]],
@@ -489,6 +513,8 @@ else:
                 # Update the layout
             fig.update_layout(xaxis_title="Product", yaxis_title="Closing Stock")
 
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
                 # Display the chart
             st.plotly_chart(fig, use_container_width=True)
     except:
@@ -503,7 +529,7 @@ else:
             # Group by "Count" and sum the "Closing Stock M/Ton" values
             countwise_opeining_stock = filtered_df.groupby("Count", as_index=False)["Opening Stock M/Ton"].sum()
 
-            
+            countwise_opeining_stock=countwise_opeining_stock[countwise_opeining_stock["Opening Stock M/Ton"]>0]
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_opeining_stock, x="Count", y="Opening Stock M/Ton",
                             text=['{:,.2f}'.format(x) for x in countwise_opeining_stock["Opening Stock M/Ton"]],
@@ -513,6 +539,8 @@ else:
                 # Update the layout
             fig.update_layout(xaxis_title="Product", yaxis_title="Opening Stock")
 
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
                 # Display the chart
             st.plotly_chart(fig, use_container_width=True)
     except:

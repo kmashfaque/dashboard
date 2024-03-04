@@ -420,6 +420,8 @@ if selected_factory=="All":
             fig = px.bar(factory_df, x="Factory", y="achieved production", text=['{:,.2f}'.format(x) for x in factory_df["achieved production"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(factory_df))
             fig.update_layout(title="Production: Premises Wise")
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -436,6 +438,8 @@ if selected_factory=="All":
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
             fig.update_layout(title="Efficiency: Premises Wise")
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -447,6 +451,8 @@ if selected_factory=="All":
             fig = px.bar(hands_per_ton_df, x="Factory", y="Hands Per Ton", text=['{:,.2f}'.format(x) for x in hands_per_ton_df["Hands Per Ton"]],
                         template="seaborn", width=350, height=350, color_discrete_sequence=["#AC3E31"] * len(hands_per_ton_df))
             fig.update_layout(title="Hands Per Ton: Premises Wise")
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -485,6 +491,9 @@ else:
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #488A99"] * len(mill_production_df))
             fig.update_layout(title="Production: Mill Wise")
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
+            
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -500,6 +509,8 @@ else:
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=[" #1C4E80"] * len(mill_efficiency_df))
             fig.update_layout(title="Efficiency: Mill Wise")
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -513,6 +524,8 @@ else:
                          template="seaborn", width=350, height=350,
                          color_discrete_sequence=["#AC3E31"] * len(mill_hands_per_ton_df))
             fig.update_layout(title="Hands Per Ton: Mill Wise")
+              # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
             st.plotly_chart(fig, use_container_width=True)
 
         except IndexError:
@@ -531,6 +544,8 @@ if selected_factory=="All":
         fig = px.bar(count_df, x="count", y="achieved production", text=['{:,.2f}'.format(x) for x in count_df["achieved production"]],
                     template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(count_df))
         fig.update_layout(title="Production: Countwise")
+          # Convert the x-axis to categorical to remove blank spaces
+        fig.update_xaxes(type='category')
         
         # Convert the x-axis to categorical to remove blank spaces
         fig.update_xaxes(type='category')
@@ -565,6 +580,8 @@ else:
                     template="seaborn", width=1000, height=500,
                     color_discrete_sequence=[" #488A99"] * len(mill_production_df))
         fig.update_layout(title="Countwise Production")
+          # Convert the x-axis to categorical to remove blank spaces
+        fig.update_xaxes(type='category')
         
         # Convert the x-axis to categorical to remove blank spaces
         fig.update_xaxes(type='category')
