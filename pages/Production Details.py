@@ -50,7 +50,7 @@ default_end_date = max_date.date()
 
 # Display the date input widgets in two columns
 with col1:
-    start_date = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_start_date)
+    start_date = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
 
 with col2:
     # Set the minimum value of the end date input dynamically based on the selected start date

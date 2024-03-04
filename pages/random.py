@@ -3,6 +3,7 @@
 
 
 import streamlit as st
+import streamlit_shadcn_ui as ui
 import plotly.express as px
 import pandas as pd
 import os
@@ -14,7 +15,6 @@ import pandas as pd
 import base64
 from io import BytesIO
 
-warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="Over All Production!!", page_icon=":bar_chart:", layout="wide")
 
@@ -51,6 +51,14 @@ unique_date=df["Date"]
 
 
 
+cols = st.columns(3)
+with cols[0]:
+    ui.metric_card(title="Total Revenue", content="$45,231.89", description="+20.1% from last month", key="card1")
+with cols[1]:
+    ui.metric_card(title="Total Revenue", content="$45,231.89", description="+20.1% from last month", key="card2")
+with cols[2]:
+    ui.metric_card(title="Total Revenue", content="$45,231.89", description="+20.1% from last month", key="card3")
+warnings.filterwarnings("ignore")
 
 
 

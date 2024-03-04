@@ -22,7 +22,7 @@ hands_df=hands_df[hands_df["Date"].isin(unique_date)]
 stock_df=stock_df[stock_df["Date"].isin(unique_date)]
 
 # Extract the end date from the DataFrame
-end_date_from_df = df["Date"].min().strftime('%Y-%m-%d')
+end_date_from_df = df["Date"].max().strftime('%Y-%m-%d')
 st.set_page_config(page_title="Production Dashboard!!", page_icon=":bar_chart:", layout="wide")
 
 title_with_end_date = f":bar_chart: Daily Production Dashboard - Date: {end_date_from_df}"
