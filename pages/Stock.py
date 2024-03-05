@@ -9,7 +9,7 @@ warnings.filterwarnings("ignore")
 
 
 st.set_page_config(page_title="Overall Stock", page_icon=":bar_chart:", layout="wide")
-st.title(" :bar_chart: Stock Details")
+st.title(" :bar_chart: Stock Details - All Mills")
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 
 
@@ -41,7 +41,6 @@ default_end_date = max_date.date()
 # Display the date input widgets in two columns
 with col1:
     date1 = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
-
 with col2:
     # Set the minimum value of the end date input dynamically based on the selected start date
     min_end_date = min(date1, default_end_date)
@@ -194,7 +193,6 @@ formatted_closing_stock="{:.2f}".format(closing_stock)
 
 
 
-
 filtered_date_1_date_df=filtered_df[filtered_df["Date"]==date1]
 opening_value=filtered_date_1_date_df["Opening Stock M/Ton"].sum()
 formatted_opening_value="{:.2f}".format(opening_value)
@@ -261,9 +259,6 @@ col1,col2=st.columns(2)
 start_date = filtered_df["Date"].min()
 end_date = filtered_df["Date"].max()
 date_diff = (end_date - start_date).days
-
-
-
 
 with col1:
         
@@ -382,17 +377,11 @@ if date_diff<=5:
 
 
 
-
-
-
-
     with col2:
-         
 
         try:
 
-
-                    # Group by "Count" and sum the "Production M/Ton" values
+             # Group by "Count" and sum the "Production M/Ton" values
                     countwise_production = filtered_df.groupby("Count", as_index=False)["Production M/Ton"].sum()
 
                     
@@ -447,7 +436,6 @@ else:
 
     try:
 
-
                     # Group by "Count" and sum the "Production M/Ton" values
                     countwise_production = filtered_df.groupby("Count", as_index=False)["Production M/Ton"].sum()
 
@@ -469,9 +457,6 @@ else:
     except:
                     st.warning("No data found for the specified end date.")
         
-
-
-
     
 try:
         # Filter the DataFrame based on the end date
@@ -496,11 +481,6 @@ try:
             st.plotly_chart(fig, use_container_width=True)
 except:
             st.warning("No data found for the specified end date.")
-
-
-
-
-
 
 
 col1,col2=st.columns(2)
@@ -558,9 +538,6 @@ if date_diff<=10:
             st.plotly_chart(fig, use_container_width=True)
         except:
             st.warning("No data found for the specified end date.")
-
-
-   
 
 
 else:

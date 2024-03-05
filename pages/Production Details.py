@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 st.set_page_config(page_title="Over All Production!!", page_icon=":bar_chart:", layout="wide")
 
 
-st.title(" :bar_chart: Production Details Dashboard")
+st.title(" :bar_chart: Production Details Dashboard - All Mills")
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 
 
@@ -186,6 +186,12 @@ efficiency=factory_df["Efficiency"].mean()
 converted_production=factory_df["Converted Production"].sum()
 total_frame=factory_df["Frame"].sum()
 
+# calculation for average count
+total_count=factory_df["Running Spindle"].sum()
+sum_count_spindle = (factory_df["count"] * factory_df["Running Spindle"]).sum()
+average_count=sum_count_spindle/total_count
+formatted_average_count="{:.2f}".format(average_count)
+
 formatted_actual_production="{:.2f}".format(production)
 formatted_efficiency="{:.0%}".format(efficiency)
 formatted_converted_production="{:.2f}".format(converted_production)
@@ -251,7 +257,16 @@ with col4:
         st.markdown("")
 
 
+with col5:
+    original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Average Count</p>'
+        
+    st.markdown(original_title,unsafe_allow_html=True)
+    value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_average_count}</p>'
+    st.markdown(value,unsafe_allow_html=True)
 
+    st.markdown("")
+    st.markdown("")
+    st.markdown("")
 
 
 # Start sections for charts
