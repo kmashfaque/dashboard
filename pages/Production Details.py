@@ -189,7 +189,10 @@ total_frame=factory_df["Frame"].sum()
 formatted_actual_production="{:.2f}".format(production)
 formatted_efficiency="{:.0%}".format(efficiency)
 formatted_converted_production="{:.2f}".format(converted_production)
-total_frame="{:.2f}".format(total_frame)
+total_frame="{:.0f}".format(total_frame)
+
+
+
 
 
 with col1:

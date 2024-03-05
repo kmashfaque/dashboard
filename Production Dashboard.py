@@ -25,7 +25,7 @@ stock_df=stock_df[stock_df["Date"].isin(unique_date)]
 end_date_from_df = df["Date"].max().strftime('%Y-%m-%d')
 st.set_page_config(page_title="Production Dashboard!!", page_icon=":bar_chart:", layout="wide")
 
-title_with_end_date = f":bar_chart: Daily Production Dashboard - Date: {end_date_from_df}"
+title_with_end_date = f":bar_chart: Daily Production Dashboard - All Mills - Date: {end_date_from_df}"
 st.title(title_with_end_date)
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 st.markdown("")
@@ -135,6 +135,10 @@ if selected_factory=="All":
     formatted_total_hands="{:.2f}".format(total_hands)
     formatted_stock_despatch="{:.2f}".format(stock_despatch)
 
+    formatted_total_frame_existing="{:.0f}".format(total_frame)
+    formatted_total_frame_running="{:.0f}".format(total_frame)
+
+
     with col1:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
         st.markdown(original_title,unsafe_allow_html=True)
@@ -213,7 +217,7 @@ if selected_factory=="All":
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Existing</p>'
             st.markdown(original_title,unsafe_allow_html=True)
 
-            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_total_frame_existing}</p>'
             st.markdown(value,unsafe_allow_html=True)
 
             
@@ -224,7 +228,7 @@ if selected_factory=="All":
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Running</p>'
             st.markdown(original_title,unsafe_allow_html=True)
 
-            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_total_frame_running}</p>'
             st.markdown(value,unsafe_allow_html=True)
 
             st.markdown("")
