@@ -341,66 +341,135 @@ with col2:
             st.warning("No data found for the specified filter.")
 
 
+start_date = filtered_df["Date"].min()
+end_date = filtered_df["Date"].max()
+date_diff = (end_date - start_date).days
 
-try:
-        
-    countwise_despatch = filtered_df.groupby("Count", as_index=False)["Despatch M/Ton"].sum()
 
-    # Group by "Count" and sum the "Despatch M/Ton" values
-    countwise_despatch = filtered_df.groupby("Count", as_index=False)["Despatch M/Ton"].sum()
+col1,col2=st.columns([1,3])
 
-    # Filter out rows with zero values in "Despatch M/Ton"
-    countwise_despatch = countwise_despatch[countwise_despatch["Despatch M/Ton"] > 0]
+if date_diff<=5:
 
-    # Plot the DataFrame as a stacked bar chart
-    fig = px.bar(countwise_despatch, x="Count", y="Despatch M/Ton",
-                text=['{:,.2f}'.format(x) for x in countwise_despatch["Despatch M/Ton"]],
-                template="seaborn", width=350, height=350, title="Despatch (M/Ton)",
-                
-                )
+    with col1:
+        try:
+            
+            countwise_despatch = filtered_df.groupby("Count", as_index=False)["Despatch M/Ton"].sum()
 
-    # Update the layout
-    fig.update_layout(xaxis_title="Product", yaxis_title="Production", barmode="stack")
+            # Group by "Count" and sum the "Despatch M/Ton" values
+            countwise_despatch = filtered_df.groupby("Count", as_index=False)["Despatch M/Ton"].sum()
 
-    # Convert the x-axis to categorical to remove blank spaces
-    fig.update_xaxes(type='category')
+            # Filter out rows with zero values in "Despatch M/Ton"
+            countwise_despatch = countwise_despatch[countwise_despatch["Despatch M/Ton"] > 0]
 
-    # Display the chart
-    st.plotly_chart(fig, use_container_width=True)
+            # Plot the DataFrame as a stacked bar chart
+            fig = px.bar(countwise_despatch, x="Count", y="Despatch M/Ton",
+                        text=['{:,.2f}'.format(x) for x in countwise_despatch["Despatch M/Ton"]],
+                        template="seaborn", width=350, height=350, title="Despatch (M/Ton)",
+                        
+                        )
 
-except:
+            # Update the layout
+            fig.update_layout(xaxis_title="Count", yaxis_title="Production", barmode="stack")
+
+            # Convert the x-axis to categorical to remove blank spaces
+            fig.update_xaxes(type='category')
+
+            # Display the chart
+            st.plotly_chart(fig, use_container_width=True)
+
+        except:
             st.warning("No data found for the specified filter.")
 
 
 
 
-# start_date = filtered_df["Date"].min()
-# end_date = filtered_df["Date"].max()
-# date_diff = (end_date - start_date).days
-
-try:
 
 
-            # Group by "Count" and sum the "Production M/Ton" values
-            countwise_production = filtered_df.groupby("Count", as_index=False)["Production M/Ton"].sum()
 
+    with col2:
+         
+
+        try:
+
+
+                    # Group by "Count" and sum the "Production M/Ton" values
+                    countwise_production = filtered_df.groupby("Count", as_index=False)["Production M/Ton"].sum()
+
+                    
+                    countwise_production_filtered = countwise_production[countwise_production["Production M/Ton"] > 0]
+
+                    # Plot the DataFrame as a stacked bar chart
+                    fig = px.bar(countwise_production_filtered, x="Count", y="Production M/Ton",
+                                text=['{:,.2f}'.format(x) for x in countwise_production_filtered["Production M/Ton"]],
+                                template="seaborn", width=800, height=350, title="Production: Countwise",
+                                color_discrete_sequence=[" #488A99"] * len(countwise_production_filtered))
+
+                    # Update the layout
+                    fig.update_layout(xaxis_title="Count", yaxis_title="Production")
+                    fig.update_xaxes(type='category')
+
+                    # Display the chart
+                    st.plotly_chart(fig, use_container_width=True)
+        except:
+                    st.warning("No data found for the specified end date.")
+        
+
+else:
+    try:
             
-            countwise_production_filtered = countwise_production[countwise_production["Production M/Ton"] > 0]
+            countwise_despatch = filtered_df.groupby("Count", as_index=False)["Despatch M/Ton"].sum()
+
+            # Group by "Count" and sum the "Despatch M/Ton" values
+            countwise_despatch = filtered_df.groupby("Count", as_index=False)["Despatch M/Ton"].sum()
+
+            # Filter out rows with zero values in "Despatch M/Ton"
+            countwise_despatch = countwise_despatch[countwise_despatch["Despatch M/Ton"] > 0]
 
             # Plot the DataFrame as a stacked bar chart
-            fig = px.bar(countwise_production_filtered, x="Count", y="Production M/Ton",
-                        text=['{:,.2f}'.format(x) for x in countwise_production_filtered["Production M/Ton"]],
-                        template="seaborn", width=800, height=500, title="Countwise Production",
-                        color_discrete_sequence=[" #488A99"] * len(countwise_production_filtered))
+            fig = px.bar(countwise_despatch, x="Count", y="Despatch M/Ton",
+                        text=['{:,.2f}'.format(x) for x in countwise_despatch["Despatch M/Ton"]],
+                        template="seaborn", width=350, height=350, title="Despatch (M/Ton)",
+                        
+                        )
 
             # Update the layout
-            fig.update_layout(xaxis_title="Count", yaxis_title="Production")
+            fig.update_layout(xaxis_title="Count", yaxis_title="Production", barmode="stack")
+
+            # Convert the x-axis to categorical to remove blank spaces
             fig.update_xaxes(type='category')
 
             # Display the chart
             st.plotly_chart(fig, use_container_width=True)
-except:
-            st.warning("No data found for the specified end date.")
+
+    except:
+            st.warning("No data found for the specified filter.")
+
+
+    try:
+
+
+                    # Group by "Count" and sum the "Production M/Ton" values
+                    countwise_production = filtered_df.groupby("Count", as_index=False)["Production M/Ton"].sum()
+
+                    
+                    countwise_production_filtered = countwise_production[countwise_production["Production M/Ton"] > 0]
+
+                    # Plot the DataFrame as a stacked bar chart
+                    fig = px.bar(countwise_production_filtered, x="Count", y="Production M/Ton",
+                                text=['{:,.2f}'.format(x) for x in countwise_production_filtered["Production M/Ton"]],
+                                template="seaborn", width=800, height=500, title="Production: Countwise",
+                                color_discrete_sequence=[" #488A99"] * len(countwise_production_filtered))
+
+                    # Update the layout
+                    fig.update_layout(xaxis_title="Count", yaxis_title="Production")
+                    fig.update_xaxes(type='category')
+
+                    # Display the chart
+                    st.plotly_chart(fig, use_container_width=True)
+    except:
+                    st.warning("No data found for the specified end date.")
+        
+
 
 
     
@@ -415,7 +484,7 @@ try:
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_loose_stock, x="Count", y="Loose Stock",
                             text=['{:,.2f}'.format(x) for x in countwise_loose_stock["Loose Stock"]],
-                            template="seaborn", width=800, height=500, title="Countwise Loose Stock",
+                            template="seaborn", width=800, height=500, title="Loose Stock: Countwise",
                             color_discrete_sequence=[" #83af70"] * len(countwise_production_filtered))
 
                 # Update the layout
@@ -451,7 +520,7 @@ if date_diff<=10:
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_opeining_stock, x="Count", y="Opening Stock M/Ton",
                             text=['{:,.2f}'.format(x) for x in countwise_opeining_stock["Opening Stock M/Ton"]],
-                            template="seaborn", width=800, height=500, title="Countwise Opening Stock",
+                            template="seaborn", width=800, height=500, title="Opening Stock: Countwise",
                             color_discrete_sequence=[" #488A99"] * len(countwise_opeining_stock))
 
               # Convert the x-axis to categorical to remove blank spaces
@@ -477,7 +546,7 @@ if date_diff<=10:
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_closing_stock, x="Count", y="Closing Stock M/Ton",
                             text=['{:,.2f}'.format(x) for x in countwise_closing_stock["Closing Stock M/Ton"]],
-                            template="seaborn", width=800, height=500, title="Countwise Closing Stock",
+                            template="seaborn", width=800, height=500, title="Closing Stock: Countwise",
                             color_discrete_sequence=[" #488A99"] * len(countwise_closing_stock))
 
                 # Update the layout
@@ -506,7 +575,7 @@ else:
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_opeining_stock, x="Count", y="Opening Stock M/Ton",
                             text=['{:,.2f}'.format(x) for x in countwise_opeining_stock["Opening Stock M/Ton"]],
-                            template="seaborn", width=800, height=500, title="Countwise Opening Stock",
+                            template="seaborn", width=800, height=500, title="Opening Stock: Countwise",
                             color_discrete_sequence=[" #488A99"] * len(countwise_opeining_stock))
 
                 # Update the layout
@@ -530,7 +599,7 @@ else:
                 # Plot the DataFrame as a stacked bar chart
             fig = px.bar(countwise_closing_stock, x="Count", y="Closing Stock M/Ton",
                             text=['{:,.2f}'.format(x) for x in countwise_closing_stock["Closing Stock M/Ton"]],
-                            template="seaborn", width=800, height=500, title="Countwise Closing Stock",
+                            template="seaborn", width=800, height=500, title="Closing Stock: Countwise",
                             color_discrete_sequence=[" #488A99"] * len(countwise_closing_stock))
 
                 # Update the layout
