@@ -44,19 +44,45 @@ max_date = hands_df["Date"].max()
 default_start_date = min_date.date()
 default_end_date = max_date.date()
 
-# Display the date input widgets in two columns
-col1, col2 = st.columns(2)
 
+
+
+col1, col2 = st.columns(2)
+hands_df["Date"] = pd.to_datetime(hands_df["Date"])
+
+# Get the minimum and maximum dates from the DataFrame
+min_date = hands_df["Date"].min()
+max_date = hands_df["Date"].max()
+
+# Set default values for date input widgets
+default_start_date = min_date.date()
+default_end_date = max_date.date()
+
+# Display the date input widgets in two columns
 with col1:
-    date1 = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
+    start_date = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
 
 with col2:
-    date2 = st.date_input("End Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
+    # Set the minimum value of the end date input dynamically based on the selected start date
+    min_end_date = min(start_date, default_end_date)
+    end_date = st.date_input("End Date", min_value=min_end_date, max_value=max_date.date(), value=default_end_date)
 
 # Convert start_date and end_date to Timestamp objects
-date1 = pd.Timestamp(date1)
-date2 = pd.Timestamp(date2)
+start_date = pd.Timestamp(start_date)
+end_date = pd.Timestamp(end_date)
+
+# Apply date filtering to the DataFrame
+filtered_df = hands_df[(hands_df["Date"] >= start_date) & (hands_df["Date"] <= end_date)].copy()
 # date filtering section ends here
+
+
+
+
+
+
+
+
+
 
 
 
@@ -131,9 +157,9 @@ date2 = pd.Timestamp(date2)
 
 
 # Define initial options for the selectboxes
-all_factories = ["All"] + list(hands_df["Factory"].unique())
-all_mill_nos = ["All"] + list(hands_df["Mill No."].unique())
-all_buyers = ["All"] + list(hands_df["Shift"].unique())
+all_factories = ["All"] + list(filtered_df["Factory"].unique())
+
+all_buyers = ["All"] + list(filtered_df["Shift"].unique())
 
 
 
@@ -143,33 +169,33 @@ all_buyers = ["All"] + list(hands_df["Shift"].unique())
 
 
 # Create a column for filtering data
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 # Create selectboxes for filtering
 with col1:
     selected_factory = st.selectbox("Factory", all_factories)
 
-# Dynamically update options for Mill No. based on selected factory
-if selected_factory != "All":
-    factories_df = hands_df[hands_df["Factory"] == selected_factory]
-    all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
-else:
-    all_mill_nos = ["All"] + list(hands_df["Mill No."].unique())
+# # Dynamically update options for Mill No. based on selected factory
+# if selected_factory != "All":
+#     factories_df = filtered_df[filtered_df["Factory"] == selected_factory]
+#     all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
+# else:
+#     all_mill_nos = ["All"] + list(filtered_df["Mill No."].unique())
 
-with col2:
-    selected_mill_no = st.selectbox("Mill No.", all_mill_nos)
+# with col2:
+#     selected_mill_no = st.selectbox("Mill No.", all_mill_nos)
 
 # Dynamically update options for Shift based on selected factory and mill
-if selected_mill_no != "All" and selected_factory != "All":
-    mill_df = hands_df[(hands_df["Mill No."] == selected_mill_no) & (hands_df["Factory"] == selected_factory)]
-    shift = ["All"] + list(mill_df["Shift"].unique())
-elif selected_factory != "All":
-    factories_df = hands_df[hands_df["Factory"] == selected_factory]
+# if selected_mill_no != "All" and selected_factory != "All":
+#     mill_df = filtered_df[(filtered_df["Mill No."] == selected_mill_no) & (filtered_df["Factory"] == selected_factory)]
+#     shift = ["All"] + list(mill_df["Shift"].unique())
+if selected_factory != "All":
+    factories_df = filtered_df[filtered_df["Factory"] == selected_factory]
     shift = ["All"] + list(factories_df["Shift"].unique())
 else:
-    shift = ["All"] + list(hands_df["Shift"].unique())
+    shift = ["All"] + list(filtered_df["Shift"].unique())
 
-with col3:
+with col2:
     selected_Shift = st.selectbox("Shift", shift)
 
 
@@ -181,11 +207,11 @@ st.markdown("")
 
 
 # Filter the data based on selected filters
-filtered_df = hands_df.copy()
+filtered_df = filtered_df.copy()
 if selected_factory != "All":
     filtered_df = filtered_df[filtered_df["Factory"] == selected_factory]
-if selected_mill_no != "All":
-    filtered_df = filtered_df[filtered_df["Mill No."] == selected_mill_no]
+# if selected_mill_no != "All":
+#     filtered_df = filtered_df[filtered_df["Mill No."] == selected_mill_no]
 if selected_Shift != "All":
     filtered_df = filtered_df[filtered_df["Shift"] == selected_Shift]
 
@@ -229,11 +255,11 @@ st.markdown("")
 
 
 # groupby shift for data visualization
-factory_df=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands"].sum()
-sectionwise_df=filtered_df.groupby(filtered_df["Section"], as_index=False)["Hands Per Ton"].sum()
-millwise_hands=filtered_df.groupby(filtered_df["Mill No."], as_index=False)["Hands"].sum()
-factory_df_hands_per_ton=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands Per Ton"].sum()
-shift_wise_hands_per_ton=filtered_df.groupby(filtered_df["Shift"],as_index=False)["Hands Per Ton"].sum()
+# factory_df=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands"].sum()
+# # sectionwise_df=filtered_df.groupby(filtered_df["Section"], as_index=False)["Hands Per Ton"].sum()
+# millwise_hands=filtered_df.groupby(filtered_df["Mill No."], as_index=False)["Hands"].sum()
+# factory_df_hands_per_ton=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands Per Ton"].sum()
+# shift_wise_hands_per_ton=filtered_df.groupby(filtered_df["Shift"],as_index=False)["Hands Per Ton"].sum()
 
 
 # shift for text columns
@@ -364,97 +390,160 @@ st.markdown("")
 
 # starts section for charts
 col1,col2=st.columns((2))
-with col1:
-    try:
-        # original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Factory Wise Hands</p>'
-        # st.markdown(original_title,unsafe_allow_html=True)
-    
-        fig=px.bar(factory_df,x="Factory",y="Hands",text=['{:,.2f}'.format(x) for x in factory_df["Hands"]],
-                    template = "seaborn",height=350,width=350)
-        fig.update_layout(title="Hands: Premises Wise")
-    
-    except IndexError:
-        st.warning("No data found for the specified filter.")
+
+
+
+if selected_factory=="All":
+     
+
+    factory_df=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands"].sum()
+    # sectionwise_df=filtered_df.groupby(filtered_df["Section"], as_index=False)["Hands Per Ton"].sum()
+    millwise_hands=filtered_df.groupby(filtered_df["Mill No."], as_index=False)["Hands"].sum()
+    factory_df_hands_per_ton=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands Per Ton"].sum()
+    with col1:
+        try:
+            # original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Factory Wise Hands</p>'
+            # st.markdown(original_title,unsafe_allow_html=True)
         
-    if "fig" in locals():
-
-        st.plotly_chart(fig,use_container_width=False, )
-
-with col2:
-
-    try:
+            fig=px.bar(factory_df,x="Factory",y="Hands",text=['{:,.2f}'.format(x) for x in factory_df["Hands"]],
+                        template = "seaborn",height=350,width=350)
+            fig.update_layout(title="Hands: Premises Wise")
+        
+        except IndexError:
+            st.warning("No data found for the specified filter.")
             
-        # original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 20px; font-weight:bold;">Factory wise Hands Per Ton</p>'
-        # st.markdown(original_title,unsafe_allow_html=True)
-        fig = px.bar(factory_df_hands_per_ton, x="Factory",y="Hands Per Ton",text=['{:,.2f}'.format(x) for x in factory_df_hands_per_ton["Hands Per Ton"]],
-                    template="seaborn",height=350,width=350)
-        fig.update_layout(title="Hands Per Ton: Premises Wise")
+        if "fig" in locals():
+
+            st.plotly_chart(fig,use_container_width=False, )
+
+    with col2:
+
+        try:
+                
+            # original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 20px; font-weight:bold;">Factory wise Hands Per Ton</p>'
+            # st.markdown(original_title,unsafe_allow_html=True)
+            fig = px.bar(factory_df_hands_per_ton, x="Factory",y="Hands Per Ton",text=['{:,.2f}'.format(x) for x in factory_df_hands_per_ton["Hands Per Ton"]],
+                        template="seaborn",height=350,width=350)
+            fig.update_layout(title="Hands Per Ton: Premises Wise")
+        
+        except IndexError:
+            st.warning("No data found for the specified filter.")
+
+
+        if "fig" in locals():
+            st.plotly_chart(fig,use_container_width=False)
+
+
+else:
+    selected_factory=[selected_factory] if isinstance(selected_factory, str) else selected_factory
+
+    factory_df_selected = filtered_df[filtered_df['Factory'].isin(selected_factory)]
+
+    # Extract unique mill numbers from the selected factory DataFrame
+    selected_mills_production = factory_df_selected["Mill No."].unique()
+
+
+    # Filter the DataFrame to include only the selected mills
+    mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
     
-    except IndexError:
-        st.warning("No data found for the specified filter.")
+    mill_hands_df = mill_df.groupby(["Mill No."], as_index=False)["Hands"].sum()
+    mill_hands_per_ton_df = mill_df.groupby(["Mill No."], as_index=False)["Hands Per Ton"].sum()
 
 
-    if "fig" in locals():
-        st.plotly_chart(fig,use_container_width=False)
+
+    with col1:
+        try:
+            # original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Factory Wise Hands</p>'
+            # st.markdown(original_title,unsafe_allow_html=True)
+        
+            fig=px.bar(mill_hands_df,x="Mill No.",y="Hands",text=['{:,.2f}'.format(x) for x in mill_hands_df["Hands"]],
+                        template = "seaborn",height=350,width=350)
+            fig.update_layout(title="Hands: Mill Wise")
+        
+        except IndexError:
+            st.warning("No data found for the specified filter.")
+            
+        if "fig" in locals():
+
+            st.plotly_chart(fig,use_container_width=False, )
+
+    with col2:
+
+        try:
+                
+            # original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 20px; font-weight:bold;">Factory wise Hands Per Ton</p>'
+            # st.markdown(original_title,unsafe_allow_html=True)
+            fig = px.bar(mill_hands_per_ton_df, x="Mill No.",y="Hands Per Ton",text=['{:,.2f}'.format(x) for x in mill_hands_per_ton_df["Hands Per Ton"]],
+                        template="seaborn",height=350,width=350)
+            fig.update_layout(title="Hands Per Ton: Mill Wise")
+        
+        except IndexError:
+            st.warning("No data found for the specified filter.")
+
+
+        if "fig" in locals():
+            st.plotly_chart(fig,use_container_width=False)
+
+
 
 
 # section for department wise hands per ton
 
 # st.subheader("Department wise Hands")
 
-col1,col2=st.columns(2)
-with col1:
+# col1,col2=st.columns(2)
+# with col1:
      
-    # Define the list of selected departments
-    selected_departments = ["Spreader", "Breaker", "Drawing", "Spinning", "Finisher", "Roll Winding", "Precision Winding"]
-    selected_departments_mechanical = ["Mechanical"]
-    selected_departments_quality = ["Quality"]
-    selected_departments_production_general = ["Production General"]
+#     # Define the list of selected departments
+#     selected_departments = ["Spreader", "Breaker", "Drawing", "Spinning", "Finisher", "Roll Winding", "Precision Winding"]
+#     selected_departments_mechanical = ["Mechanical"]
+#     selected_departments_quality = ["Quality"]
+#     selected_departments_production_general = ["Production General"]
 
-    # Filter the DataFrame to include only the selected departments
-    selected_df = filtered_df[filtered_df["Section"].isin(selected_departments)]
+#     # Filter the DataFrame to include only the selected departments
+#     selected_df = filtered_df[filtered_df["Section"].isin(selected_departments)]
 
-    # Group by "Section" (department) and sum the values of "Hands" for each department
-    production_department = selected_df.groupby("Section")["Hands"].sum().reset_index()
+#     # Group by "Section" (department) and sum the values of "Hands" for each department
+#     production_department = selected_df.groupby("Section")["Hands"].sum().reset_index()
 
-    # Filter the DataFrame to include only the mechanical department
-    selected_df_mechanical = filtered_df[filtered_df["Section"].isin(selected_departments_mechanical)]
-    mechanical_dept = selected_df_mechanical["Hands"].sum()
+#     # Filter the DataFrame to include only the mechanical department
+#     selected_df_mechanical = filtered_df[filtered_df["Section"].isin(selected_departments_mechanical)]
+#     mechanical_dept = selected_df_mechanical["Hands"].sum()
 
-    # Filter the DataFrame to include only the quality department
-    selected_df_quality = filtered_df[filtered_df["Section"].isin(selected_departments_quality)]
-    quality_dept = selected_df_quality["Hands"].sum()
+#     # Filter the DataFrame to include only the quality department
+#     selected_df_quality = filtered_df[filtered_df["Section"].isin(selected_departments_quality)]
+#     quality_dept = selected_df_quality["Hands"].sum()
 
-    # Filter the DataFrame to include only the production general department
-    selected_df_production_general = filtered_df[filtered_df["Section"].isin(selected_departments_production_general)]
-    production_general_dept = selected_df_production_general["Hands"].sum()
+#     # Filter the DataFrame to include only the production general department
+#     selected_df_production_general = filtered_df[filtered_df["Section"].isin(selected_departments_production_general)]
+#     production_general_dept = selected_df_production_general["Hands"].sum()
 
-    # Create a DataFrame to concatenate the sums
-    combined_df = pd.DataFrame({
-        "Section": ["Production"] * len(production_department) + ["Mechanical"] + ["Quality"] + ["Production General"],
-        "Hands": production_department["Hands"].tolist() + [mechanical_dept] + [quality_dept] + [production_general_dept]
-    })
+#     # Create a DataFrame to concatenate the sums
+#     combined_df = pd.DataFrame({
+#         "Section": ["Production"] * len(production_department) + ["Mechanical"] + ["Quality"] + ["Production General"],
+#         "Hands": production_department["Hands"].tolist() + [mechanical_dept] + [quality_dept] + [production_general_dept]
+#     })
 
-    # Create a pie chart for the combined data
-    fig_combined = px.pie(combined_df, values="Hands", names="Section", hole=0.5)
+#     # Create a pie chart for the combined data
+#     fig_combined = px.pie(combined_df, values="Hands", names="Section", hole=0.5)
 
-    # Update layout
-    fig_combined.update_layout(title="Total Hands by Department")
+#     # Update layout
+#     fig_combined.update_layout(title="Total Hands by Department")
 
-    # Display the combined pie chart using Streamlit
-    st.plotly_chart(fig_combined, use_container_width=True)
+#     # Display the combined pie chart using Streamlit
+#     st.plotly_chart(fig_combined, use_container_width=True)
 
-with col2:
+# with col2:
     
 
-    # hands_per_ton_df = sectionwise_df.groupby(sectionwise_df["Section"], as_index=False)["Hands Per Ton"].sum()
+#     # hands_per_ton_df = sectionwise_df.groupby(sectionwise_df["Section"], as_index=False)["Hands Per Ton"].sum()
    
-    try:
-            # Create a bar chart for production by factory
-            fig = px.bar(sectionwise_df, x="Section", y="Hands Per Ton", text=['{:,.2f}'.format(x) for x in sectionwise_df["Hands Per Ton"]],
-                        template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(sectionwise_df))
-            fig.update_layout(title="Production: Section Wise")
-            st.plotly_chart(fig, use_container_width=True)
+#     try:
+#             # Create a bar chart for production by factory
+#             fig = px.bar(sectionwise_df, x="Section", y="Hands Per Ton", text=['{:,.2f}'.format(x) for x in sectionwise_df["Hands Per Ton"]],
+#                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(sectionwise_df))
+#             fig.update_layout(title="Production: Section Wise")
+#             st.plotly_chart(fig, use_container_width=True)
 
-    except IndexError:
-            st.warning("No data found for the specified filter.")
+#     except IndexError:
+#             st.warning("No data found for the specified filter.")
