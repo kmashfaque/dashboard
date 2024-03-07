@@ -200,9 +200,6 @@ with col2:
 
 
 
-
-
-
 st.markdown("")
 
 
@@ -266,7 +263,7 @@ st.markdown("")
 col1,col2,col3=st.columns((1,1,2))
 
 total_hands=filtered_df["Hands"].sum()
-hands_per_ton=filtered_df["Hands Per Ton"].sum()
+hands_per_ton=filtered_df["Hands Per Ton"].mean()
 
 
 
@@ -396,10 +393,10 @@ col1,col2=st.columns((2))
 if selected_factory=="All":
      
 
-    factory_df=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands"].sum()
+    factory_df=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands"].mean()
     # sectionwise_df=filtered_df.groupby(filtered_df["Section"], as_index=False)["Hands Per Ton"].sum()
-    millwise_hands=filtered_df.groupby(filtered_df["Mill No."], as_index=False)["Hands"].sum()
-    factory_df_hands_per_ton=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands Per Ton"].sum()
+    millwise_hands=filtered_df.groupby(filtered_df["Mill No."], as_index=False)["Hands"].mean()
+    factory_df_hands_per_ton=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands Per Ton"].mean()
     with col1:
         try:
             # original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Factory Wise Hands</p>'

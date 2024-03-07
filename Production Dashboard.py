@@ -116,9 +116,10 @@ col1,col2,col3,col4,col5,col6=st.columns((6))
 
 
 
+
 if selected_factory=="All":
 
-
+   
     factory_df=df_last_date
     hands_df_all=hands_df_last_date
     stock_all=stock_df_last_date
@@ -126,8 +127,12 @@ if selected_factory=="All":
     efficiency=factory_df["Efficiency"].mean()
     converted_production=factory_df["Converted Production"].sum()
     total_frame=factory_df["Frame"].sum()
-    total_hands=hands_df_all["Hands Per Ton"].sum()
+    total_hands=hands_df_all["Hands Per Ton"].mean()
     stock_despatch=stock_all["Despatch M/Ton"].sum()
+    
+    target_production=factory_df["Target Production"].sum()
+    target_frame=factory_df["Target Frame"].sum()
+
 
     formatted_actual_production="{:.2f}".format(actual_production)
     formatted_efficiency="{:.0%}".format(efficiency)
@@ -155,7 +160,7 @@ if selected_factory=="All":
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center;">Target</p>'
             st.markdown(original_title,unsafe_allow_html=True)
 
-            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center;">{formatted_actual_production}</p>'
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center;">{target_production}</p>'
             st.markdown(value,unsafe_allow_html=True)
 
             st.markdown("")
@@ -217,7 +222,7 @@ if selected_factory=="All":
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Existing</p>'
             st.markdown(original_title,unsafe_allow_html=True)
 
-            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_total_frame_existing}</p>'
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{target_frame}</p>'
             st.markdown(value,unsafe_allow_html=True)
 
             
@@ -274,6 +279,8 @@ else:
     total_frame=factory_df_selected["Frame"].sum()
     total_hands=hands_df_selected["Hands Per Ton"].sum()
     stock_despatch=stock_df_selected["Despatch M/Ton"].sum()
+    target_production=factory_df_selected["Target Production"].sum()
+    target_frame=factory_df_selected["Target Frame"].sum()
 
 
     formatted_actual_production="{:.2f}".format(actual_production)
@@ -297,7 +304,7 @@ else:
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Target</p>'
             st.markdown(original_title,unsafe_allow_html=True)
 
-            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_actual_production}</p>'
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{target_production}</p>'
             st.markdown(value,unsafe_allow_html=True)
 
             st.markdown("")
@@ -362,7 +369,7 @@ else:
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Existing</p>'
             st.markdown(original_title,unsafe_allow_html=True)
 
-            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{total_frame}</p>'
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{target_frame}</p>'
             st.markdown(value,unsafe_allow_html=True)
 
             
@@ -417,7 +424,7 @@ col1, col2, col3 = st.columns((3))
 if selected_factory=="All":
     factory_df = df_last_date.groupby(df_last_date["Factory"], as_index=False)["achieved production"].sum()
     efficiency_df = df_last_date.groupby(df_last_date["Factory"], as_index=False)["Efficiency"].mean()
-    hands_per_ton_df = hands_df_last_date.groupby(hands_df_last_date["Factory"], as_index=False)["Hands Per Ton"].sum()
+    hands_per_ton_df = hands_df_last_date.groupby(hands_df_last_date["Factory"], as_index=False)["Hands Per Ton"].mean()
     with col1:
         try:
             # Create a bar chart for production by factory
@@ -482,7 +489,7 @@ else:
     hands_mill_no = hands_df_selected[hands_df_selected["Mill No."].isin(selected_mills_hands)]
     mill_production_df = mill_df.groupby(["Mill No."], as_index=False)["achieved production"].sum()
     mill_efficiency_df = mill_df.groupby(["Mill No."], as_index=False)["Efficiency"].mean()
-    mill_hands_per_ton_df = hands_mill_no.groupby(["Mill No."], as_index=False)["Hands Per Ton"].sum()
+    mill_hands_per_ton_df = hands_mill_no.groupby(["Mill No."], as_index=False)["Hands Per Ton"].mean()
 
   
 

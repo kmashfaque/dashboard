@@ -186,6 +186,7 @@ efficiency=factory_df["Efficiency"].mean()
 converted_production=factory_df["Converted Production"].sum()
 total_frame=factory_df["Frame"].sum()
 
+
 # calculation for average count
 total_count=factory_df["Running Spindle"].sum()
 sum_count_spindle = (factory_df["count"] * factory_df["Running Spindle"]).sum()

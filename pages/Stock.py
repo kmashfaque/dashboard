@@ -307,6 +307,8 @@ with col2:
             # Sum the production quantities across all counts
             total_production = production_df.sum()
 
+            # total_production="{:.2f}".format(total_production)
+
             # Create a DataFrame for the total production
             total_production_df = pd.DataFrame(total_production).reset_index()
 
