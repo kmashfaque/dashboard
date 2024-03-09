@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 
 
 os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
-df=pd.read_excel("production.xlsx")
+df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
 hands_df=pd.read_excel("HandsPerTon.xlsx")
 stock_df=pd.read_excel("Stocks.xlsx")
 

@@ -31,7 +31,7 @@ st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow
 
 os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
     
-df=pd.read_excel("production.xlsx")
+df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
 
 unique_date=df["Date"]
 

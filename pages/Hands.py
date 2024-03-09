@@ -260,7 +260,7 @@ st.markdown("")
 
 
 # shift for text columns
-col1,col2,col3=st.columns((1,1,2))
+col1,col2=st.columns(2)
 
 total_hands=filtered_df["Hands"].sum()
 hands_per_ton=filtered_df["Hands Per Ton"].mean()
@@ -286,82 +286,83 @@ with col2:
         value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{formatted_total_hands}</p>'
         st.markdown(value,unsafe_allow_html=True)
 
-with col3:
-    # Define the list of selected departments
-    selected_departments = ["Spreader", "Breaker", "Drawing", "Spinning", "Finisher", "Roll Winding", "Precision Winding"]
-    selected_departments_mechanical = ["Mechanical"]
-    selected_departments_quality = ["Quality"]
-    selected_departments_production_general = ["Production General"]
+# with col3:
+#     # Define the list of selected departments
+#     selected_departments = ["Spreader", "Breaker", "Drawing", "Spinning", "Finisher", "Roll Winding", "Precision Winding"]
+#     selected_departments_mechanical = ["Mechanical"]
+#     selected_departments_quality = ["Quality"]
+#     selected_departments_production_general = ["Production General"]
 
-    # Filter the DataFrame to include only the selected departments
-    selected_df = filtered_df[filtered_df["Section"].isin(selected_departments)]
+#     # Filter the DataFrame to include only the selected departments
+#     selected_df = filtered_df[filtered_df["Section"].isin(selected_departments)]
 
-    # Group by "Section" (department) and sum the values of "Hands" for each department
-    production_department = selected_df["Hands"].sum()
-    formatted_production_department="{:.2f}".format(production_department)
+#     # Group by "Section" (department) and sum the values of "Hands" for each department
+#     production_department = selected_df["Hands"].sum()
+#     formatted_production_department="{:.2f}".format(production_department)
 
 
-    # Filter the DataFrame to include only the mechanical department
-    selected_df_mechanical = filtered_df[filtered_df["Section"].isin(selected_departments_mechanical)]
-    mechanical_dept = selected_df_mechanical["Hands"].sum()
-    formatted_mechanical_department="{:.2f}".format(mechanical_dept)
+#     # Filter the DataFrame to include only the mechanical department
+#     selected_df_mechanical = filtered_df[filtered_df["Section"].isin(selected_departments_mechanical)]
+#     mechanical_dept = selected_df_mechanical["Hands"].sum()
+#     formatted_mechanical_department="{:.2f}".format(mechanical_dept)
 
-    # Filter the DataFrame to include only the quality department
-    selected_df_quality = filtered_df[filtered_df["Section"].isin(selected_departments_quality)]
-    quality_dept = selected_df_quality["Hands"].sum()
-    formatted_quality_department="{:.2f}".format(quality_dept)
+#     # Filter the DataFrame to include only the quality department
+#     selected_df_quality = filtered_df[filtered_df["Section"].isin(selected_departments_quality)]
+#     quality_dept = selected_df_quality["Hands"].sum()
+#     formatted_quality_department="{:.2f}".format(quality_dept)
     
 
-    # Filter the DataFrame to include only the production general department
-    selected_df_production_general = filtered_df[filtered_df["Section"].isin(selected_departments_production_general)]
-    production_general_dept = selected_df_production_general["Hands"].sum()
+#     # Filter the DataFrame to include only the production general department
+#     selected_df_production_general = filtered_df[filtered_df["Section"].isin(selected_departments_production_general)]
+#     production_general_dept = selected_df_production_general["Hands"].sum()
 
 
-    original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Hands </p>'
-    st.markdown(original_title,unsafe_allow_html=True)
-        # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
-            # st.markdown(value,unsafe_allow_html=True)
-            # st.markdown("")
-            # st.markdown("")
-            # st.markdown("")
+#     original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Hands </p>'
+#     st.markdown(original_title,unsafe_allow_html=True)
+#         # value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;">{formatted_actual_production}</p>'
+#             # st.markdown(value,unsafe_allow_html=True)
+#             # st.markdown("")
+#             # st.markdown("")
+#             # st.markdown("")
 
 
-    col1_prod, col1_mech,col1_quality =st.columns((3))
+#     col1_prod, col1_mech,col1_quality =st.columns((3))
     
-    with col1_prod:
-                original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center;">Production</p>'
-                st.markdown(original_title,unsafe_allow_html=True)
+#     with col1_prod:
+#                 original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center;">Production</p>'
+#                 st.markdown(original_title,unsafe_allow_html=True)
 
-                value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center;">{formatted_production_department}</p>'
-                st.markdown(value,unsafe_allow_html=True)
+#                 value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center;">{formatted_production_department}</p>'
+#                 st.markdown(value,unsafe_allow_html=True)
 
-                st.markdown("")
-                st.markdown("")
-                st.markdown("")
+#                 st.markdown("")
+#                 st.markdown("")
+#                 st.markdown("")
             
 
-    with col1_mech:
-                original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Mechanical</p>'
-                st.markdown(original_title,unsafe_allow_html=True)
+#     with col1_mech:
+#                 original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Mechanical</p>'
+#                 st.markdown(original_title,unsafe_allow_html=True)
 
-                value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_mechanical_department}</p>'
-                st.markdown(value,unsafe_allow_html=True)
+#                 value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_mechanical_department}</p>'
+#                 st.markdown(value,unsafe_allow_html=True)
 
-                st.markdown("")
-                st.markdown("")
-                st.markdown("")
+#                 st.markdown("")
+#                 st.markdown("")
+#                 st.markdown("")
         
-    with col1_quality:
-                original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Quality</p>'
-                st.markdown(original_title,unsafe_allow_html=True)
+#     with col1_quality:
+#                 original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Quality</p>'
+#                 st.markdown(original_title,unsafe_allow_html=True)
 
-                value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_quality_department}</p>'
-                st.markdown(value,unsafe_allow_html=True)
+#                 value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center"">{formatted_quality_department}</p>'
+#                 st.markdown(value,unsafe_allow_html=True)
 
-                st.markdown("")
-                st.markdown("")
-                st.markdown("")
+#                 st.markdown("")
+#                 st.markdown("")
+#                 st.markdown("")
 
+st.markdown("")
 st.markdown("")
     
 # else:
