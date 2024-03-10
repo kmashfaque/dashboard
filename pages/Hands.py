@@ -445,7 +445,7 @@ else:
     mill_df = factory_df_selected[factory_df_selected["Mill No."].isin(selected_mills_production)]
     
     mill_hands_df = mill_df.groupby(["Mill No."], as_index=False)["Hands"].sum()
-    mill_hands_per_ton_df = mill_df.groupby(["Mill No."], as_index=False)["Hands Per Ton"].sum()
+    mill_hands_per_ton_df = mill_df.groupby(["Mill No."], as_index=False)["Hands Per Ton"].mean()
 
 
 

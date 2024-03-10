@@ -277,7 +277,7 @@ else:
     efficiency=factory_df_selected["Efficiency"].mean()
     converted_production=factory_df_selected["Converted Production"].sum()
     total_frame=factory_df_selected["Frame"].sum()
-    total_hands=hands_df_selected["Hands Per Ton"].sum()
+    total_hands=hands_df_selected["Hands Per Ton"].mean()
     stock_despatch=stock_df_selected["Despatch M/Ton"].sum()
     target_production=factory_df_selected["Target Production"].sum()
     target_frame=factory_df_selected["Target Frame"].sum()
