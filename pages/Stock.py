@@ -149,10 +149,11 @@ if selected_factory=="All":
 
         # Generate a download button for the DataFrame
 else:
+    factory_df_selected=filtered_df
     selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
     # Filter the DataFrame based on the selected factories
-    factory_df_selected = filtered_df[filtered_df['Factory'].isin(selected_factory)]
+    factory_df_selected = factory_df_selected[factory_df_selected['Factory'].isin(selected_factory)]
     
 
     with st.expander("View DataFrame"):
