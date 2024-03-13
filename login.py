@@ -1,6 +1,11 @@
 import streamlit as st
 import streamlit_authenticator as stauth
 import pyrebase
+import sys
+sys.path.append("pages")
+
+
+
 
 
 firebaseConfig = {
@@ -30,7 +35,6 @@ db=firebase.database()
 storage=firebase.storage()
 
 # Authentication
-
 
 # st.subheader("Login/Signup")
 
@@ -117,8 +121,27 @@ def handle_login_logout():
     else:  # User is authenticated
         st.warning("Undefined Credentials!")
 
+
+
+
+
+
 def main():
     handle_login_logout()
+
+
+    if st.session_state["authenticated"]:
+        from pages.Production_Dashboard import production_dashboard
+        from pages.Production_Details import Peroduction_details
+        from pages.Stock import Stock
+        from pages.Hands import Hands
+        from pages.file_uploader import file_uploader
+
+
+        
+
+
+
 
 
 

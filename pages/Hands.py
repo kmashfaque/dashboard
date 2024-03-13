@@ -83,12 +83,6 @@ def Hands():
 
 
 
-
-
-
-
-
-
     # sidebar for filtering data starts here
 
     # st.sidebar.header("Choose your filter: ")
