@@ -162,14 +162,15 @@ st.markdown("")
 
 
 
-col1,col2,col3,col4,col5=st.columns(5)
+col1,col2,col3,col4,col5,col6=st.columns(6)
 
 
 factory_df=filtered_df
 requisition=factory_df["Demand"].sum()/1000
 jute_issue=factory_df["Issue"].sum()/1000
 accuracy_qty=(factory_df["Demand"].sum()/1000)+(factory_df["Shortage"].sum()/1000)
-
+accuracy_rate = ((factory_df["Demand"].sum() / 1000) + (factory_df["Shortage"].sum() / 1000)) / (factory_df["Demand"].sum() / 1000)
+accuracy_rate_percentage = accuracy_rate * 100
 
 access=factory_df["Access"].sum()/1000
 shortage=factory_df["Shortage"].sum()/1000
@@ -179,6 +180,7 @@ formatted_issue="{:.2f}".format(jute_issue)
 formatted_accuracy_qty="{:.2f}".format(accuracy_qty)
 formatted_access_qty="{:.2f}".format(access)
 formatted_shortage_qty="{:.2f}".format(abs(shortage))
+formatted_accuracy_rate="{:.2f}%".format(accuracy_rate_percentage)
 
 
 
@@ -226,8 +228,19 @@ with col3:
             st.markdown("")
             st.markdown("")
         
-
 with col4:
+
+
+            original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Accuracy Rate</p>'
+            
+            st.markdown(original_title,unsafe_allow_html=True)
+            value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 18px; font-weight:bold;text-align:center">{formatted_accuracy_rate}</p>'
+            st.markdown(value,unsafe_allow_html=True)
+
+            st.markdown("")
+            st.markdown("")
+            st.markdown("")
+with col5:
 
 
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Access</p>'
@@ -240,7 +253,7 @@ with col4:
             st.markdown("")
             st.markdown("")
 
-with col5:
+with col6:
 
 
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Shortage</p>'
@@ -256,41 +269,51 @@ with col5:
 # Start sections for charts
 # col1 = st.columns((1))
 # Display factory-wise charts
-if selected_factory=="All":
-    factory_df = ((filtered_df.groupby(filtered_df["Grade"])[["Demand","Issue"]].sum())/1000).reset_index()
-    # Filter out rows where both Demand and Issue are zero
-    factory_df = factory_df[(factory_df["Demand"] != 0) | (factory_df["Issue"] != 0)]
 
-    # Get the list of Grades with non-zero values
-    non_zero_grades = factory_df["Grade"].unique()
+factory_df = ((filtered_df.groupby(filtered_df["Grade"])[["Demand","Issue"]].sum())/1000).reset_index()
+# Filter out rows where both Demand and Issue are zero
+factory_df = factory_df[(factory_df["Demand"] != 0) | (factory_df["Issue"] != 0)]
+
+# Get the list of Grades with non-zero values
+non_zero_grades = factory_df["Grade"].unique()
 
         
     
-    # with col1:
-    try:
-            # Create a bar chart for production by factory
-            fig = px.bar(factory_df, x="Grade", y=["Demand", "Issue"],
+# with col1:
+try:
+        # Create a bar chart for production by factory
+        fig = px.bar(factory_df, x="Grade", y=["Demand", "Issue"],
                          barmode='group', labels={"value": "Value", "variable": "Category"},
              title="Requisition and Issued by Jute Grade")
     
             
-            fig.update_layout(title="Requisition and Issue Qty: Grade Wise ")
-            st.plotly_chart(fig, use_container_width=True)
-    except IndexError:
+        fig.update_layout(title="Requisition and Issue Qty: Grade Wise ")
+        st.plotly_chart(fig, use_container_width=True)
+except IndexError:
                 st.warning("No data found for the specified filter.")
 
-    # with col2:
-    #         # Convert efficiency values to percentages
-    #     efficiency_df["Efficiency (%)"] = efficiency_df["Efficiency"] * 100
-    #     try:
-    #             # Create a bar chart for efficiency by factory
-    #             fig = px.bar(efficiency_df, x="Factory", y="Efficiency (%)", text=['{:,.0f}%'.format(x) for x in efficiency_df["Efficiency (%)"]],
-    #                         template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(efficiency_df))
-    #             fig.update_layout(title="Efficiency: Premises Wise ")
-    #             st.plotly_chart(fig, use_container_width=True)
 
-    #     except IndexError:
-    #             st.warning("No data found for the specified filter.")
+
+  
+# Assuming 'Issue' column contains numeric values represented as strings
+filtered_df['Issue'] = pd.to_numeric(filtered_df['Issue'])
+
+# Group by Grade and sum the Issue column, then divide the sum by 1000
+grade_df = filtered_df.groupby(filtered_df["Grade"], as_index=False)["Issue"].sum()
+grade_df["Issue"] /= 1000  # Divide the sum by 1000
+
+# Filter out rows with zero values in the 'Issue' column
+grade_df = grade_df[grade_df["Issue"] != 0]
+
+try:
+                # Create a bar chart for efficiency by factory
+        fig = px.bar(grade_df, x="Grade", y="Issue", text=['{:,.2f}'.format(x) for x in grade_df["Issue"]],
+                            template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(grade_df))
+        fig.update_layout(title="Jute Issue: Grade Wise ")
+        st.plotly_chart(fig, use_container_width=True)
+
+except IndexError:
+        st.warning("No data found for the specified filter.")
         
 
     # with col3:
