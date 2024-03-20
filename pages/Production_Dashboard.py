@@ -8,39 +8,40 @@ import base64
 from io import BytesIO
 
 
-def production_dashboard():
-    warnings.filterwarnings("ignore")
+# def production_dashboard():
+#     warnings.filterwarnings("ignore")
 
 
 
-    os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
-    df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
-    hands_df=pd.read_excel("HandsPerTon.xlsx")
-    stock_df=pd.read_excel("Stocks.xlsx")
+os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
+# df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
+df=pd.read_excel("Production (2).xlsx")
+hands_df=pd.read_excel("HandsPerTon.xlsx")
+stock_df=pd.read_excel("Stocks.xlsx")
 
-    unique_date=df["Date"].unique()
-    hands_df=hands_df[hands_df["Date"].isin(unique_date)]
-    stock_df=stock_df[stock_df["Date"].isin(unique_date)]
+unique_date=df["Date"].unique()
+hands_df=hands_df[hands_df["Date"].isin(unique_date)]
+stock_df=stock_df[stock_df["Date"].isin(unique_date)]
 
-    # Extract the end date from the DataFrame
-    end_date_from_df = df["Date"].max().strftime('%Y-%m-%d')
-    st.set_page_config(page_title="Production Dashboard!!", page_icon=":bar_chart:", layout="wide")
+# Extract the end date from the DataFrame
+end_date_from_df = df["Date"].max().strftime('%Y-%m-%d')
+st.set_page_config(page_title="Production Dashboard!!", page_icon=":bar_chart:", layout="wide")
 
-    title_with_end_date = f":bar_chart: Daily Production Dashboard - All Mills - Date: {end_date_from_df}"
-    st.title(title_with_end_date)
-    st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
-    st.markdown("")
-    st.markdown("")
+title_with_end_date = f":bar_chart: Daily Production Dashboard - All Mills - Date: {end_date_from_df}"
+st.title(title_with_end_date)
+st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
+st.markdown("")
+st.markdown("")
 
 
-    # Filter the DataFrame to include only data for the last date
-    df_last_date = df[df["Date"] == end_date_from_df]
+# Filter the DataFrame to include only data for the last date
+df_last_date = df[df["Date"] == end_date_from_df]
 
-    # Filter the hands DataFrame to include only data for the last date
-    hands_df_last_date = hands_df[hands_df["Date"] == end_date_from_df]
+# Filter the hands DataFrame to include only data for the last date
+hands_df_last_date = hands_df[hands_df["Date"] == end_date_from_df]
 
-    # Filter the stock DataFrame to include only data for the last date
-    stock_df_last_date = stock_df[stock_df["Date"] == end_date_from_df]
+# Filter the stock DataFrame to include only data for the last date
+stock_df_last_date = stock_df[stock_df["Date"] == end_date_from_df]
 
     # file uploading section
     # fl=st.file_uploader(":file_folder: Upload a file", type=(["csv","xlsx","txt","xls"]))
@@ -70,15 +71,15 @@ def production_dashboard():
 
 
     # Sidebar for filtering data
-    st.sidebar.header("Choose your filter:")
-    # Create for Factory Name
-    selected_factory = st.sidebar.selectbox("Pick Location",
+st.sidebar.header("Choose your filter:")
+# Create for Factory Name
+selected_factory = st.sidebar.selectbox("Pick Location",
                                             ["All"] + list(df_last_date["Factory"].unique()),
                                             index=0)
 
 
     # Define the function to generate a download link for Excel
-    def get_table_download_link(df_last_date, filename):
+def get_table_download_link(df_last_date, filename):
         excel_file_buffer = BytesIO()
         df_last_date.to_excel(excel_file_buffer, index=False)
         excel_file_buffer.seek(0)
@@ -86,14 +87,13 @@ def production_dashboard():
         href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}.xlsx">Download file</a>'
         return href
 
-
-    if selected_factory=="All":
+if selected_factory=="All":
         factory_df_selected=df_last_date
         with st.expander("View DataFrame"):
             # Display the DataFrame within the expander
             st.write(factory_df_selected)
             # Generate a download button for the DataFrame
-    else:
+else:
         selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
         # Filter the DataFrame based on the selected factories
@@ -106,19 +106,19 @@ def production_dashboard():
             # Generate a download button for the DataFrame
             
 
-    st.markdown(get_table_download_link(factory_df_selected, "production"), unsafe_allow_html=True)
+st.markdown(get_table_download_link(factory_df_selected, "production"), unsafe_allow_html=True)
 
-    st.markdown("")
+st.markdown("")
 
 
     # filter data based on factory
 
-    col1,col2,col3,col4,col5,col6=st.columns((6))
+col1,col2,col3,col4,col5,col6=st.columns((6))
 
 
 
 
-    if selected_factory=="All":
+if selected_factory=="All":
 
     
         factory_df=df_last_date
@@ -267,7 +267,7 @@ def production_dashboard():
                 st.markdown("")
                 st.markdown("")
 
-    else:
+else:
 
 
         selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
@@ -419,10 +419,10 @@ def production_dashboard():
 
 
     # Start sections for charts
-    col1, col2, col3 = st.columns((3))
+col1, col2, col3 = st.columns((3))
 
-    # Display factory-wise charts
-    if selected_factory=="All":
+# Display factory-wise charts
+if selected_factory=="All":
         factory_df = df_last_date.groupby(df_last_date["Factory"], as_index=False)["achieved production"].sum()
         efficiency_df = df_last_date.groupby(df_last_date["Factory"], as_index=False)["Efficiency"].mean()
         hands_per_ton_df = hands_df_last_date.groupby(hands_df_last_date["Factory"], as_index=False)["Hands Per Ton"].mean()
@@ -471,7 +471,7 @@ def production_dashboard():
                 st.warning("No data found for the specified filter.")
 
     # Display mill-wise data if a factory is selected
-    else:
+else:
 
         selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
@@ -548,7 +548,7 @@ def production_dashboard():
 
     # counwise production chart
 
-    if selected_factory=="All":
+if selected_factory=="All":
         count_df = df_last_date.groupby(df_last_date["count"], as_index=False)["achieved production"].sum()
 
         try:
@@ -571,7 +571,7 @@ def production_dashboard():
         
 
     # Display mill-wise data if a factory is selected
-    else:
+else:
 
         selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 

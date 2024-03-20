@@ -32,7 +32,7 @@ st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow
 
 os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
         
-jute_issue_df=pd.read_excel("Jute Issue Format.xlsx")
+jute_issue_df=pd.read_excel("Juteissue.xlsx")
 
 # date filtering starts here
 col1, col2=st.columns((2))

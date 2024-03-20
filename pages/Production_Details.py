@@ -9,15 +9,15 @@ import base64
 from io import BytesIO
 
 
-def Peroduction_details():
+# def Peroduction_details():
      
-    warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore")
 
-    st.set_page_config(page_title="Over All Production!!", page_icon=":bar_chart:", layout="wide")
+st.set_page_config(page_title="Over All Production!!", page_icon=":bar_chart:", layout="wide")
 
 
-    st.title(" :bar_chart: Production Details Dashboard - All Mills")
-    st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
+st.title(" :bar_chart: Production Details Dashboard - All Mills")
+st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 
 
     # file uploading section
@@ -32,117 +32,118 @@ def Peroduction_details():
     #     df=pd.read_excel("production.xlsx")
     #     hands_df=pd.read_excel("HandsPerTon.xlsx")
 
-    os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
-        
-    df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
+os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
 
-    unique_date=df["Date"]
+df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
+
+unique_date=df["Date"]
 
 
 
-    col1, col2 = st.columns(2)
-    df["Date"] = pd.to_datetime(df["Date"])
+col1, col2 = st.columns(2)
+df["Date"] = pd.to_datetime(df["Date"])
 
-    # Get the minimum and maximum dates from the DataFrame
-    min_date = df["Date"].min()
-    max_date = df["Date"].max()
+# Get the minimum and maximum dates from the DataFrame
+min_date = df["Date"].min()
+max_date = df["Date"].max()
 
-    # Set default values for date input widgets
-    default_start_date = min_date.date()
-    default_end_date = max_date.date()
+# Set default values for date input widgets
+default_start_date = min_date.date()
+default_end_date = max_date.date()
 
-    # Display the date input widgets in two columns
-    with col1:
+# Display the date input widgets in two columns
+with col1:
         start_date = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
 
-    with col2:
+with col2:
         # Set the minimum value of the end date input dynamically based on the selected start date
         min_end_date = min(start_date, default_end_date)
         end_date = st.date_input("End Date", min_value=min_end_date, max_value=max_date.date(), value=default_end_date)
 
     # Convert start_date and end_date to Timestamp objects
-    start_date = pd.Timestamp(start_date)
-    end_date = pd.Timestamp(end_date)
+start_date = pd.Timestamp(start_date)
+end_date = pd.Timestamp(end_date)
 
-    # Apply date filtering to the DataFrame
-    df = df[(df["Date"] >= start_date) & (df["Date"] <= end_date)].copy()
-    # date filtering section ends here
+# Apply date filtering to the DataFrame
+df = df[(df["Date"] >= start_date) & (df["Date"] <= end_date)].copy()
+# date filtering section ends here
 
 
 
-    # Define initial options for the selectboxes
-    all_factories = ["All"] + list(df["Factory"].unique())
-    all_mill_nos = ["All"] + list(df["Mill No."].unique())
-    all_buyers = ["All"] + list(df["Buyer's Name"].unique())
-    all_cont_nos = ["All"] + list(df["Contact No."].unique())
+# Define initial options for the selectboxes
+all_factories = ["All"] + list(df["Factory"].unique())
+all_mill_nos = ["All"] + list(df["Mill No."].unique())
+all_buyers = ["All"] + list(df["Buyer's Name"].unique())
+all_cont_nos = ["All"] + list(df["Contact No."].unique())
 
-    # Create a column for filtering data
-    col1, col2, col3, col4 = st.columns(4)
+# Create a column for filtering data
+col1, col2, col3, col4 = st.columns(4)
 
-    # Create selectboxes for filtering
-    with col1:
+# Create selectboxes for filtering
+with col1:
+        
         selected_factory = st.selectbox("Factory", all_factories)
 
     # Dynamically update options for Mill No. based on selected factory
-    if selected_factory != "All":
-        factories_df = df[df["Factory"] == selected_factory]
-        all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
-    else:
-        all_mill_nos = ["All"] + list(df["Mill No."].unique())
+        if selected_factory != "All":
+            factories_df = df[df["Factory"] == selected_factory]
+            all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
+        else:
+            all_mill_nos = ["All"] + list(df["Mill No."].unique())
 
-    with col2:
+with col2:
         selected_mill_no = st.selectbox("Mill No.", all_mill_nos)
 
     # Dynamically update options for Buyer's Name based on selected factory and mill
-    if selected_mill_no != "All" and selected_factory != "All":
-        mill_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory)]
-        all_buyers = ["All"] + list(mill_df["Buyer's Name"].unique())
-    elif selected_factory != "All":
-        factories_df = df[df["Factory"] == selected_factory]
-        all_buyers = ["All"] + list(factories_df["Buyer's Name"].unique())
-    else:
-        all_buyers = ["All"] + list(df["Buyer's Name"].unique())
+        if selected_mill_no != "All" and selected_factory != "All":
+            mill_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory)]
+            all_buyers = ["All"] + list(mill_df["Buyer's Name"].unique())
+        elif selected_factory != "All":
+            factories_df = df[df["Factory"] == selected_factory]
+            all_buyers = ["All"] + list(factories_df["Buyer's Name"].unique())
+        else:
+            all_buyers = ["All"] + list(df["Buyer's Name"].unique())
 
-    with col3:
+with col3:
         selected_buyer = st.selectbox("Buyer's Name", all_buyers)
 
     # Dynamically update options for Contact No. based on selected filters
-    if selected_mill_no != "All" and selected_factory != "All" and selected_buyer != "All":
-        contact_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory) & (df["Buyer's Name"] == selected_buyer)]
-        all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
-    elif selected_mill_no != "All" and selected_factory != "All":
-        contact_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory)]
-        all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
-    elif selected_factory != "All":
-        contact_df = df[df["Factory"] == selected_factory]
-        all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
-    elif selected_buyer != "All":
-        contact_df = df[df["Buyer's Name"] == selected_buyer]
-        all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
-    else:
-        all_cont_nos = ["All"] + list(df["Contact No."].unique())
+        if selected_mill_no != "All" and selected_factory != "All" and selected_buyer != "All":
+            contact_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory) & (df["Buyer's Name"] == selected_buyer)]
+            all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
+        elif selected_mill_no != "All" and selected_factory != "All":
+            contact_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory)]
+            all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
+        elif selected_factory != "All":
+            contact_df = df[df["Factory"] == selected_factory]
+            all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
+        elif selected_buyer != "All":
+            contact_df = df[df["Buyer's Name"] == selected_buyer]
+            all_cont_nos = ["All"] + list(contact_df["Contact No."].unique())
+        else:
+            all_cont_nos = ["All"] + list(df["Contact No."].unique())
 
-    with col4:
+with col4:
         selected_cont_no = st.selectbox("Contact No.", all_cont_nos)
 
-    st.markdown("")
-    st.markdown("")
+st.markdown("")
+st.markdown("")
 
     # Filter the data based on selected filters
-    filtered_df = df.copy()
-    if selected_factory != "All":
+filtered_df = df.copy()
+if selected_factory != "All":
         filtered_df = filtered_df[filtered_df["Factory"] == selected_factory]
-    if selected_mill_no != "All":
+if selected_mill_no != "All":
         filtered_df = filtered_df[filtered_df["Mill No."] == selected_mill_no]
-    if selected_buyer != "All":
+if selected_buyer != "All":
         filtered_df = filtered_df[filtered_df["Buyer's Name"] == selected_buyer]
-    if selected_cont_no != "All":
+if selected_cont_no != "All":
         filtered_df = filtered_df[filtered_df["Contact No."] == selected_cont_no]
 
 
 
     # Define the function to generate a download link for Excel
-    def get_table_download_link(df, filename):
+def get_table_download_link(df, filename):
         excel_file_buffer = BytesIO()
         df.to_excel(excel_file_buffer, index=False)
         excel_file_buffer.seek(0)
@@ -151,14 +152,14 @@ def Peroduction_details():
         return href
 
 
-    if selected_factory=="All":
+if selected_factory=="All":
         factory_df_selected=filtered_df
         with st.expander("View DataFrame"):
             # Display the DataFrame within the expander
             st.write(factory_df_selected)
 
             # Generate a download button for the DataFrame
-    else:
+else:
         selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
         # Filter the DataFrame based on the selected factories
@@ -171,41 +172,41 @@ def Peroduction_details():
             # Generate a download button for the DataFrame
             
 
-    st.markdown(get_table_download_link(factory_df_selected, "Production Details"), unsafe_allow_html=True)
+st.markdown(get_table_download_link(factory_df_selected, "Production Details"), unsafe_allow_html=True)
 
-    st.markdown("")
-
-
-
-
-    col1,col2,col3,col4,col5=st.columns(5)
-
-
-
-    factory_df=filtered_df
-
-    production=factory_df["achieved production"].sum()
-    efficiency=factory_df["Efficiency"].mean()
-    converted_production=factory_df["Converted Production"].sum()
-    total_frame=factory_df["Frame"].sum()
-
-
-    # calculation for average count
-    total_count=factory_df["Running Spindle"].sum()
-    sum_count_spindle = (factory_df["count"] * factory_df["Running Spindle"]).sum()
-    average_count=sum_count_spindle/total_count
-    formatted_average_count="{:.2f}".format(average_count)
-
-    formatted_actual_production="{:.2f}".format(production)
-    formatted_efficiency="{:.0%}".format(efficiency)
-    formatted_converted_production="{:.2f}".format(converted_production)
-    total_frame="{:.0f}".format(total_frame)
+st.markdown("")
 
 
 
 
+col1,col2,col3,col4,col5=st.columns(5)
 
-    with col1:
+
+
+factory_df=filtered_df
+
+production=factory_df["achieved production"].sum()
+efficiency=factory_df["Efficiency"].mean()
+converted_production=factory_df["Converted Production"].sum()
+total_frame=factory_df["Frame"].sum()
+
+
+# calculation for average count
+total_count=factory_df["Running Spindle"].sum()
+sum_count_spindle = (factory_df["count"] * factory_df["Running Spindle"]).sum()
+average_count=sum_count_spindle/total_count
+formatted_average_count="{:.2f}".format(average_count)
+
+formatted_actual_production="{:.2f}".format(production)
+formatted_efficiency="{:.0%}".format(efficiency)
+formatted_converted_production="{:.2f}".format(converted_production)
+total_frame="{:.0f}".format(total_frame)
+
+
+
+
+
+with col1:
 
 
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Production</p>'
@@ -219,7 +220,7 @@ def Peroduction_details():
             st.markdown("")
         
 
-    with col2:
+with col2:
 
 
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Efficiency</p>'
@@ -234,7 +235,7 @@ def Peroduction_details():
         
 
 
-    with col3:
+with col3:
 
 
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Converted Production</p>'
@@ -247,7 +248,7 @@ def Peroduction_details():
             st.markdown("")
             st.markdown("")
         
-    with col4:
+with col4:
 
 
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Frame</p>'
@@ -261,7 +262,7 @@ def Peroduction_details():
             st.markdown("")
 
 
-    with col5:
+with col5:
         original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Average Count</p>'
             
         st.markdown(original_title,unsafe_allow_html=True)
@@ -274,10 +275,10 @@ def Peroduction_details():
 
 
     # Start sections for charts
-    col1, col2, col3 = st.columns((3))
+col1, col2, col3 = st.columns((3))
 
     # Display factory-wise charts
-    if selected_factory=="All":
+if selected_factory=="All":
         factory_df = filtered_df.groupby(filtered_df["Factory"], as_index=False)["achieved production"].sum()
         efficiency_df = filtered_df.groupby(filtered_df["Factory"], as_index=False)["Efficiency"].mean()
         
@@ -341,7 +342,7 @@ def Peroduction_details():
 
 
     # Display mill-wise data if a factory is selected
-    else:
+else:
 
         selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
@@ -423,19 +424,19 @@ def Peroduction_details():
 
 
     # Calculate the difference between start date and end date
-    start_date = filtered_df["Date"].min()
-    end_date = filtered_df["Date"].max()
-    date_diff = (end_date - start_date).days
+start_date = filtered_df["Date"].min()
+end_date = filtered_df["Date"].max()
+date_diff = (end_date - start_date).days
 
 
 
 
 
 
-    count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["achieved production"].sum()
-    quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["achieved production"].sum()
+count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["achieved production"].sum()
+quality_df = filtered_df.groupby(filtered_df["Product Type"], as_index=False)["achieved production"].sum()
 
-    if date_diff<=5:
+if date_diff<=5:
         col1,col2=st.columns([3,2])    
         if len(quality_df)==0:
         
@@ -499,7 +500,7 @@ def Peroduction_details():
                         st.warning("No data found for the specified filter.")
 
 
-    else:
+else:
 
 
     # frame vs count chart
@@ -537,9 +538,9 @@ def Peroduction_details():
 
 
     # Grouping and processing data for the first column
-    count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["Frame"].sum()
+count_df = filtered_df.groupby(filtered_df["count"], as_index=False)["Frame"].sum()
 
-    if date_diff <= 5:
+if date_diff <= 5:
         with col1:
             try:
                 # Create a bar chart for Frame vs Count
@@ -568,7 +569,7 @@ def Peroduction_details():
 
             except IndexError:
                 st.warning("No data found for the specified filter.")
-    else:
+else:
         try:
             # Create a bar chart for Frame vs Count
             fig = px.bar(count_df, x="count", y="Frame", text=['{:,.2f}'.format(x) for x in count_df["Frame"]],

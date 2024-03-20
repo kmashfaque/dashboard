@@ -8,14 +8,14 @@ import base64
 from io import BytesIO
 
 
-def Hands():
+# def Hands():
 
-    warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore")
 
 
-    st.set_page_config(page_title="Hands Per Ton", page_icon=":bar_chart:", layout="wide")
-    st.title(" :bar_chart: Hands Per Ton")
-    st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
+st.set_page_config(page_title="Hands Per Ton", page_icon=":bar_chart:", layout="wide")
+st.title(" :bar_chart: Hands Per Ton")
+st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 
 
 
@@ -31,52 +31,52 @@ def Hands():
         
     #     hands_df=pd.read_excel("HandsPerTon.xlsx")
 
-    os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
-        
-    hands_df=pd.read_excel("HandsPerTon.xlsx")
+os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
 
-    # date filtering starts here
-    col1, col2=st.columns((2))
-    hands_df["Date"]=pd.to_datetime(hands_df["Date"])
+hands_df=pd.read_excel("HandsPerTon.xlsx")
 
-    # Get the minimum and maximum dates from the DataFrame
-    min_date = hands_df["Date"].min()
-    max_date = hands_df["Date"].max()
+# date filtering starts here
+col1, col2=st.columns((2))
+hands_df["Date"]=pd.to_datetime(hands_df["Date"])
 
-    # Set default values for date input widgets
-    default_start_date = min_date.date()
-    default_end_date = max_date.date()
+# Get the minimum and maximum dates from the DataFrame
+min_date = hands_df["Date"].min()
+max_date = hands_df["Date"].max()
 
-
+# Set default values for date input widgets
+default_start_date = min_date.date()
+default_end_date = max_date.date()
 
 
-    col1, col2 = st.columns(2)
-    hands_df["Date"] = pd.to_datetime(hands_df["Date"])
 
-    # Get the minimum and maximum dates from the DataFrame
-    min_date = hands_df["Date"].min()
-    max_date = hands_df["Date"].max()
 
-    # Set default values for date input widgets
-    default_start_date = min_date.date()
-    default_end_date = max_date.date()
+col1, col2 = st.columns(2)
+hands_df["Date"] = pd.to_datetime(hands_df["Date"])
 
-    # Display the date input widgets in two columns
-    with col1:
+# Get the minimum and maximum dates from the DataFrame
+min_date = hands_df["Date"].min()
+max_date = hands_df["Date"].max()
+
+# Set default values for date input widgets
+default_start_date = min_date.date()
+default_end_date = max_date.date()
+
+# Display the date input widgets in two columns
+with col1:
         start_date = st.date_input("Start Date", min_value=min_date.date(), max_value=max_date.date(), value=default_end_date)
 
-    with col2:
+with col2:
         # Set the minimum value of the end date input dynamically based on the selected start date
         min_end_date = min(start_date, default_end_date)
         end_date = st.date_input("End Date", min_value=min_end_date, max_value=max_date.date(), value=default_end_date)
 
     # Convert start_date and end_date to Timestamp objects
-    start_date = pd.Timestamp(start_date)
-    end_date = pd.Timestamp(end_date)
+start_date = pd.Timestamp(start_date)
+end_date = pd.Timestamp(end_date)
 
-    # Apply date filtering to the DataFrame
-    filtered_df = hands_df[(hands_df["Date"] >= start_date) & (hands_df["Date"] <= end_date)].copy()
-    # date filtering section ends here
+# Apply date filtering to the DataFrame
+filtered_df = hands_df[(hands_df["Date"] >= start_date) & (hands_df["Date"] <= end_date)].copy()
+# date filtering section ends here
 
 
 
@@ -154,22 +154,22 @@ def Hands():
 
 
     # Define initial options for the selectboxes
-    all_factories = ["All"] + list(filtered_df["Factory"].unique())
+all_factories = ["All"] + list(filtered_df["Factory"].unique())
 
-    all_buyers = ["All"] + list(filtered_df["Shift"].unique())
-
-
+all_buyers = ["All"] + list(filtered_df["Shift"].unique())
 
 
 
 
 
 
-    # Create a column for filtering data
-    col1, col2 = st.columns(2)
 
-    # Create selectboxes for filtering
-    with col1:
+
+# Create a column for filtering data
+col1, col2 = st.columns(2)
+
+# Create selectboxes for filtering
+with col1:
         selected_factory = st.selectbox("Factory", all_factories)
 
     # # Dynamically update options for Mill No. based on selected factory
@@ -186,33 +186,33 @@ def Hands():
     # if selected_mill_no != "All" and selected_factory != "All":
     #     mill_df = filtered_df[(filtered_df["Mill No."] == selected_mill_no) & (filtered_df["Factory"] == selected_factory)]
     #     shift = ["All"] + list(mill_df["Shift"].unique())
-    if selected_factory != "All":
+if selected_factory != "All":
         factories_df = filtered_df[filtered_df["Factory"] == selected_factory]
         shift = ["All"] + list(factories_df["Shift"].unique())
-    else:
+else:
         shift = ["All"] + list(filtered_df["Shift"].unique())
 
-    with col2:
+with col2:
         selected_Shift = st.selectbox("Shift", shift)
 
 
 
-    st.markdown("")
+st.markdown("")
 
 
     # Filter the data based on selected filters
-    filtered_df = filtered_df.copy()
-    if selected_factory != "All":
-        filtered_df = filtered_df[filtered_df["Factory"] == selected_factory]
+filtered_df = filtered_df.copy()
+if selected_factory != "All":
+    filtered_df = filtered_df[filtered_df["Factory"] == selected_factory]
     # if selected_mill_no != "All":
     #     filtered_df = filtered_df[filtered_df["Mill No."] == selected_mill_no]
-    if selected_Shift != "All":
+if selected_Shift != "All":
         filtered_df = filtered_df[filtered_df["Shift"] == selected_Shift]
 
 
 
     # Define the function to generate a download link for Excel
-    def get_table_download_link(df, filename):
+def get_table_download_link(df, filename):
         excel_file_buffer = BytesIO()
         df.to_excel(excel_file_buffer, index=False)
         excel_file_buffer.seek(0)
@@ -221,14 +221,14 @@ def Hands():
         return href
 
 
-    if selected_factory=="All":
+if selected_factory=="All":
         factory_df_selected=filtered_df
         with st.expander("View DataFrame"):
             # Display the DataFrame within the expander
             st.write(factory_df_selected.iloc[:, :8])
 
             # Generate a download button for the DataFrame
-    else:
+else:
         selected_factory = [selected_factory] if isinstance(selected_factory, str) else selected_factory
 
         # Filter the DataFrame based on the selected factories
@@ -241,9 +241,9 @@ def Hands():
             # Generate a download button for the DataFrame
             
 
-    st.markdown(get_table_download_link(factory_df_selected, "Hands"), unsafe_allow_html=True)
+st.markdown(get_table_download_link(factory_df_selected, "Hands"), unsafe_allow_html=True)
 
-    st.markdown("")
+st.markdown("")
 
 
 
@@ -257,14 +257,14 @@ def Hands():
 
 
     # shift for text columns
-    col1,col2=st.columns(2)
+col1,col2=st.columns(2)
 
-    total_hands=filtered_df["Hands"].sum()
-    hands_per_ton=filtered_df["Hands Per Ton"].mean()
+total_hands=filtered_df["Hands"].sum()
+hands_per_ton=filtered_df["Hands Per Ton"].mean()
 
 
 
-    with col1:
+with col1:
             formatted_total_hands="{:.2f}".format(total_hands)
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Total Hands</p>'
             st.markdown(original_title,unsafe_allow_html=True)
@@ -273,7 +273,7 @@ def Hands():
             value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{formatted_total_hands}</p>'
             st.markdown(value,unsafe_allow_html=True)
 
-    with col2:
+with col2:
 
             formatted_total_hands="{:.2f}".format(hands_per_ton)
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Hands Per Ton</p>'
@@ -359,8 +359,8 @@ def Hands():
     #                 st.markdown("")
     #                 st.markdown("")
 
-    st.markdown("")
-    st.markdown("")
+st.markdown("")
+st.markdown("")
         
     # else:
     #     with col1:
@@ -384,11 +384,11 @@ def Hands():
 
 
     # starts section for charts
-    col1,col2=st.columns((2))
+col1,col2=st.columns((2))
 
 
 
-    if selected_factory=="All":
+if selected_factory=="All":
         
 
         factory_df=filtered_df.groupby(filtered_df["Factory"], as_index=False)["Hands"].mean()
@@ -429,7 +429,7 @@ def Hands():
                 st.plotly_chart(fig,use_container_width=False)
 
 
-    else:
+else:
         selected_factory=[selected_factory] if isinstance(selected_factory, str) else selected_factory
 
         factory_df_selected = filtered_df[filtered_df['Factory'].isin(selected_factory)]
