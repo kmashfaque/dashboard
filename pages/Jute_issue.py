@@ -184,10 +184,7 @@ formatted_accuracy_rate="{:.2f}%".format(accuracy_rate_percentage)
 
 
 
-
-
 with col1:
-
 
             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Jute Requisition</p>'
             
