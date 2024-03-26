@@ -15,9 +15,9 @@ from io import BytesIO
 
 os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
 # df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
-df=pd.read_excel("Production (2).xlsx")
-hands_df=pd.read_excel("HandsPerTon.xlsx")
-stock_df=pd.read_excel("Stocks.xlsx")
+df=pd.read_excel("production - Copy.xlsx")
+hands_df=pd.read_excel("HandsPerTon - Copy.xlsx")
+stock_df=pd.read_excel("Stocks - Copy.xlsx")
 
 unique_date=df["Date"].unique()
 hands_df=hands_df[hands_df["Date"].isin(unique_date)]

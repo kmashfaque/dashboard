@@ -15,7 +15,7 @@ st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow
 
 
 # Load your data
-df = pd.read_excel("Stocks.xlsx")
+df = pd.read_excel("Stocks - Copy.xlsx")
 
 
 # Assuming `df` is your DataFrame
