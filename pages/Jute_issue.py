@@ -79,7 +79,7 @@ df = jute_issue_df[(jute_issue_df["Date"] >= start_date) & (jute_issue_df["Date"
 # Define initial options for the selectboxes
 all_factories = ["All"] + list(df["Factory"].unique())
 all_mill_nos = ["All"] + list(df["Mill No."].unique())
-grade = ["All"] + list(df["Grade"].unique())
+grade = ["All"] + list(df["Jute Type"].unique())
 
 # Create a column for filtering data
 col1, col2, col3 = st.columns(3)
@@ -101,15 +101,15 @@ with col2:
 # Dynamically update options for Grade based on selected factory and mill
 if selected_mill_no != "All" and selected_factory != "All":
     mill_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory)]
-    grade = ["All"] + list(mill_df["Grade"].unique())
+    grade = ["All"] + list(mill_df["Jute Type"].unique())
 elif selected_factory != "All":
     factories_df = df[df["Factory"] == selected_factory]
-    grade = ["All"] + list(factories_df["Grade"].unique())
+    grade = ["All"] + list(factories_df["Jute Type"].unique())
 else:
-    grade = ["All"] + list(df["Grade"].unique())
+    grade = ["All"] + list(df["Jute Type"].unique())
 
 with col3:
-    selected_grade = st.selectbox("Grade", grade)
+    selected_grade = st.selectbox("Jute Type", grade)
 
 
 # Filter the data based on selected filters
@@ -119,7 +119,7 @@ if selected_factory != "All":
 if selected_mill_no != "All":
     filtered_df = filtered_df[filtered_df["Mill No."] == selected_mill_no]
 if selected_grade != "All":
-    filtered_df = filtered_df[filtered_df["Grade"] == selected_grade]
+    filtered_df = filtered_df[filtered_df["Jute Type"] == selected_grade]
 
 
 
@@ -267,19 +267,19 @@ with col6:
 # col1 = st.columns((1))
 # Display factory-wise charts
 
-factory_df = ((filtered_df.groupby(filtered_df["Grade"])[["Demand","Issue"]].sum())/1000).reset_index()
+factory_df = ((filtered_df.groupby(filtered_df["Jute Type"])[["Demand","Issue"]].sum())/1000).reset_index()
 # Filter out rows where both Demand and Issue are zero
 factory_df = factory_df[(factory_df["Demand"] != 0) | (factory_df["Issue"] != 0)]
 
 # Get the list of Grades with non-zero values
-non_zero_grades = factory_df["Grade"].unique()
+non_zero_grades = factory_df["Jute Type"].unique()
 
         
     
 # with col1:
 try:
         # Create a bar chart for production by factory
-        fig = px.bar(factory_df, x="Grade", y=["Demand", "Issue"],
+        fig = px.bar(factory_df, x="Jute Type", y=["Demand", "Issue"],
                          barmode='group', labels={"value": "Value", "variable": "Category"},
              title="Requisition and Issued by Jute Grade")
     
@@ -296,7 +296,7 @@ except IndexError:
 filtered_df['Issue'] = pd.to_numeric(filtered_df['Issue'])
 
 # Group by Grade and sum the Issue column, then divide the sum by 1000
-grade_df = filtered_df.groupby(filtered_df["Grade"], as_index=False)["Issue"].sum()
+grade_df = filtered_df.groupby(filtered_df["Jute Type"], as_index=False)["Issue"].sum()
 grade_df["Issue"] /= 1000  # Divide the sum by 1000
 
 # Filter out rows with zero values in the 'Issue' column
@@ -304,7 +304,7 @@ grade_df = grade_df[grade_df["Issue"] != 0]
 
 try:
                 # Create a bar chart for efficiency by factory
-        fig = px.bar(grade_df, x="Grade", y="Issue", text=['{:,.2f}'.format(x) for x in grade_df["Issue"]],
+        fig = px.bar(grade_df, x="Jute Type", y="Issue", text=['{:,.2f}'.format(x) for x in grade_df["Issue"]],
                             template="seaborn", width=350, height=350, color_discrete_sequence=[" #1C4E80"] * len(grade_df))
         fig.update_layout(title="Jute Issue: Grade Wise ")
         st.plotly_chart(fig, use_container_width=True)
