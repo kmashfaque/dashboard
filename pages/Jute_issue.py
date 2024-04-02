@@ -124,8 +124,7 @@ if selected_grade != "All":
 
 
 
-
- # Define the function to generate a download link for Excel
+# Define the function to generate a download link for Excel
 def get_table_download_link(df, filename):
         excel_file_buffer = BytesIO()
         df.to_excel(excel_file_buffer, index=False)
