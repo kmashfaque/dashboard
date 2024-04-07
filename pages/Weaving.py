@@ -79,37 +79,60 @@ df = jute_issue_df[(jute_issue_df["Date"] >= start_date) & (jute_issue_df["Date"
 # Define initial options for the selectboxes
 all_factories = ["All"] + list(df["Factory"].unique())
 all_mill_nos = ["All"] + list(df["Mill No."].unique())
-grade = ["All"] + list(df["Shift"].unique())
+shift = ["All"] + list(df["Shift"].unique())
+grade = ["All"] + list(df["Product Type"].unique())
 
 # Create a column for filtering data
-col1, col2, col3 = st.columns(3)
+col1, col2, col3,col4 = st.columns(4)
 
 # Create selectboxes for filtering
 with col1:
     selected_factory = st.selectbox("Factory", all_factories)
 
     # Dynamically update options for Mill No. based on selected factory
-if selected_factory != "All":
-    factories_df = df[df["Factory"] == selected_factory]
-    all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
-else:
-    all_mill_nos = ["All"] + list(df["Mill No."].unique())
+    if selected_factory != "All":
+        factories_df = df[df["Factory"] == selected_factory]
+        all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
+    else:
+        all_mill_nos = ["All"] + list(df["Mill No."].unique())
 
 with col2:
     selected_mill_no = st.selectbox("Mill No.", all_mill_nos)
 
-# Dynamically update options for Grade based on selected factory and mill
-if selected_mill_no != "All" and selected_factory != "All":
-    mill_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory)]
-    grade = ["All"] + list(mill_df["Shift"].unique())
-elif selected_factory != "All":
-    factories_df = df[df["Factory"] == selected_factory]
-    grade = ["All"] + list(factories_df["Shift"].unique())
-else:
-    grade = ["All"] + list(df["Shift"].unique())
+    # Dynamically update options for shift based on selected factory and mill
+    if selected_mill_no != "All" and selected_factory != "All":
+        mill_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory)]
+        shift = ["All"] + list(mill_df["Shift"].unique())
+    elif selected_factory != "All":
+        factories_df = df[df["Factory"] == selected_factory]
+        shift = ["All"] + list(factories_df["Shift"].unique())
+    else:
+        shift = ["All"] + list(df["Shift"].unique())
 
 with col3:
-    selected_grade = st.selectbox("Shift", grade)
+    selected_shift = st.selectbox("Shift", shift)
+   # Dynamically update options for shift based on selected factory and mill
+    if selected_mill_no != "All" and selected_factory != "All" and selected_shift!="All" and selected_product_type!="All":
+        mill_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory) & (df["Shift"]==selected_shift) ] 
+        grade = ["All"] + list(mill_df["Product Type"].unique())
+    elif selected_factory != "All":
+        factories_df = df[df["Factory"] == selected_factory]
+        grade = ["All"] + list(factories_df["Product Type"].unique())
+    elif selected_mill_no != "All":
+        factories_mill_no = df[df["Mill No."] == selected_mill_no]
+        grade = ["All"] + list(factories_mill_no["Product Type"].unique())
+    elif selected_mill_no != "All":
+        shift = df[df["Shift"] == selected_mill_no]
+        grade = ["All"] + list(shift["Product Type"].unique())
+    else:
+        grade = ["All"] + list(df["Product Type"].unique())
+
+
+with col4:
+    selected_product_type=st.selectbox("Product Type",grade)
+
+   
+
 
 
 # Filter the data based on selected filters
@@ -118,10 +141,10 @@ if selected_factory != "All":
     filtered_df = filtered_df[filtered_df["Factory"] == selected_factory]
 if selected_mill_no != "All":
     filtered_df = filtered_df[filtered_df["Mill No."] == selected_mill_no]
-if selected_grade != "All":
-    filtered_df = filtered_df[filtered_df["Shift"] == selected_grade]
-
-
+if selected_shift != "All":
+    filtered_df = filtered_df[filtered_df["Shift"] == selected_shift]
+if selected_product_type != "All":
+    filtered_df = filtered_df[filtered_df["Product Type"] == selected_shift]
 
 
 
@@ -162,360 +185,166 @@ st.markdown("")
 
 
 
-col1,col2,col3=st.columns(3)
+col1,col2,col3,col4=st.columns(4)
 
 
 
        
 
-
-
-
-       
-
-
-# jute_issue=factory_df["Issue"].sum()/1000
-# accuracy_qty=(factory_df["Demand"].sum()/1000)+(factory_df["Shortage"].sum()/1000)
-# accuracy_rate = ((factory_df["Demand"].sum() / 1000) + (factory_df["Shortage"].sum() / 1000)) / (factory_df["Demand"].sum() / 1000)
-# accuracy_rate_percentage = accuracy_rate * 100
-
-# access=factory_df["Access"].sum()/1000
-# shortage=factory_df["Shortage"].sum()/1000
-
-# formatted_requisition="{:.2f}".format(product)
-# formatted_issue="{:.2f}".format(jute_issue)
-# formatted_accuracy_qty="{:.2f}".format(accuracy_qty)
-# formatted_access_qty="{:.2f}".format(access)
-# formatted_shortage_qty="{:.2f}".format(abs(shortage))
-# formatted_accuracy_rate="{:.2f}%".format(accuracy_rate_percentage)
-
-
-
-
-
-# with col1:
-
-#             original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 18px; font-weight:bold;text-align:center">Product</p>'
-#             st.markdown(original_title,unsafe_allow_html=True)
-
-#             sacking,hessian,soil,normal=st.columns(4)
-            
-#             with sacking:
-#                 original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Sacking</p>'
-            
-#                 st.markdown(original_title,unsafe_allow_html=True)
-#                 value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{sacking_value}</p>'
-#                 st.markdown(value,unsafe_allow_html=True)
-
-#                 st.markdown("")
-#                 st.markdown("")
-#                 st.markdown("")
-            
-
-#             with hessian:
-#                 original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Hessian</p>'
-            
-#                 st.markdown(original_title,unsafe_allow_html=True)
-#                 value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{hessian_value}</p>'
-#                 st.markdown(value,unsafe_allow_html=True)
-
-#                 st.markdown("")
-#                 st.markdown("")
-#                 st.markdown("")
-            
-#             with soil:
-#                 original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Soil</p>'
-            
-#                 st.markdown(original_title,unsafe_allow_html=True)
-#                 value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{soil_value}</p>'
-#                 st.markdown(value,unsafe_allow_html=True)
-
-#                 st.markdown("")
-#                 st.markdown("")
-#                 st.markdown("")
-            
-
-#             with normal:
-#                 original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Normal</p>'
-            
-#                 st.markdown(original_title,unsafe_allow_html=True)
-#                 value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{normal_value}</p>'
-#                 st.markdown(value,unsafe_allow_html=True)
-
-#                 st.markdown("")
-#                 st.markdown("")
-#                 st.markdown("")
-        
-        
-
-col1,col2=st.columns(2)
 
 factory_df=filtered_df
-products=factory_df["Product"].unique()
-sacking_value = 0
-hessian_value = 0
-soil_value = 0
-normal_value = 0
-for product in products:
-    looms_sum = factory_df[factory_df["Product"] == product]["No. of Looms"].sum()
-    if product == "SACKING":
-        sacking_value = looms_sum
-    elif product in ["F. B. HESSIAN", "N. HESSIAN"]:
-        hessian_value += looms_sum
-    elif product == "SOIL SAVER":
-        soil_value = looms_sum
-    else:
-        normal_value += looms_sum
+
+loom_val=factory_df["No. of Looms"].sum()
+production=factory_df["Actual Production Tons"].sum()
+total_cut=factory_df["Actual Production Cuts"].sum()   
+efficiency=factory_df["Efficiency"].mean()
+formatted_actual_production="{:.2f}".format(production)
+formatted_total_cut="{:.2f}".format(total_cut)
+formatted_efficiency="{:.2f}".format(efficiency)
+
+
+
 
 with col1:
-   # Define the product categories and their corresponding values
-    product_categories = ['Sacking', 'Hessian', 'Soil', 'Normal']
-    product_values = [sacking_value, hessian_value, soil_value, normal_value]
-    text_values = [value for value in product_values]
 
-    # Define color palette list (replace with desired colors)
-    color_palette = ['royalblue', 'firebrick', 'gold', 'seagreen']
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">No of Looms</p>'
+            
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{loom_val}</p>'
+        st.markdown(value,unsafe_allow_html=True)
 
-    # Create a DataFrame from the product categories and values
-    product_df = pd.DataFrame({'Product': product_categories, 'Value': product_values})
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")
 
-    # Create a bar chart using Plotly Express
-    fig = px.bar(product_df, x='Product', y='Value',
-                # Use 'Value' as the color code for individual bars
+with col2:
+
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Production</p>'
+            
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{formatted_actual_production}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")           
+
+with col3:
+
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Total Cut</p>'
+            
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{formatted_total_cut}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")   
+
+with col4:
+
+        original_title = '<p style="font-family:Arial-Black; color:Black; font-size: 15px; font-weight:bold;text-align:center">Efficiency</p>'
+            
+        st.markdown(original_title,unsafe_allow_html=True)
+        value = f'<p style="font-family:Arial-Black; color:#AC3E31; font-size: 15px; font-weight:bold;text-align:center">{formatted_efficiency}</p>'
+        st.markdown(value,unsafe_allow_html=True)
+
+        st.markdown("")
+        st.markdown("")
+        st.markdown("")      
+        
+        
+col1,col2=st.columns(2)
+width_vs_prod = factory_df.groupby(factory_df["Width"], as_index=False)["Actual Production Tons"].sum()
+width_vs_cuts = factory_df.groupby(factory_df["Width"], as_index=False)["Actual Production Cuts"].sum()
+
+
+with col1:
+     # Create a bar chart for production by factory
+    fig = px.bar(width_vs_prod, x="Width", y="Actual Production Tons", text=['{:,.2f}'.format(x) for x in width_vs_prod["Actual Production Tons"]],
+                            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(width_vs_prod))
+    fig.update_layout(title="Production: Width Wise")
                 
-                labels={'Value': 'Value', 'Product': 'Product Category'},
-                title='Product Values by Category',
-                template='seaborn')
-
-    # Add custom styling to the bar chart
-    fig.update_layout(font=dict(family='Arial', size=15, color='Black'),
-                    xaxis=dict(tickmode='array', tickvals=product_categories, title='Product Category'),
-                    yaxis=dict(title='Value'),
-                    barmode='group',
-                    width=1000, height=500,  # Adjust width and height here
-                    margin=dict(l=50, r=50, t=50, b=50),  # Adjust margins as needed
-                    bargap=0.1)  # Adjust the gap between bars here
-
-    # Set the text to display on the bars
-    fig.update_traces(text=text_values, textposition='outside',
-                    textfont=dict(size=15, color='Black', family='Arial'))
-
-    # Display the bar chart in Streamlit
+    # Convert the x-axis to categorical to remove blank spaces
+    fig.update_xaxes(type='category')
+                
     st.plotly_chart(fig, use_container_width=True)
-                        
-
-
-
-
-
 
 
 with col2:
-    prod_sacking_value=0
-    prod_hessian_value = 0
-    prod_soil_value = 0
-    prod_normal_value = 0
-    for product in products:
-        looms_sum = factory_df[factory_df["Product"] == product]["Oz/Yd."].sum()
-        if product == "SACKING":
-            prod_sacking_value = looms_sum
-        elif product in ["F. B. HESSIAN", "N. HESSIAN"]:
-            prod_hessian_value += looms_sum
-        elif product == "SOIL SAVER":
-            prod_soil_value = looms_sum
-        else:
-            prod_normal_value += looms_sum
-
-    # Define the product categories and their corresponding values
-    product_categories = ['Sacking', 'Hessian', 'Soil', 'Normal']
-    product_values = [prod_sacking_value, prod_hessian_value, prod_soil_value, prod_normal_value]
-    text_values = ["{:.2f}".format(value) for value in product_values]
-
-    # Define color palette list (replace with desired colors)
-    color_palette = ['royalblue', 'firebrick', 'gold', 'seagreen']
-
-    # Create a DataFrame from the product categories and values
-    product_df = pd.DataFrame({'Product': product_categories, 'Value': product_values})
-
-    # Create a bar chart using Plotly Express
-    fig = px.bar(product_df, x='Product', y='Value',
-                labels={'Value': 'Value', 'Product': 'Product Category'},
-                title='Product Values by Category',
-                template='seaborn')
-
-    # Add custom styling to the bar chart
-    fig.update_layout(font=dict(family='Arial', size=15, color='Black'),
-                    xaxis=dict(tickmode='array', tickvals=product_categories, title='Product Category'),
-                    yaxis=dict(title='Value'),
-                    barmode='group',
-                    width=1000, height=500,  # Adjust width and height here
-                    margin=dict(l=50, r=50, t=50, b=50),  # Adjust margins as needed
-                    bargap=0.1)  # Adjust the gap between bars here
-
-    # Set the text to display on the bars
-    fig.update_traces(text=text_values, textposition='outside',
-                    textfont=dict(size=15, color='Black', family='Arial'))
-
-    # Display the bar chart in Streamlit
+     # Create a bar chart for production by factory
+    fig = px.bar(width_vs_cuts, x="Width", y="Actual Production Cuts", text=['{:,.2f}'.format(x) for x in width_vs_cuts["Actual Production Cuts"]],
+                            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(width_vs_cuts))
+    fig.update_layout(title="Cuts: Width Wise")
+                
+    # Convert the x-axis to categorical to remove blank spaces
+    fig.update_xaxes(type='category')
+                
     st.plotly_chart(fig, use_container_width=True)
-
-
-
 
 
 col1,col2,col3=st.columns(3)
 
 
 with col1:
+    product_categories=factory_df.groupby(factory_df["Product Type"], as_index=False)["No. of Looms"].sum()
 
-    cut_sacking_value=0
-    cut_hessian_value = 0
-    cut_soil_value = 0
-    cut_normal_value = 0
-    for product in products:
-        looms_sum = factory_df[factory_df["Product"] == product]["Actual Production Cuts"].sum()
-        if product == "SACKING":
-            cut_sacking_value = looms_sum
-        elif product in ["F. B. HESSIAN", "N. HESSIAN"]:
-            cut_hessian_value += looms_sum
-        elif product == "SOIL SAVER":
-            cut_soil_value = looms_sum
-        else:
-            cut_normal_value += looms_sum
-   # Define the product categories and their corresponding values
-    product_categories = ['Sacking', 'Hessian', 'Soil', 'Normal']
-    product_values = [cut_sacking_value, cut_hessian_value, cut_soil_value, cut_normal_value]
-    text_values = ["{:.2f}".format(value) for value in product_values]
-
-    # Define color palette list (replace with desired colors)
-    color_palette = ['royalblue', 'firebrick', 'gold', 'seagreen']
-
-    # Create a DataFrame from the product categories and values
-    product_df = pd.DataFrame({'Product': product_categories, 'Value': product_values})
-
-    # Create a bar chart using Plotly Express
-    fig = px.bar(product_df, x='Product', y='Value',
-                # Use 'Value' as the color code for individual bars
+     # Create a bar chart for production by factory
+    fig = px.bar(product_categories, x="Product Type", y="No. of Looms", text=['{:,.2f}'.format(x) for x in product_categories["No. of Looms"]],
+                            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(product_categories))
+    fig.update_layout(title="Looms: Product Wise ")
                 
-                labels={'Value': 'Value', 'Product': 'Product Category'},
-                title='Product Values by Category',
-                template='seaborn')
-
-    # Add custom styling to the bar chart
-    fig.update_layout(font=dict(family='Arial', size=15, color='Black'),
-                    xaxis=dict(tickmode='array', tickvals=product_categories, title='Product Category'),
-                    yaxis=dict(title='Value'),
-                    barmode='group',
-                    width=1000, height=500,  # Adjust width and height here
-                    margin=dict(l=50, r=50, t=50, b=50),  # Adjust margins as needed
-                    bargap=0.1)  # Adjust the gap between bars here
-
-    # Set the text to display on the bars
-    fig.update_traces(text=text_values, textposition='outside',
-                    textfont=dict(size=15, color='Black', family='Arial'))
-
-    # Display the bar chart in Streamlit
+    # Convert the x-axis to categorical to remove blank spaces
+    fig.update_xaxes(type='category')
+                
     st.plotly_chart(fig, use_container_width=True)
                         
 
 
 
 
-
-
-
 with col2:
-    prod_sacking_value=0
-    prod_hessian_value = 0
-    prod_soil_value = 0
-    prod_normal_value = 0
-    for product in products:
-        looms_sum = factory_df[factory_df["Product"] == product]["Actual Production Tons"].sum()
-        if product == "SACKING":
-            prod_sacking_value = looms_sum
-        elif product in ["F. B. HESSIAN", "N. HESSIAN"]:
-            prod_hessian_value += looms_sum
-        elif product == "SOIL SAVER":
-            prod_soil_value = looms_sum
-        else:
-            prod_normal_value += looms_sum
 
-    # Define the product categories and their corresponding values
-    product_categories = ['Sacking', 'Hessian', 'Soil', 'Normal']
-    product_values = [prod_sacking_value, prod_hessian_value, prod_soil_value, prod_normal_value]
-    text_values = ["{:.2f}".format(value) for value in product_values]
+    product_categories=factory_df.groupby(factory_df["Product Type"], as_index=False)["Actual Production Tons"].sum()
+    
 
-    # Define color palette list (replace with desired colors)
-    color_palette = ['royalblue', 'firebrick', 'gold', 'seagreen']
-
-    # Create a DataFrame from the product categories and values
-    product_df = pd.DataFrame({'Product': product_categories, 'Value': product_values})
-
-    # Create a bar chart using Plotly Express
-    fig = px.bar(product_df, x='Product', y='Value',
-                labels={'Value': 'Value', 'Product': 'Product Category'},
-                title='Product Values by Category',
-                template='seaborn')
-
-    # Add custom styling to the bar chart
-    fig.update_layout(font=dict(family='Arial', size=15, color='Black'),
-                    xaxis=dict(tickmode='array', tickvals=product_categories, title='Product Category'),
-                    yaxis=dict(title='Value'),
-                    barmode='group',
-                    width=1000, height=500,  # Adjust width and height here
-                    margin=dict(l=50, r=50, t=50, b=50),  # Adjust margins as needed
-                    bargap=0.1)  # Adjust the gap between bars here
-
-    # Set the text to display on the bars
-    fig.update_traces(text=text_values, textposition='outside',
-                    textfont=dict(size=15, color='Black', family='Arial'))
-
-    # Display the bar chart in Streamlit
+    # Create a bar chart for production by factory
+    fig = px.bar(product_categories, x="Product Type", y="Actual Production Tons", text=['{:,.2f}'.format(x) for x in product_categories["Actual Production Tons"]],
+                            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(product_categories))
+    fig.update_layout(title="Production: Product Wise (M/Ton)")
+                
+    # Convert the x-axis to categorical to remove blank spaces
+    fig.update_xaxes(type='category')
+                
     st.plotly_chart(fig, use_container_width=True)
+
 
 
 with col3:
-    # Define the list of selected departments
-    selected_hessian = ["F. B. HESSIAN", "N. HESSIAN"]
-    selected_sacking = ["SACKING"]
-    selected_normal = ["NORMAL"]
-    selected_soil_saver = ["SOIL SAVER"]
-
-    # Filter the DataFrame to include only the selected departments
-    selected_df_hessian = filtered_df[filtered_df["Product"].isin(selected_hessian)]
-    selected_df_sacking = filtered_df[filtered_df["Product"].isin(selected_sacking)]
-    selected_df_normal = filtered_df[filtered_df["Product"].isin(selected_normal)]
-    selected_df_soil_saver = filtered_df[filtered_df["Product"].isin(selected_soil_saver)]
-
-    # Calculate mean efficiency for each product category
-    hessian_efficiency = selected_df_hessian["Efficiency"].mean()
-    sacking_efficiency = selected_df_sacking["Efficiency"].mean()
-    normal_efficiency = selected_df_normal["Efficiency"].mean()
-    soil_saver_efficiency = selected_df_soil_saver["Efficiency"].mean()
-
-    # Create a DataFrame to hold the aggregated data
-    aggregated_df = pd.DataFrame({
-        "Product": ["Hessian", "Sacking", "Normal", "Soil Saver"],
-        "Efficiency": [hessian_efficiency, sacking_efficiency, normal_efficiency, soil_saver_efficiency]
-    })
-
-    # Create a bar chart using Plotly Express
-    fig = px.bar(aggregated_df, x='Product', y='Efficiency',
-                labels={'Efficiency': 'Mean Efficiency', 'Product': 'Product Category'},
-                title='Mean Efficiency by Product Category',
-                template='seaborn')
-
-    # Add custom styling to the bar chart
-    fig.update_layout(font=dict(family='Arial', size=15, color='Black'),
-                    xaxis=dict(title='Product Category'),
-                    yaxis=dict(title='Mean Efficiency'),
-                    width=800, height=500,  # Adjust width and height here
-                    margin=dict(l=50, r=50, t=50, b=50),  # Adjust margins as needed
-                    bargap=0.1)  # Adjust the gap between bars here
-
-    # Set the text to display on the bars in percentage format
-    fig.update_traces(texttemplate='%{y:.2%}', textposition='outside',
-                    textfont=dict(size=15, color='Black', family='Arial'))
-
-    # Display the bar chart in Streamlit
+    width_vs_loom = factory_df.groupby(factory_df["Width"], as_index=False)["No. of Looms"].sum()
+    
+    # Create a bar chart for production by factory
+    fig = px.bar(width_vs_loom, x="Width", y="No. of Looms", text=['{:,.2f}'.format(x) for x in width_vs_loom["No. of Looms"]],
+                            template="seaborn", width=350, height=350, color_discrete_sequence=[" #488A99"] * len(width_vs_loom))
+    fig.update_layout(title="Loom: Width Wise")
+                
+    # Convert the x-axis to categorical to remove blank spaces
+    fig.update_xaxes(type='category')
+                
     st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+

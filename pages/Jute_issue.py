@@ -89,24 +89,24 @@ with col1:
     selected_factory = st.selectbox("Factory", all_factories)
 
     # Dynamically update options for Mill No. based on selected factory
-if selected_factory != "All":
-    factories_df = df[df["Factory"] == selected_factory]
-    all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
-else:
-    all_mill_nos = ["All"] + list(df["Mill No."].unique())
+    if selected_factory != "All":
+        factories_df = df[df["Factory"] == selected_factory]
+        all_mill_nos = ["All"] + list(factories_df["Mill No."].unique())
+    else:
+        all_mill_nos = ["All"] + list(df["Mill No."].unique())
 
 with col2:
     selected_mill_no = st.selectbox("Mill No.", all_mill_nos)
 
-# Dynamically update options for Grade based on selected factory and mill
-if selected_mill_no != "All" and selected_factory != "All":
-    mill_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory)]
-    grade = ["All"] + list(mill_df["Jute Type"].unique())
-elif selected_factory != "All":
-    factories_df = df[df["Factory"] == selected_factory]
-    grade = ["All"] + list(factories_df["Jute Type"].unique())
-else:
-    grade = ["All"] + list(df["Jute Type"].unique())
+    # Dynamically update options for Grade based on selected factory and mill
+    if selected_mill_no != "All" and selected_factory != "All":
+        mill_df = df[(df["Mill No."] == selected_mill_no) & (df["Factory"] == selected_factory)]
+        grade = ["All"] + list(mill_df["Jute Type"].unique())
+    elif selected_factory != "All":
+        factories_df = df[df["Factory"] == selected_factory]
+        grade = ["All"] + list(factories_df["Jute Type"].unique())
+    else:
+        grade = ["All"] + list(df["Jute Type"].unique())
 
 with col3:
     selected_grade = st.selectbox("Jute Type", grade)
