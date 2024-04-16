@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 
 
 st.set_page_config(page_title="Weaving", page_icon=":bar_chart:", layout="wide")
-st.title(" :bar_chart: Weaving")
+st.title(" :bar_chart: Weaving Production")
 st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
 
 
@@ -30,9 +30,9 @@ st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow
         
 #     jute_issue_df=pd.read_excel("HandsPerTon.xlsx")
 
-os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
+
         
-jute_issue_df=pd.read_excel("Weaving_prod_format.xlsx",skiprows=5)
+jute_issue_df=pd.read_excel("Weaving_prod.xlsx",skiprows=5)
 
 # date filtering starts here
 col1, col2=st.columns((2))
@@ -192,7 +192,7 @@ col1,col2,col3,col4=st.columns(4)
        
 
 
-factory_df=filtered_df
+factory_df=factory_df_selected
 
 loom_val=factory_df["No. of Looms"].sum()
 production=factory_df["Actual Production Tons"].sum()

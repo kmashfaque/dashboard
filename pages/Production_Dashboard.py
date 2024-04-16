@@ -13,7 +13,6 @@ from io import BytesIO
 
 
 
-os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
 # df=pd.read_excel("production.xlsx",sheet_name="Overall Production")
 df=pd.read_excel("production - Copy.xlsx")
 hands_df=pd.read_excel("HandsPerTon - Copy.xlsx")

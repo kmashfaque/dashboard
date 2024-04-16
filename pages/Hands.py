@@ -31,7 +31,7 @@ st.markdown("<style>div.block-container{padding-top:1rem}</style>", unsafe_allow
         
     #     hands_df=pd.read_excel("HandsPerTon.xlsx")
 
-os.chdir(r"C:\Users\jashfaque\Desktop\dashboardSoft")
+
 
 hands_df=pd.read_excel("HandsPerTon - Copy.xlsx")
 
